@@ -5,7 +5,7 @@ import dev.groupx.apkikala.R
 import dev.groupx.apkikala.ui.navigation.NavigationDestination
 
 object HomeNode: NavigationDestination {
-    override val route = "home"
+    override val route = "HomeScreen"
     override val titleRes = R.string.app_name
 }
 
