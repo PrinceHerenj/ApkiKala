@@ -7,7 +7,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import dev.groupx.apkikala.ui.theme.ApkiKalaTheme
 
 @AndroidEntryPoint
-class ApkiKalaActivity : ComponentActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

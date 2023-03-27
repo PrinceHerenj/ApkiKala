@@ -2,23 +2,22 @@ package dev.groupx.apkikala.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import dev.groupx.apkikala.ApkiKalaAppState
 import dev.groupx.apkikala.ui.screen.home.HomeNode
+import dev.groupx.apkikala.ui.screen.login.LoginNode
+import dev.groupx.apkikala.ui.screen.login.LoginScreen
 
-@Composable
-fun ApkiKalaNavHost(
-    navController: NavHostController,
-    modifier: Modifier = Modifier
-) {
-    NavHost(
-        navController = navController,
-        startDestination = HomeNode.route,
-        modifier = modifier
-    ) {
-        composable(route = HomeNode.route) {
-
-        }
+fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
+    composable(LoginNode.route) {
+        LoginScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp)} )
     }
+//    composable(HomeNode.route) {
+//        HomeScreen()
+//    }
 }
+
+

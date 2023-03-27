@@ -1,22 +1,70 @@
 package dev.groupx.apkikala
 
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import android.content.res.Resources
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import dev.groupx.apkikala.ui.navigation.ApkiKalaNavHost
+import dev.groupx.apkikala.ui.common.snackbar.SnackbarManager
+import dev.groupx.apkikala.ui.navigation.apkiKalaGraph
+import dev.groupx.apkikala.ui.screen.login.LoginNode
+import dev.groupx.apkikala.ui.screen.login.LoginScreen
+import dev.groupx.apkikala.ui.theme.ApkiKalaTheme
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun ApkiKalaApp(navController: NavHostController = rememberNavController()) {
-    ApkiKalaNavHost(navController = navController)
+//    ApkiKalaTheme {
+//        val appState = rememberAppState()
+//
+//        Scaffold(
+//            topBar = {
+//                ApkiKalaTopAppBar(title = "Example", canNavigateBack = false)
+//            }
+//        ) {innerPaddingModifier ->
+//            NavHost(
+//                navController = appState.navController,
+//                startDestination = LoginNode.route,
+//                modifier = Modifier.padding(innerPaddingModifier)
+//            ) {
+//                apkiKalaGraph(appState)
+//            }
+//        }
+//    }
+    LoginScreen(openAndPopUp = {_,_->})
 }
+
+
+
+@Composable
+@ReadOnlyComposable
+fun resources(): Resources {
+    LocalConfiguration.current
+    return LocalContext.current.resources
+}
+
+@Composable
+fun rememberAppState(
+    scaffoldState: ScaffoldState = rememberScaffoldState(),
+    navController: NavHostController = rememberNavController(),
+    snackbarManager: SnackbarManager = SnackbarManager,
+    resources: Resources = resources(),
+    coroutineScope: CoroutineScope = rememberCoroutineScope()
+) =
+    remember(scaffoldState, navController, snackbarManager, resources, coroutineScope) {
+        ApkiKalaAppState(scaffoldState, navController, snackbarManager, resources, coroutineScope)
+    }
 
 @Composable
 fun ApkiKalaTopAppBar(

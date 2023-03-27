@@ -12,5 +12,4 @@ import dev.groupx.apkikala.model.service.impl.AccountServiceImpl
 abstract class ServiceModule {
     @Binds
     abstract fun provideAccountService(impl: AccountServiceImpl): AccountService
-
 }

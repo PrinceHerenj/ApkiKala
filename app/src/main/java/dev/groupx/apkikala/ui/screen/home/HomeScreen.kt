@@ -9,3 +9,8 @@ object HomeNode: NavigationDestination {
     override val titleRes = R.string.app_name
 }
 
+//@Composable
+//fun HomeScreen(
+//    openAndPopUp: (String
+//) {}
+//
