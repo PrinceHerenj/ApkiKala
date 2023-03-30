@@ -13,38 +13,44 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import dev.groupx.apkikala.ui.common.snackbar.SnackbarManager
 import dev.groupx.apkikala.ui.navigation.apkiKalaGraph
+import dev.groupx.apkikala.ui.screen.egsplashscreen.SplashNode
 import dev.groupx.apkikala.ui.screen.login.LoginNode
-import dev.groupx.apkikala.ui.screen.login.LoginScreen
 import dev.groupx.apkikala.ui.theme.ApkiKalaTheme
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
-fun ApkiKalaApp(navController: NavHostController = rememberNavController()) {
-//    ApkiKalaTheme {
-//        val appState = rememberAppState()
-//
-//        Scaffold(
-//            topBar = {
-//                ApkiKalaTopAppBar(title = "Example", canNavigateBack = false)
-//            }
-//        ) {innerPaddingModifier ->
-//            NavHost(
-//                navController = appState.navController,
-//                startDestination = LoginNode.route,
-//                modifier = Modifier.padding(innerPaddingModifier)
-//            ) {
-//                apkiKalaGraph(appState)
-//            }
-//        }
-//    }
-    LoginScreen(openAndPopUp = {_,_->})
-}
+fun ApkiKalaApp() {
+    ApkiKalaTheme {
+        val appState = rememberAppState()
 
+        Scaffold(
+            snackbarHost = {
+                SnackbarHost(
+                    hostState = it,
+                    modifier = Modifier.padding(8.dp),
+                    snackbar = {snackbarData ->
+                        Snackbar(snackbarData, contentColor = MaterialTheme.colors.onPrimary)
+                    }
+                )
+            },
+            scaffoldState = appState.scaffoldState
+        ) { innerPaddingModifier ->
+            NavHost(
+                navController = appState.navController,
+                startDestination = SplashNode.route,
+                modifier = Modifier.padding(innerPaddingModifier)
+            ) {
+                apkiKalaGraph(appState)
+            }
+        }
+    }
+}
 
 
 @Composable
@@ -87,6 +93,6 @@ fun ApkiKalaTopAppBar(
             }
         )
     } else {
-        TopAppBar(title = { Text(title)}, modifier = modifier)
+        TopAppBar(title = { Text(title) }, modifier = modifier)
     }
 }

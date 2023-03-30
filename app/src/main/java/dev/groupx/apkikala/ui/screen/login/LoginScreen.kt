@@ -50,9 +50,3 @@ fun LoginScreen(
         }
     }
 }
-
-@Preview
-@Composable
-fun DefaultLoginScreen() {
-    LoginScreen(openAndPopUp = { _, _ -> } )
-}

@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
+@Stable
 class ApkiKalaAppState(
     val scaffoldState: ScaffoldState,
     val navController: NavHostController,

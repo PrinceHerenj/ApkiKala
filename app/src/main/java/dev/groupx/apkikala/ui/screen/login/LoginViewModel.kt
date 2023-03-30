@@ -1,21 +1,21 @@
 package dev.groupx.apkikala.ui.screen.login
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.groupx.apkikala.R.string as AppText
 import dev.groupx.apkikala.model.service.AccountService
+import dev.groupx.apkikala.model.service.LogService
 import dev.groupx.apkikala.ui.common.snackbar.SnackbarManager
 import dev.groupx.apkikala.ui.common.utils.isValidEmail
+import dev.groupx.apkikala.ui.screen.ApkiKalaViewModel
 import dev.groupx.apkikala.ui.screen.home.HomeNode
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import dev.groupx.apkikala.R.string as AppText
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val accountService: AccountService
-) : ViewModel() {
+    private val accountService: AccountService,
+    logService: LogService
+) : ApkiKalaViewModel(logService) {
     var uiState = mutableStateOf(LoginUiState())
         private set
 
@@ -32,21 +32,22 @@ class LoginViewModel @Inject constructor(
         uiState.value = uiState.value.copy(password = newValue)
     }
 
-    fun onSignInClick(openAndPopUp: (String,String) -> Unit) {
-        if(!email.isValidEmail()) {
+    fun onSignInClick(openAndPopUp: (String, String) -> Unit) {
+        if (!email.isValidEmail()) {
             SnackbarManager.showMessage(AppText.email_error)
             return
         }
 
-        if(password.isBlank()) {
+        if (password.isBlank()) {
             SnackbarManager.showMessage(AppText.empty_password_error)
             return
         }
 
-        viewModelScope.launch {
+        launchCatching {
             accountService.authenticate(email, password)
-            openAndPopUp(HomeNode.route, LoginNode.route)
+//            openAndPopUp(HomeNode.route, LoginNode.route)
         }
+
     }
 
     fun onForgotPasswordClick() {
@@ -55,10 +56,11 @@ class LoginViewModel @Inject constructor(
             return
         }
 
-        viewModelScope.launch {
+        launchCatching {
             accountService.sendRecoveryEmail(email)
             SnackbarManager.showMessage(AppText.recovery_email_sent)
         }
+
     }
 
 

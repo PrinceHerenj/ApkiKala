@@ -10,10 +10,12 @@ import dev.groupx.apkikala.ui.theme.ApkiKalaTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             ApkiKalaTheme {
                 ApkiKalaApp()
             }
         }
     }
+
 }
