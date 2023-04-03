@@ -5,7 +5,9 @@ interface StorageService {
 //
 //    suspend fun saveImageUrlToFirestorePost()
 
-    suspend fun loadImageFromFirestore()
+    suspend fun loadImageFromFirestore() {
+
+    }
     
 }
 
