@@ -26,31 +26,34 @@ import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun ApkiKalaApp() {
-    ApkiKalaTheme {
-        val appState = rememberAppState()
+//    ApkiKalaTheme {
+//        val appState = rememberAppState()
+//
+//        Scaffold(
+//            snackbarHost = {
+//                SnackbarHost(
+//                    hostState = it,
+//                    modifier = Modifier.padding(8.dp),
+//                    snackbar = {snackbarData ->
+//                        Snackbar(snackbarData, contentColor = MaterialTheme.colors.onPrimary)
+//                    }
+//                )
+//            },
+//            scaffoldState = appState.scaffoldState
+//        ) { innerPaddingModifier ->
+//            NavHost(
+//                navController = appState.navController,
+//                startDestination = SplashNode.route,
+//                modifier = Modifier.padding(innerPaddingModifier)
+//            ) {
+//                apkiKalaGraph(appState)
+//            }
+//        }
+//    }
 
-        Scaffold(
-            snackbarHost = {
-                SnackbarHost(
-                    hostState = it,
-                    modifier = Modifier.padding(8.dp),
-                    snackbar = {snackbarData ->
-                        Snackbar(snackbarData, contentColor = MaterialTheme.colors.onPrimary)
-                    }
-                )
-            },
-            scaffoldState = appState.scaffoldState
-        ) { innerPaddingModifier ->
-            NavHost(
-                navController = appState.navController,
-                startDestination = SplashNode.route,
-                modifier = Modifier.padding(innerPaddingModifier)
-            ) {
-                apkiKalaGraph(appState)
-            }
-        }
-    }
+
 }
+
 
 
 @Composable
