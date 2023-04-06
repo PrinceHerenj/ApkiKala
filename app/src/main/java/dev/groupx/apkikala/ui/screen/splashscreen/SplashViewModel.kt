@@ -1,4 +1,4 @@
-package dev.groupx.apkikala.ui.screen.egsplashscreen
+package dev.groupx.apkikala.ui.screen.splashscreen
 
 import androidx.compose.runtime.mutableStateOf
 import com.google.firebase.auth.FirebaseAuthException

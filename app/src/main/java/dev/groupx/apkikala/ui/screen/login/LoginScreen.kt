@@ -30,7 +30,7 @@ fun LoginScreen(
 ) {
     val uiState by viewModel.uiState
 
-    BasicToolbar(AppText.login_details)
+//    BasicToolbar(AppText.login_details)
 
     Column(
         modifier = modifier

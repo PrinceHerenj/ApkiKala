@@ -1,20 +1,18 @@
 package dev.groupx.apkikala
 
 import android.content.res.Resources
-import androidx.compose.material.ScaffoldState
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Stable
 import androidx.navigation.NavHostController
 import dev.groupx.apkikala.ui.common.snackbar.SnackbarManager
-import dev.groupx.apkikala.ui.common.snackbar.SnackbarManager.snackbarMessages
 import dev.groupx.apkikala.ui.common.snackbar.SnackbarMessage.Companion.toMessage
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 
 @Stable
 class ApkiKalaAppState(
-    val scaffoldState: ScaffoldState,
+    val scaffoldState: SnackbarHostState,
     val navController: NavHostController,
     private val snackbarManager: SnackbarManager,
     private val resources: Resources,
@@ -25,7 +23,7 @@ class ApkiKalaAppState(
         coroutineScope.launch {
             snackbarManager.snackbarMessages.filterNotNull().collect { snackbarMessage ->
                 val text = snackbarMessage.toMessage(resources)
-                scaffoldState.snackbarHostState.showSnackbar(text)
+                scaffoldState.showSnackbar(text)
             }
         }
     }

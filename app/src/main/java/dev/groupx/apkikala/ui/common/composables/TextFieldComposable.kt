@@ -14,11 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package dev.groupx.apkikala.ui.common.composables
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock

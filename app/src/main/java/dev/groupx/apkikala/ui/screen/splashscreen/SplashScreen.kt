@@ -1,4 +1,4 @@
-package dev.groupx.apkikala.ui.screen.egsplashscreen
+package dev.groupx.apkikala.ui.screen.splashscreen
 
 import dev.groupx.apkikala.R
 import dev.groupx.apkikala.ui.navigation.NavigationDestination
@@ -6,9 +6,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -25,7 +25,7 @@ object SplashNode : NavigationDestination {
     override val titleRes = R.string.app_name
 }
 
-private const val SPLASH_TIMEOUT = 5000L
+private const val SPLASH_TIMEOUT = 1000L
 
 @Composable
 fun SplashScreen(
@@ -38,7 +38,7 @@ fun SplashScreen(
         modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(color = MaterialTheme.colors.background)
+            .background(color = MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -52,7 +52,7 @@ fun SplashScreen(
                 )
             }
         } else {
-            CircularProgressIndicator(color = MaterialTheme.colors.onBackground)
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.onBackground)
         }
     }
 
