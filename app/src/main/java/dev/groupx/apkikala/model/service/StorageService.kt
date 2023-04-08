@@ -1,9 +1,11 @@
 package dev.groupx.apkikala.model.service
 
+import android.net.Uri
+
 interface StorageService {
-//    suspend fun saveImageToStorage()
-//
-//    suspend fun saveImageUrlToFirestorePost()
+    suspend fun saveImageToStorage(imageUri: Uri)
+
+    suspend fun saveImageUrlToFirestorePost(downloadUri: Uri)
 
     suspend fun loadImageURLFromFirestore(): String
 

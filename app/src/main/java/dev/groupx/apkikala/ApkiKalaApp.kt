@@ -13,6 +13,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import dev.groupx.apkikala.ui.common.snackbar.SnackbarManager
 import dev.groupx.apkikala.ui.navigation.apkiKalaGraph
+import dev.groupx.apkikala.ui.screen.home.HomeNode
+import dev.groupx.apkikala.ui.screen.home.HomeScreen
+import dev.groupx.apkikala.ui.screen.login.LoginNode
 import dev.groupx.apkikala.ui.screen.splashscreen.SplashNode
 import dev.groupx.apkikala.ui.theme.ApkiKalaTheme
 import kotlinx.coroutines.CoroutineScope
@@ -20,33 +23,36 @@ import kotlinx.coroutines.CoroutineScope
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ApkiKalaApp() {
-    ApkiKalaTheme {
-        val appState = rememberAppState()
+//    ApkiKalaTheme {
+//        val appState = rememberAppState()
+//
+//        Scaffold(
+//            snackbarHost = {
+////                SnackbarHost(
+////                    hostState = it,
+////                    modifier = Modifier.padding(8.dp),
+////                    snackbar = {snackbarData ->
+////                        Snackbar(snackbarData, contentColor = MaterialTheme.colorScheme.onPrimary)
+////                    }
+////                )
+//                SnackbarHost(appState.scaffoldState)
+//
+//            },
+////            scaffoldState = appState.scaffoldState
+//        ) { innerPaddingModifier ->
+//            NavHost(
+//                navController = appState.navController,
+//                startDestination = SplashNode.route,
+//                modifier = Modifier.padding(innerPaddingModifier)
+//            ) {
+//                apkiKalaGraph(appState)
+//            }
+//        }
+//    }
 
-        Scaffold(
-            snackbarHost = {
-//                SnackbarHost(
-//                    hostState = it,
-//                    modifier = Modifier.padding(8.dp),
-//                    snackbar = {snackbarData ->
-//                        Snackbar(snackbarData, contentColor = MaterialTheme.colorScheme.onPrimary)
-//                    }
-//                )
-                SnackbarHost(appState.scaffoldState)
-                
-            },
-//            scaffoldState = appState.scaffoldState
-        ) { innerPaddingModifier ->
-            NavHost(
-                navController = appState.navController,
-                startDestination = SplashNode.route,
-                modifier = Modifier.padding(innerPaddingModifier)
-            ) {
-                apkiKalaGraph(appState)
-            }
-        }
-    }
 //    CText()
+
+    HomeScreen()
 
 }
 
