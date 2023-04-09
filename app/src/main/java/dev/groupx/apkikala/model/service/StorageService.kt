@@ -9,6 +9,8 @@ interface StorageService {
 
     suspend fun loadImageURLFromFirestore(): String
 
+    suspend fun getUniqueUsername(username: String): Boolean
+
 }
 
 /*TODO

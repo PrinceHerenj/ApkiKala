@@ -7,6 +7,8 @@ import dev.groupx.apkikala.ui.screen.home.HomeNode
 import dev.groupx.apkikala.ui.screen.home.HomeScreen
 import dev.groupx.apkikala.ui.screen.login.LoginNode
 import dev.groupx.apkikala.ui.screen.login.LoginScreen
+import dev.groupx.apkikala.ui.screen.sign_up.SignUpNode
+import dev.groupx.apkikala.ui.screen.sign_up.SignUpScreen
 import dev.groupx.apkikala.ui.screen.splashscreen.SplashNode
 import dev.groupx.apkikala.ui.screen.splashscreen.SplashScreen
 
@@ -25,6 +27,10 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
             restartApp = {route -> appState.clearAndNavigate(route)},
             openScreen = {route -> appState.navigate(route)}
         )
+    }
+
+    composable(SignUpNode.route) {
+        SignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp)})
     }
 
 }

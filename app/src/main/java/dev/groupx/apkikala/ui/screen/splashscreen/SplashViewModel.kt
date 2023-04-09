@@ -24,7 +24,6 @@ class SplashViewModel @Inject constructor(
     }
 
     fun onAppStart(openAndPopUp: (String, String) -> Unit) {
-
         showError.value = false
         if (accountService.hasUser) openAndPopUp(HomeNode.route, SplashNode.route)
         else createAnonymousAccount(openAndPopUp)

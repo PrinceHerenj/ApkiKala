@@ -49,8 +49,10 @@ fun ApkiKalaTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composab
         LightColorPalette
     }
 
+    val colorsTemp = LightColorPalette
+
     MaterialTheme(
-        colorScheme = colors,
+        colorScheme = colorsTemp,
         typography = Typography,
         shapes = Shapes,
         content = content
