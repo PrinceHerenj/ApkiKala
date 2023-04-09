@@ -5,18 +5,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import dev.groupx.apkikala.R.string as AppText
-import dev.groupx.apkikala.ui.navigation.NavigationDestination
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.groupx.apkikala.ui.common.composables.BasicButton
-import dev.groupx.apkikala.ui.common.composables.BasicField
+import dev.groupx.apkikala.ui.navigation.NavigationDestination
+import dev.groupx.apkikala.R.string as AppText
 
 
 object HomeNode : NavigationDestination {
@@ -28,11 +25,11 @@ object HomeNode : NavigationDestination {
 fun HomeScreen(
     restartApp: (String) -> Unit,
     openScreen: (String) -> Unit,
-    openAndPopUp: (String, String) -> Unit,
-    modifier: Modifier = Modifier,
+//    openAndPopUp: (String, String) -> Unit,
+//    modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsState(initial = HomeUiState(false))
+    val uiState by viewModel.uiState.collectAsState(initial = HomeUiState(false, ""))
 
     Column {
         Post()
@@ -47,7 +44,7 @@ fun HomeScreen(
                 viewModel.onSignOutClick(restartApp)
             }
         }
-        Text(text = viewModel.currentUserId)
+        Text(text = uiState.currentUserId)
 
     }
 
