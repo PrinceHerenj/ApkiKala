@@ -7,6 +7,7 @@ import dev.groupx.apkikala.model.service.AccountService
 import dev.groupx.apkikala.model.service.ConfigurationService
 import dev.groupx.apkikala.model.service.LogService
 import dev.groupx.apkikala.ui.screen.ApkiKalaViewModel
+import dev.groupx.apkikala.ui.screen.home.HomeNode
 import dev.groupx.apkikala.ui.screen.login.LoginNode
 import javax.inject.Inject
 
@@ -25,7 +26,7 @@ class SplashViewModel @Inject constructor(
     fun onAppStart(openAndPopUp: (String, String) -> Unit) {
 
         showError.value = false
-        if (accountService.hasUser) openAndPopUp(LoginNode.route, SplashNode.route)
+        if (accountService.hasUser) openAndPopUp(HomeNode.route, SplashNode.route)
         else createAnonymousAccount(openAndPopUp)
     }
 
@@ -37,7 +38,7 @@ class SplashViewModel @Inject constructor(
                 showError.value = true
                 throw ex
             }
-            openAndPopUp(LoginNode.route, SplashNode.route)
+            openAndPopUp(HomeNode.route, SplashNode.route)
         }
     }
 }

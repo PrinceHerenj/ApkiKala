@@ -29,9 +29,7 @@ fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState
-
-//    BasicToolbar(AppText.login_details)
-
+    
     Column(
         modifier = modifier
             .fillMaxWidth()

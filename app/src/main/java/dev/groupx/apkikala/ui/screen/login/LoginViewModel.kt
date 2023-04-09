@@ -45,7 +45,7 @@ class LoginViewModel @Inject constructor(
 
         launchCatching {
             accountService.authenticate(email, password)
-//            openAndPopUp(HomeNode.route, LoginNode.route)
+            openAndPopUp(HomeNode.route, LoginNode.route)
         }
 
     }

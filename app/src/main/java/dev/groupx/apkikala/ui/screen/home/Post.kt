@@ -23,9 +23,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 
 @Composable
-fun Post(
-
-) {
+fun Post() {
     ElevatedCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary
@@ -43,48 +41,6 @@ fun Post(
         }
     }
 }
-
-@Composable
-fun PostBottomBar() {
-    BottomAppBar(
-        containerColor = MaterialTheme.colorScheme.primary,
-        modifier = Modifier
-            .padding(bottom = 8.dp)
-            .height(48.dp)
-    ) {
-        IconButton(onClick = { /*TODO*/ }) {
-            Icon(Icons.Outlined.FavoriteBorder, contentDescription = null)
-        }
-        Spacer(modifier = Modifier.width(8.dp))
-        IconButton(onClick = { /*TODO*/ }) {
-            Icon(Icons.Filled.Notifications, contentDescription = null)
-        }
-    }
-}
-
-
-@Composable
-fun PostContent() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp, bottom = 0.dp)
-            .padding(horizontal = 0.dp)
-    ) {
-        GetPostImage(
-            createPostImage = { imageUrl ->
-                ImageCommon(
-                    imageUrl = imageUrl,
-                    height = 400.dp,
-                    width = 400.dp,
-                    shape = RoundedCornerShape(4.dp),
-                    contentScale = ContentScale.FillWidth
-                )
-            }
-        )
-    }
-}
-
 
 @Composable
 fun PostTopBar() {
@@ -116,6 +72,46 @@ fun PostTopBar() {
 
         IconButton(onClick = { /*TODO*/ }) {
             Icon(Icons.Filled.MoreVert, contentDescription = null)
+        }
+    }
+}
+
+@Composable
+fun PostContent() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp, bottom = 0.dp)
+            .padding(horizontal = 0.dp)
+    ) {
+        GetPostImage(
+            createPostImage = { imageUrl ->
+                ImageCommon(
+                    imageUrl = imageUrl,
+                    height = 400.dp,
+                    width = 400.dp,
+                    shape = RoundedCornerShape(4.dp),
+                    contentScale = ContentScale.FillWidth
+                )
+            }
+        )
+    }
+}
+
+@Composable
+fun PostBottomBar() {
+    BottomAppBar(
+        containerColor = MaterialTheme.colorScheme.primary,
+        modifier = Modifier
+            .padding(bottom = 8.dp)
+            .height(48.dp)
+    ) {
+        IconButton(onClick = { /*TODO*/ }) {
+            Icon(Icons.Outlined.FavoriteBorder, contentDescription = null)
+        }
+        Spacer(modifier = Modifier.width(8.dp))
+        IconButton(onClick = { /*TODO*/ }) {
+            Icon(Icons.Filled.Notifications, contentDescription = null)
         }
     }
 }

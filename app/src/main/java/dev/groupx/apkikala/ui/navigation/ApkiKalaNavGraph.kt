@@ -1,17 +1,14 @@
 package dev.groupx.apkikala.ui.navigation
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import dev.groupx.apkikala.ApkiKalaAppState
-import dev.groupx.apkikala.ui.screen.splashscreen.SplashNode
-import dev.groupx.apkikala.ui.screen.splashscreen.SplashScreen
 import dev.groupx.apkikala.ui.screen.home.HomeNode
+import dev.groupx.apkikala.ui.screen.home.HomeScreen
 import dev.groupx.apkikala.ui.screen.login.LoginNode
 import dev.groupx.apkikala.ui.screen.login.LoginScreen
+import dev.groupx.apkikala.ui.screen.splashscreen.SplashNode
+import dev.groupx.apkikala.ui.screen.splashscreen.SplashScreen
 
 fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
     composable(SplashNode.route) {
@@ -22,7 +19,13 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
         LoginScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp)} )
     }
 
-
+    composable(HomeNode.route) {
+        HomeScreen(
+            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp)},
+            restartApp = {route -> appState.clearAndNavigate(route)},
+            openScreen = {route -> appState.navigate(route)}
+        )
+    }
 
 }
 

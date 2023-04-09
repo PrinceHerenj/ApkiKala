@@ -23,36 +23,26 @@ import kotlinx.coroutines.CoroutineScope
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ApkiKalaApp() {
-//    ApkiKalaTheme {
-//        val appState = rememberAppState()
-//
-//        Scaffold(
-//            snackbarHost = {
-////                SnackbarHost(
-////                    hostState = it,
-////                    modifier = Modifier.padding(8.dp),
-////                    snackbar = {snackbarData ->
-////                        Snackbar(snackbarData, contentColor = MaterialTheme.colorScheme.onPrimary)
-////                    }
-////                )
-//                SnackbarHost(appState.scaffoldState)
-//
-//            },
-////            scaffoldState = appState.scaffoldState
-//        ) { innerPaddingModifier ->
-//            NavHost(
-//                navController = appState.navController,
-//                startDestination = SplashNode.route,
-//                modifier = Modifier.padding(innerPaddingModifier)
-//            ) {
-//                apkiKalaGraph(appState)
-//            }
-//        }
-//    }
+    ApkiKalaTheme {
+        val appState = rememberAppState()
+
+        Scaffold(
+            snackbarHost = {
+                SnackbarHost(appState.scaffoldState)
+
+            },
+        ) { innerPaddingModifier ->
+            NavHost(
+                navController = appState.navController,
+                startDestination = SplashNode.route,
+                modifier = Modifier.padding(innerPaddingModifier)
+            ) {
+                apkiKalaGraph(appState)
+            }
+        }
+    }
 
 //    CText()
-
-    HomeScreen()
 
 }
 
