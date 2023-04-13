@@ -1,5 +1,6 @@
 package dev.groupx.apkikala.ui.screen.home
 
+import android.net.Uri
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.groupx.apkikala.model.service.AccountService
 import dev.groupx.apkikala.model.service.LogService
@@ -17,8 +18,8 @@ class HomeViewModel @Inject constructor(
     private val storageService: StorageService,
     logService: LogService
 ): ApkiKalaViewModel(logService) {
-    val uiState = accountService.currentUser.map { HomeUiState(it.isAnonymous, it.id) }
-
+    var uiState = accountService.currentUser.map { HomeUiState(it.isAnonymous, it.id) }
+        private set
     fun onLoginClick(openScreen: (String) -> Unit) = openScreen(LoginNode.route)
     fun onSignUpClick(openScreen: (String) -> Unit) = openScreen(SignUpNode.route)
 
@@ -26,6 +27,13 @@ class HomeViewModel @Inject constructor(
         launchCatching {
             accountService.signOut()
             restartApp(SplashNode.route)
+        }
+    }
+
+    fun addImageToStorageAndFirestore(imageUri: Uri) {
+        launchCatching {
+            val downloadUrl = storageService.saveImageToStorageReturningUrl(imageUri)
+            storageService.saveImageUrlToFirestorePost(downloadUrl)
         }
     }
 

@@ -44,7 +44,6 @@ fun SignUpScreen(
   val uiState by viewModel.uiState
   val fieldModifier = Modifier.fieldModifier()
 
-  val coroutineScope = rememberCoroutineScope()
 
   Column(
     modifier = modifier

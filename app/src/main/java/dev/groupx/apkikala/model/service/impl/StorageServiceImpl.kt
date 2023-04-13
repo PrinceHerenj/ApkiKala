@@ -9,22 +9,27 @@ import dev.groupx.apkikala.model.service.StorageService
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class StorageServiceImpl @Inject constructor(private val storage: FirebaseStorage, private val firestore: FirebaseFirestore) : StorageService {
+class StorageServiceImpl @Inject constructor(
+    private val storage: FirebaseStorage,
+    private val firestore: FirebaseFirestore,
+) : StorageService {
 
-    override suspend fun saveImageToStorage(imageUri: Uri) {
-        TODO("Not yet implemented")
-//        return try {
-//            storage.reference.child(IMGFOL).child("egFile.jpg")
-//                .putFile()
-//        }
+    override suspend fun saveImageToStorageReturningUrl(imageUri: Uri): Uri{
+        return storage.reference.child(IMGFOL).child("egFile.jpg")
+            .putFile(imageUri).await()
+            .storage.downloadUrl.await()
+
     }
 
-    override suspend fun saveImageUrlToFirestorePost(downloadUri: Uri) {
-        TODO("Not yet implemented")
+    override suspend fun saveImageUrlToFirestorePost(downloadUrl: Uri) {
+        firestore.collection(EG_COL).document(DOCID).set(mapOf(
+            "URL" to downloadUrl
+        )).await()
     }
 
-    override suspend fun loadImageURLFromFirestore() : String {
-        return firestore.collection(EG_COL).document(DOCID).get().await().getString("URL").toString()
+    override suspend fun loadImageURLFromFirestore(): String {
+        return firestore.collection(EG_COL).document(DOCID).get().await().getString("URL")
+            .toString()
     }
 
     override suspend fun getUniqueUsername(username: String): Boolean {
