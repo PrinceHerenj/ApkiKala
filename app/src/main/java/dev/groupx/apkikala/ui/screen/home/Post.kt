@@ -1,5 +1,6 @@
 package dev.groupx.apkikala.ui.screen.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -91,7 +92,9 @@ fun PostContent() {
                     height = 400.dp,
                     width = 400.dp,
                     shape = RoundedCornerShape(4.dp),
-                    contentScale = ContentScale.FillWidth
+                    contentScale = ContentScale.FillWidth,
+//                    modifier = Modifier
+//                        .clickable {  }
                 )
             }
         )
@@ -141,6 +144,7 @@ fun ImageCommon(
     width: Dp,
     shape: Shape,
     contentScale: ContentScale,
+    modifier: Modifier = Modifier
 ) {
     Box(
         modifier = Modifier
