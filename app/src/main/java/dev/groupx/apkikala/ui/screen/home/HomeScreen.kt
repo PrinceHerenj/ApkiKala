@@ -118,7 +118,7 @@ fun HomeScreen(
                         viewModel.onSignOutClick(restartApp)
                     }
                     BasicButton(AppText.delete_acc, modifier = Modifier.padding(start = 8.dp)) {
-                        viewModel.onDeleteAccClick(openAndPopUp)
+                        viewModel.onDeleteAccClick(openAndPopUp, uiState.currentUserId)
                     }
                 }
             }
