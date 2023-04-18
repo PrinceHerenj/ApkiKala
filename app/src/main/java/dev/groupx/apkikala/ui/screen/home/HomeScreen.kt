@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.groupx.apkikala.ui.common.composables.BasicButton
 import dev.groupx.apkikala.ui.navigation.NavigationDestination
+import dev.groupx.apkikala.ui.screen.AccountUiState
 import dev.groupx.apkikala.R.string as AppText
 
 object HomeNode : NavigationDestination {
@@ -37,7 +38,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsState(initial = HomeUiState(false, ))
+    val uiState by viewModel.uiState.collectAsState(initial = AccountUiState(false ))
 
     val galleryLauncher = rememberLauncherForActivityResult(GetContent()) { imageUri ->
         imageUri?.let {
@@ -95,7 +96,7 @@ fun HomeScreen(
 
 
         Column(modifier = Modifier.padding(it)) {
-            Post()
+            Post("5dVVboSdA2JDcF17RAC2")
 
             if (uiState.isAnonymousAccount) {
                 Row {

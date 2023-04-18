@@ -24,7 +24,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 
 @Composable
-fun Post() {
+fun Post(documentId: String) {
     ElevatedCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary
@@ -47,10 +47,20 @@ fun Post() {
 
 @Composable
 fun PostDescription() {
-    Column(Modifier.padding(horizontal = 16.dp).padding(bottom = 16.dp)) {
-        Text(text = "SketchUp ⭐", style = MaterialTheme.typography.bodyLarge)
-        Spacer(modifier = Modifier.size(32.dp))
-        Text(text = "Created with 💗", style = MaterialTheme.typography.bodySmall)
+    Column(
+        Modifier
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 16.dp)
+    ) {
+        Row {
+            Text(text = "SketchUp ⭐", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Text(text = "time_created_placeholder", Modifier.weight(1f))
+        }
+        Spacer(modifier = Modifier.size(24.dp))
+        Text(
+            text = "Created with 💗, Snapchat Filter: Vibes",
+            style = MaterialTheme.typography.bodySmall
+        )
 
     }
 }
@@ -156,7 +166,7 @@ fun ImageCommon(
     width: Dp,
     shape: Shape,
     contentScale: ContentScale,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = Modifier

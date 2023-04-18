@@ -1,4 +1,4 @@
-package dev.groupx.apkikala.ui.screen.profile
+package dev.groupx.apkikala.ui.screen.profile_personal
 
 import androidx.compose.runtime.Composable
 import dev.groupx.apkikala.ui.navigation.NavigationDestination
@@ -10,6 +10,6 @@ object ProfileNode: NavigationDestination {
 }
 
 @Composable
-fun ProfileScreen() {
+fun PersonalProfileScreen() {
 
 }
