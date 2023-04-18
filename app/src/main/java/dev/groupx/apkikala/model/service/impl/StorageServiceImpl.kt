@@ -16,7 +16,6 @@ class StorageServiceImpl @Inject constructor(
     private var newPostRef = ""
 
     // Todo
-
     override suspend fun saveImageToStorageReturningUrl(imageUri: Uri): Uri {
         newPostRef = firestore.collection(POSTS).document().id
 
