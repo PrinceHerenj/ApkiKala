@@ -32,21 +32,16 @@ object HomeNode : NavigationDestination {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    restartApp: (String) -> Unit,
     openScreen: (String) -> Unit,
-    openAndPopUp: (String, String) -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsState(initial = AccountUiState(false ))
+    val uiState by viewModel.uiState.collectAsState(initial = AccountUiState(false))
 
     val galleryLauncher = rememberLauncherForActivityResult(GetContent()) { imageUri ->
         imageUri?.let {
             viewModel.addImageToStorageAndFirestore(imageUri)
         }
     }
-
-    var barSelectedIndex by remember { mutableStateOf(0) }
 
 
     Scaffold(
@@ -62,30 +57,28 @@ fun HomeScreen(
         bottomBar = {
             NavigationBar {
                 NavigationBarItem(
-                    selected = barSelectedIndex == 0,
-                    onClick = {
-                        barSelectedIndex = 0
-                    },
+                    selected = true,
+                    onClick = { },
                     icon = { Icon(Icons.Filled.Home, contentDescription = null) }
                 )
                 NavigationBarItem(
-                    selected = barSelectedIndex == 1,
+                    selected = false,
                     onClick = {
-                        barSelectedIndex = 1
+                        viewModel.onSearchClick(openScreen)
                     },
                     icon = { Icon(Icons.Filled.Search, contentDescription = null) }
                 )
                 NavigationBarItem(
-                    selected = barSelectedIndex == 2,
+                    selected = false,
                     onClick = {
-                        barSelectedIndex = 2
+                        viewModel.onCollabClick(openScreen)
                     },
                     icon = { Icon(Icons.Filled.PlayArrow, contentDescription = null) }
                 )
                 NavigationBarItem(
-                    selected = barSelectedIndex == 3,
+                    selected = false,
                     onClick = {
-                        barSelectedIndex = 3
+                        viewModel.onPersonalProfileClick(openScreen)
                     },
                     icon = { Icon(Icons.Filled.Person, contentDescription = null) }
                 )
@@ -97,30 +90,6 @@ fun HomeScreen(
 
         Column(modifier = Modifier.padding(it)) {
             Post("5dVVboSdA2JDcF17RAC2")
-
-            if (uiState.isAnonymousAccount) {
-                Row {
-                    BasicButton(AppText.sign_in, modifier = Modifier.padding(start = 8.dp)) {
-                        viewModel.onLoginClick(openScreen)
-                    }
-                    BasicButton(AppText.sign_up, modifier = Modifier.padding(start = 8.dp)) {
-                        viewModel.onSignUpClick(openScreen)
-                    }
-
-                }
-
-            } else {
-                Row {
-                    BasicButton(AppText.sign_out, modifier = Modifier.padding(start = 8.dp)) {
-                        viewModel.onSignOutClick(restartApp)
-                    }
-                    BasicButton(AppText.delete_acc, modifier = Modifier.padding(start = 8.dp)) {
-                        viewModel.onDeleteAccClick(openAndPopUp, uiState.currentUserId)
-                    }
-                }
-            }
-            Text(text = uiState.currentUserId, modifier = Modifier.padding(start = 8.dp))
-
         }
     }
 
