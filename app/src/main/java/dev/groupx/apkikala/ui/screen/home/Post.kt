@@ -41,6 +41,18 @@ fun Post() {
             PostBottomBar()
         }
     }
+
+    PostDescription()
+}
+
+@Composable
+fun PostDescription() {
+    Column(Modifier.padding(horizontal = 16.dp).padding(bottom = 16.dp)) {
+        Text(text = "SketchUp ⭐", style = MaterialTheme.typography.bodyLarge)
+        Spacer(modifier = Modifier.size(32.dp))
+        Text(text = "Created with 💗", style = MaterialTheme.typography.bodySmall)
+
+    }
 }
 
 @Composable

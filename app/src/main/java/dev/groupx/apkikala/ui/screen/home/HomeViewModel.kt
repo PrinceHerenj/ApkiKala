@@ -40,7 +40,7 @@ class HomeViewModel @Inject constructor(
     fun addImageToStorageAndFirestore(imageUri: Uri) {
         launchCatching {
             val downloadUrl = storageService.saveImageToStorageReturningUrl(imageUri)
-            storageService.saveImageUrlToFirestorePost(downloadUrl)
+            storageService.saveImageUrlToFirestorePost(downloadUrl, accountService.currentUserId)
         }
     }
 

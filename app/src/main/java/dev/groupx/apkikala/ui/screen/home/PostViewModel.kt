@@ -19,11 +19,11 @@ class PostViewModel @Inject constructor(
     var postImageUrlState by mutableStateOf("")
 
     init {
-        getProfileImageState()
+        getPostImageStates()
     }
 
-    private fun getProfileImageState() = viewModelScope.launch {
-        profileImageUrlState = storageService.loadImageURLFromFirestore()
-        postImageUrlState = storageService.loadImageURLFromFirestore()
+    private fun getPostImageStates() = viewModelScope.launch {
+        profileImageUrlState = storageService.loadImageURLFromFirestore("5dVVboSdA2JDcF17RAC2")
+        postImageUrlState = storageService.loadImageURLFromFirestore("5dVVboSdA2JDcF17RAC2")
     }
 }

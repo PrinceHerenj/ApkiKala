@@ -8,10 +8,8 @@ interface StorageService {
     suspend fun removeUserInfoFromFirestore(uid: String)
     suspend fun saveImageToStorageReturningUrl(imageUri: Uri) : Uri
 
-    suspend fun saveImageUrlToFirestorePost(downloadUrl: Uri)
+    suspend fun saveImageUrlToFirestorePost(downloadUrl: Uri, userId: String)
 
-    suspend fun loadImageURLFromFirestore(): String
-
-    suspend fun getUniqueUsername(username: String): Boolean
+    suspend fun loadImageURLFromFirestore(postRef: String): String
 
 }

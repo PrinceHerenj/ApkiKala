@@ -50,12 +50,6 @@ fun HomeScreen(
 
     Scaffold(
         floatingActionButton = {
-//            FloatingActionButton(
-//                onClick = { galleryLauncher.launch("image/*") },
-//                shape = MaterialTheme.shapes.large
-//            ) {
-//                Icon(Icons.Filled.Add, contentDescription = "Add")
-//            }
             ExtendedFloatingActionButton(
                 onClick = { galleryLauncher.launch("image/*") },
             ) {
@@ -98,6 +92,8 @@ fun HomeScreen(
         }
 
     ) {
+
+
         Column(modifier = Modifier.padding(it)) {
             Post()
 
