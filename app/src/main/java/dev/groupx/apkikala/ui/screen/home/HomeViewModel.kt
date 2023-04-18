@@ -23,10 +23,18 @@ class HomeViewModel @Inject constructor(
     fun onLoginClick(openScreen: (String) -> Unit) = openScreen(LoginNode.route)
     fun onSignUpClick(openScreen: (String) -> Unit) = openScreen(SignUpNode.route)
 
-    fun onSignOutClick(restartApp: (String) -> Unit) {
+    fun onSignOutClick(openScreen: (String) -> Unit) {
         launchCatching {
             accountService.signOut()
-            restartApp(SplashNode.route)
+            openScreen(LoginNode.route)
+//            restartApp(SplashNode.route)
+        }
+    }
+
+    fun onDeleteAccClick(openAndPopUp: (String, String) -> Unit) {
+        launchCatching {
+            accountService.deleteAccount()
+            openAndPopUp(HomeNode.route, LoginNode.route)
         }
     }
 

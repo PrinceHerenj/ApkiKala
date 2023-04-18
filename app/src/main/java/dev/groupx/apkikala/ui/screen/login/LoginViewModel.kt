@@ -8,6 +8,7 @@ import dev.groupx.apkikala.ui.common.snackbar.SnackbarManager
 import dev.groupx.apkikala.ui.common.utils.isValidEmail
 import dev.groupx.apkikala.ui.screen.ApkiKalaViewModel
 import dev.groupx.apkikala.ui.screen.home.HomeNode
+import dev.groupx.apkikala.ui.screen.sign_up.SignUpNode
 import javax.inject.Inject
 import dev.groupx.apkikala.R.string as AppText
 
@@ -47,9 +48,9 @@ class LoginViewModel @Inject constructor(
             accountService.authenticate(email, password)
             openAndPopUp(HomeNode.route, LoginNode.route)
         }
-
     }
 
+    fun onSignUpClick(openAndPopUp: (String, String) -> Unit) = openAndPopUp(SignUpNode.route, LoginNode.route)
     fun onForgotPasswordClick() {
         if (!email.isValidEmail()) {
             SnackbarManager.showMessage(AppText.email_error)

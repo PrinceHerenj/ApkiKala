@@ -3,8 +3,10 @@ package dev.groupx.apkikala.model.service.impl
 import android.content.ContentValues.TAG
 import android.net.Uri
 import android.util.Log
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import dev.groupx.apkikala.model.service.AccountService
 import dev.groupx.apkikala.model.service.StorageService
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -13,6 +15,19 @@ class StorageServiceImpl @Inject constructor(
     private val storage: FirebaseStorage,
     private val firestore: FirebaseFirestore,
 ) : StorageService {
+    override suspend fun addUserToFirestoreOnSignUp(uid: String, username: String, address: String, bio: String) {
+        firestore.collection(USERS).document(uid)
+            .set(hashMapOf(
+                "username" to username,
+                "address" to address,
+                "bio" to bio
+            ))
+    }
+
+    override suspend fun removeUserInfoFromFirestore(uid: String) {
+        firestore.collection(USERS).document(uid)
+            .delete()
+    }
 
     override suspend fun saveImageToStorageReturningUrl(imageUri: Uri): Uri{
         return storage.reference.child(IMGFOL).child("egFile.jpg")

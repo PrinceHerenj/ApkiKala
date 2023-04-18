@@ -51,6 +51,18 @@ fun BasicField(
 }
 
 @Composable
+fun CustomField(text: String, value: String, onNewValue: (String) -> Unit, modifier: Modifier = Modifier) {
+  OutlinedTextField(
+    singleLine = true,
+    modifier = modifier,
+    value = value,
+    onValueChange = { onNewValue(it) },
+    placeholder = { Text(text) },
+//    leadingIcon = { Icon(imageVector = Icons.Filled., contentDescription = "Email") }
+  )
+}
+
+@Composable
 fun EmailField(value: String, onNewValue: (String) -> Unit, modifier: Modifier = Modifier) {
   OutlinedTextField(
     singleLine = true,

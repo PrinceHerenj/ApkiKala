@@ -25,7 +25,7 @@ object SplashNode : NavigationDestination {
     override val titleRes = R.string.app_name
 }
 
-private const val SPLASH_TIMEOUT = 1000L
+private const val SPLASH_TIMEOUT = 500L
 
 @Composable
 fun SplashScreen(

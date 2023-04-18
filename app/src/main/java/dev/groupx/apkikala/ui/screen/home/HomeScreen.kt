@@ -37,7 +37,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsState(initial = HomeUiState(false, ""))
+    val uiState by viewModel.uiState.collectAsState(initial = HomeUiState(false, ))
 
     val galleryLauncher = rememberLauncherForActivityResult(GetContent()) { imageUri ->
         imageUri?.let {
@@ -50,12 +50,17 @@ fun HomeScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(
+//            FloatingActionButton(
+//                onClick = { galleryLauncher.launch("image/*") },
+//                shape = MaterialTheme.shapes.large
+//            ) {
+//                Icon(Icons.Filled.Add, contentDescription = "Add")
+//            }
+            ExtendedFloatingActionButton(
                 onClick = { galleryLauncher.launch("image/*") },
-//                containerColor = MaterialTheme.colorScheme.secondary,
-                shape = MaterialTheme.shapes.large
             ) {
                 Icon(Icons.Filled.Add, contentDescription = "Add")
+                Text(text = "Add Post")
             }
         },
         floatingActionButtonPosition = FabPosition.End,
@@ -104,14 +109,20 @@ fun HomeScreen(
                     BasicButton(AppText.sign_up, modifier = Modifier.padding(start = 8.dp)) {
                         viewModel.onSignUpClick(openScreen)
                     }
+
                 }
 
             } else {
-                BasicButton(AppText.sign_out, modifier = Modifier.padding()) {
-                    viewModel.onSignOutClick(restartApp)
+                Row {
+                    BasicButton(AppText.sign_out, modifier = Modifier.padding(start = 8.dp)) {
+                        viewModel.onSignOutClick(restartApp)
+                    }
+                    BasicButton(AppText.delete_acc, modifier = Modifier.padding(start = 8.dp)) {
+                        viewModel.onDeleteAccClick(openAndPopUp)
+                    }
                 }
             }
-            Text(text = uiState.currentUserId)
+            Text(text = uiState.currentUserId, modifier = Modifier.padding(start = 8.dp))
 
         }
     }

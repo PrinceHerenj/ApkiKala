@@ -5,13 +5,17 @@ import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import dev.groupx.apkikala.model.User
 import dev.groupx.apkikala.model.service.AccountService
+import dev.groupx.apkikala.model.service.StorageService
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class AccountServiceImpl @Inject constructor(private val auth: FirebaseAuth) : AccountService {
+class AccountServiceImpl @Inject constructor(
+    private val auth: FirebaseAuth,
+    private val storageService: StorageService
+) : AccountService {
     override val currentUserId: String
         get() = auth.currentUser?.uid.orEmpty()
 
@@ -40,14 +44,22 @@ class AccountServiceImpl @Inject constructor(private val auth: FirebaseAuth) : A
         auth.signInAnonymously().await()
     }
 
-    override suspend fun linkAccount(email: String, password: String): Unit =
+    override suspend fun linkAccount(
+        email: String,
+        password: String,
+        username: String,
+        address: String,
+        bio: String
+    ) =
         trace(LINK_ACCOUNT_TRACE) {
             val credential = EmailAuthProvider.getCredential(email, password)
             auth.currentUser!!.linkWithCredential(credential).await()
+            storageService.addUserToFirestoreOnSignUp(currentUserId, username, address, bio)
         }
 
     override suspend fun deleteAccount() {
         auth.currentUser!!.delete().await()
+        storageService.removeUserInfoFromFirestore(currentUserId)
     }
 
     override suspend fun signOut() {
@@ -56,7 +68,7 @@ class AccountServiceImpl @Inject constructor(private val auth: FirebaseAuth) : A
         }
         auth.signOut()
 
-        createAnonymousAccount()
+//        createAnonymousAccount()
     }
 
     companion object {

@@ -28,7 +28,7 @@ import dev.groupx.apkikala.ui.common.composables.*
 import dev.groupx.apkikala.ui.common.utils.basicButton
 import dev.groupx.apkikala.ui.common.utils.fieldModifier
 import dev.groupx.apkikala.ui.navigation.NavigationDestination
-import kotlinx.coroutines.launch
+
 
 object SignUpNode: NavigationDestination {
   override val route = "SignUpScreen"
@@ -53,11 +53,11 @@ fun SignUpScreen(
     verticalArrangement = Arrangement.Center,
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    EmailField(uiState.username, viewModel::onUsernameChange, fieldModifier) // username
-    EmailField(uiState.bio, viewModel::onBioChange, fieldModifier) //
-    EmailField(uiState.city, viewModel::onCityChange, fieldModifier) //
-    EmailField(uiState.state, viewModel::onStateChange, fieldModifier) //
-    EmailField(uiState.country, viewModel::onCountryChange, fieldModifier) //
+    CustomField("Username", uiState.username, viewModel::onUsernameChange, fieldModifier) // username
+    CustomField("Tell us about yourself a little", uiState.bio, viewModel::onBioChange, fieldModifier) //
+    CustomField("City",uiState.city, viewModel::onCityChange, fieldModifier) //
+    CustomField("State", uiState.state, viewModel::onStateChange, fieldModifier) //
+    CustomField("Country", uiState.country, viewModel::onCountryChange, fieldModifier) //
 
     EmailField(uiState.email, viewModel::onEmailChange, fieldModifier)
 

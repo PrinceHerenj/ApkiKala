@@ -20,7 +20,6 @@ import androidx.compose.runtime.mutableStateOf
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.groupx.apkikala.model.service.AccountService
 import dev.groupx.apkikala.model.service.LogService
-import dev.groupx.apkikala.model.service.StorageService
 import dev.groupx.apkikala.ui.common.snackbar.SnackbarManager
 import dev.groupx.apkikala.ui.common.utils.isValidEmail
 import dev.groupx.apkikala.ui.common.utils.isValidPassword
@@ -33,7 +32,6 @@ import dev.groupx.apkikala.R.string as AppText
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
   private val accountService: AccountService,
-  private val storageService: StorageService,
   logService: LogService
 ) : ApkiKalaViewModel(logService) {
   var uiState = mutableStateOf(SignUpUiState())
@@ -103,7 +101,8 @@ class SignUpViewModel @Inject constructor(
     }
 
     launchCatching {
-      accountService.linkAccount(email, password)
+      val address = "$city, $state, $country"
+      accountService.linkAccount(email, password, username, address, bio)
       openAndPopUp(HomeNode.route, SignUpNode.route)
     }
   }
