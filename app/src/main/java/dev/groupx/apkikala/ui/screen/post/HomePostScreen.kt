@@ -40,7 +40,7 @@ fun HomePostScreen(
 
     val state = rememberPullRefreshState(refreshing, ::refresh)
 
-    Box(Modifier.pullRefresh(state)) {
+    Box(modifier.pullRefresh(state)) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(uiState.posts) { post ->
                 PostItem(post)

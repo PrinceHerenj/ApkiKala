@@ -7,14 +7,14 @@
 
 ## For PostComposable 
 * post composable uses post() to render ☑️
-* posts render on a lazy list in feed
+* posts render on a lazy list in feed ☑️
 
 
 ## For PostList
-* query for personal posts in profile feed, order by recent posts first
+* query for personal posts in profile feed, order by recent posts first ☑️
 
 ## For Signup
-* divide the signup process
+* divide the signup process ☑️
 
 ## Develop Search Page
 

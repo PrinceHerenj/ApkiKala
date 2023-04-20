@@ -68,7 +68,7 @@ fun HomeScreen(
         }
 
     ) {
-        HomePostScreen(Modifier.padding(it))
+        HomePostScreen(modifier = Modifier.padding(it))
     }
 }
 

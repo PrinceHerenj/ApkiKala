@@ -1,9 +1,11 @@
 package dev.groupx.apkikala.ui.screen.post
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,6 +22,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,7 +37,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.google.firebase.Timestamp
 import dev.groupx.apkikala.model.Post
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 @Composable
@@ -43,7 +49,10 @@ fun PostItem(post: Post) {
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary
         ),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(8.dp),
+        elevation = CardDefaults.cardElevation(
+            8.dp
+        ),
         modifier = Modifier.padding(10.dp)
     ) {
         Column(
@@ -61,9 +70,15 @@ fun PostItem(post: Post) {
 
     PostDescription(
         post.title,
-        "19th April",
+        timestampToString(post.createdAt, "MMMM dd"),
         post.description
     )
+}
+
+fun timestampToString(timestamp: Timestamp, format: String): String {
+    val sdf = SimpleDateFormat(format, Locale.getDefault())
+    val date = timestamp.toDate()
+    return sdf.format(date)
 }
 
 @Composable
@@ -77,14 +92,18 @@ fun PostDescription(
             .padding(horizontal = 16.dp)
             .padding(bottom = 16.dp)
     ) {
-        Row {
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             Text(text = title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            Text(text = createdAt, Modifier.weight(1f))
+            Text(text = createdAt)
         }
-        Spacer(modifier = Modifier.size(24.dp))
+        Spacer(modifier = Modifier.size(8.dp))
         Text(
             text = description,
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.padding(start = 10.dp)
         )
 
     }
@@ -127,12 +146,12 @@ fun PostTopBar(profileImageUrl: String, username: String) {
 
 @Composable
 fun PostContent(postImageUrl: String) {
-    Row(
+    Surface(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp, bottom = 0.dp)
-            .padding(horizontal = 0.dp)
+            .fillMaxHeight()
+            .padding(0.dp)
     ) {
+
         GetPostImage(
             postImageUrl = postImageUrl,
             createPostImage = { imageUrl ->
@@ -140,13 +159,12 @@ fun PostContent(postImageUrl: String) {
                     imageUrl = imageUrl,
                     height = 400.dp,
                     width = 400.dp,
-                    shape = RoundedCornerShape(4.dp),
+                    shape = RoundedCornerShape(0.dp),
                     contentScale = ContentScale.FillWidth,
-//                    modifier = Modifier
-//                        .clickable {  }
                 )
             }
         )
+
     }
 }
 
