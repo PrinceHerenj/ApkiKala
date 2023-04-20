@@ -3,7 +3,9 @@ package dev.groupx.apkikala.model.service.impl
 import android.net.Uri
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.storage.FirebaseStorage
+import dev.groupx.apkikala.model.Post
 import dev.groupx.apkikala.model.service.StorageService
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -15,7 +17,11 @@ class StorageServiceImpl @Inject constructor(
 
     private var newPostRef = ""
 
-    // Todo
+    override suspend fun getCurrentPost(postId: String): Post {
+        return firestore.collection(POSTS).document(postId)
+            .get().await().toObject<Post>()!!
+    }
+
     override suspend fun saveImageToStorageReturningUrl(imageUri: Uri): Uri {
         newPostRef = firestore.collection(POSTS).document().id
 
@@ -35,13 +41,12 @@ class StorageServiceImpl @Inject constructor(
         ).await()
     }
 
-    override suspend fun loadImageURLFromFirestore(postRef: String): String {
-        return firestore.collection(POSTS).document(postRef).get().await().getString("URL")
-            .toString()
-
-    }
-
-    // Complete
+    // Not Required
+//    override suspend fun loadImageURLFromFirestore(postRef: String): String {
+//        return firestore.collection(POSTS).document(postRef).get().await().getString("URL")
+//            .toString()
+//
+//    }
     override suspend fun addUserToFirestoreOnSignUp(
         uid: String,
         username: String,

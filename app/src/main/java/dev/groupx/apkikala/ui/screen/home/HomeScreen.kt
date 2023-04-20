@@ -13,15 +13,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import dev.groupx.apkikala.ui.common.composables.BasicButton
+import com.google.firebase.Timestamp
+import dev.groupx.apkikala.model.Post
 import dev.groupx.apkikala.ui.navigation.NavigationDestination
 import dev.groupx.apkikala.ui.screen.AccountUiState
+import dev.groupx.apkikala.ui.screen.post.PostItem
 import dev.groupx.apkikala.R.string as AppText
 
 object HomeNode : NavigationDestination {
@@ -42,7 +40,6 @@ fun HomeScreen(
             viewModel.addImageToStorageAndFirestore(imageUri)
         }
     }
-
 
     Scaffold(
         floatingActionButton = {
@@ -86,13 +83,18 @@ fun HomeScreen(
         }
 
     ) {
-
-
         Column(modifier = Modifier.padding(it)) {
-            Post("5dVVboSdA2JDcF17RAC2")
+            val tempPost = Post(
+                title = "Sketch Up ⭐",
+                description = "Created with 🥰",
+                profileImageUrl = "https://firebasestorage.googleapis.com/v0/b/apki-kala.appspot.com/o/imagesGlobal%2F5dVVboSdA2JDcF17RAC2.jpg?alt=media&token=a1533f50-b63e-470d-ba03-ce07d9da252c",
+                postImageUrl = "https://firebasestorage.googleapis.com/v0/b/apki-kala.appspot.com/o/imagesGlobal%2Fs3CuyQYSvDEVI0vm2Kyn.jpg?alt=media&token=a48d052f-d81e-48e1-8726-0e73417438a7",
+                createdAt = Timestamp.now(),
+                user = "C7F81ikBGQMN4m9boWNzbJ99JJ23",
+                username = "Prince Herenj"
+            )
+            PostItem(post = tempPost)
         }
     }
-
-
 }
 

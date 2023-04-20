@@ -15,7 +15,7 @@ import javax.inject.Inject
 class SplashViewModel @Inject constructor(
     configurationService: ConfigurationService,
     private val accountService: AccountService,
-    logService: LogService
+    logService: LogService,
 ) : ApkiKalaViewModel(logService) {
     val showError = mutableStateOf(false)
 

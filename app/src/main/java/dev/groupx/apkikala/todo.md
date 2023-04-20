@@ -4,7 +4,7 @@
 * add facility to comment
 
 ## For PostComposable 
-* post composable uses documentID to render
+* post composable uses post() to render ☑️
 * posts render on a lazy list in feed
 
 

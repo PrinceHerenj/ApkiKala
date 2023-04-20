@@ -1,13 +1,26 @@
-package dev.groupx.apkikala.ui.screen.home
+package dev.groupx.apkikala.ui.screen.post
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material3.*
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,12 +32,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import dev.groupx.apkikala.model.Post
+
 
 @Composable
-fun Post(documentId: String) {
+fun PostItem(post: Post) {
     ElevatedCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary
@@ -36,29 +50,40 @@ fun Post(documentId: String) {
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            PostTopBar()
-            PostContent()
+            PostTopBar(
+                post.profileImageUrl,
+                post.username
+            )
+            PostContent(post.postImageUrl)
             PostBottomBar()
         }
     }
 
-    PostDescription()
+    PostDescription(
+        post.title,
+        "19th April",
+        post.description
+    )
 }
 
 @Composable
-fun PostDescription() {
+fun PostDescription(
+    title: String,
+    createdAt: String,
+    description: String,
+) {
     Column(
         Modifier
             .padding(horizontal = 16.dp)
             .padding(bottom = 16.dp)
     ) {
         Row {
-            Text(text = "SketchUp ⭐", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            Text(text = "time_created_placeholder", Modifier.weight(1f))
+            Text(text = title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Text(text = createdAt, Modifier.weight(1f))
         }
         Spacer(modifier = Modifier.size(24.dp))
         Text(
-            text = "Created with 💗, Snapchat Filter: Vibes",
+            text = description,
             style = MaterialTheme.typography.bodySmall
         )
 
@@ -66,13 +91,14 @@ fun PostDescription() {
 }
 
 @Composable
-fun PostTopBar() {
+fun PostTopBar(profileImageUrl: String, username: String) {
     Row(
         modifier = Modifier
             .padding(top = 8.dp)
             .padding(horizontal = 8.dp)
     ) {
         GetProfileImage(
+            profileImageUrl = profileImageUrl,
             createProfileImage = { imageUrl ->
                 ImageCommon(
                     imageUrl = imageUrl,
@@ -85,7 +111,7 @@ fun PostTopBar() {
         )
         Spacer(modifier = Modifier.width(10.dp))
         Text(
-            text = "Prince Herenj",
+            text = username,
             fontSize = 20.sp,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier
@@ -100,7 +126,7 @@ fun PostTopBar() {
 }
 
 @Composable
-fun PostContent() {
+fun PostContent(postImageUrl: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -108,6 +134,7 @@ fun PostContent() {
             .padding(horizontal = 0.dp)
     ) {
         GetPostImage(
+            postImageUrl = postImageUrl,
             createPostImage = { imageUrl ->
                 ImageCommon(
                     imageUrl = imageUrl,
@@ -143,19 +170,17 @@ fun PostBottomBar() {
 
 @Composable
 fun GetPostImage(
-    viewModel: PostViewModel = hiltViewModel(),
+    postImageUrl: String,
     createPostImage: @Composable (imageUrl: String) -> Unit,
 ) {
-    val postImageUrl = viewModel.postImageUrlState
     createPostImage(postImageUrl)
 }
 
 @Composable
 fun GetProfileImage(
-    viewModel: PostViewModel = hiltViewModel(),
+    profileImageUrl: String,
     createProfileImage: @Composable (imageUrl: String) -> Unit,
 ) {
-    val profileImageUrl = viewModel.profileImageUrlState
     createProfileImage(profileImageUrl)
 }
 
