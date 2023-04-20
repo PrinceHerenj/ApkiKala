@@ -17,6 +17,8 @@ import dev.groupx.apkikala.ui.screen.search.SearchNode
 import dev.groupx.apkikala.ui.screen.search.SearchScreen
 import dev.groupx.apkikala.ui.screen.sign_up.SignUpNode
 import dev.groupx.apkikala.ui.screen.sign_up.SignUpScreen
+import dev.groupx.apkikala.ui.screen.sign_up.UploadProfileImageNode
+import dev.groupx.apkikala.ui.screen.sign_up.UploadProfileImageScreen
 import dev.groupx.apkikala.ui.screen.splashscreen.SplashNode
 import dev.groupx.apkikala.ui.screen.splashscreen.SplashScreen
 
@@ -36,7 +38,7 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
     }
 
     composable(SignUpNode.route) {
-        SignUpScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
+        SignUpScreen(openScreen = { route -> appState.navigate(route) })
     }
 
     composable(PersonalProfileNode.route) {
@@ -57,6 +59,10 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
 
     composable(CollabNode.route) {
         CollabScreen()
+    }
+
+    composable(UploadProfileImageNode.route) {
+        UploadProfileImageScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
     }
 
 

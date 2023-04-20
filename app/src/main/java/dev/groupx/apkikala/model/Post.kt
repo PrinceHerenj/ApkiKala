@@ -3,6 +3,7 @@ package dev.groupx.apkikala.model
 import com.google.firebase.Timestamp
 
 data class Post(
+    val postId: String = "",
     // fetched from firestore collection users
     val profileImageUrl: String = "",
     val username: String = "",

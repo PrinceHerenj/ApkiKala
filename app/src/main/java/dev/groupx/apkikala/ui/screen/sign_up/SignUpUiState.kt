@@ -19,9 +19,7 @@ package dev.groupx.apkikala.ui.screen.sign_up
 data class SignUpUiState(
   val username: String = "",
   val bio: String = "",
-  val city: String = "",
-  val state: String = "",
-  val country: String = "",
+  val address: String = "",
   val email: String = "",
   val password: String = "",
   val repeatPassword: String = ""

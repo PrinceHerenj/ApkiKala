@@ -16,8 +16,6 @@ interface StorageService {
 
     suspend fun saveImageToStorageReturningUrl(imageUri: Uri): Uri
 
-    suspend fun getCurrentPost(postId: String): Post?
-
     suspend fun saveImageToFirestorePost(
         downloadUrl: Uri,
         userId: String,
@@ -25,5 +23,8 @@ interface StorageService {
         description: String,
     )
 
+    suspend fun saveImageToFirestoreUser(downloadUrl: Uri, userId: String)
+
     suspend fun removeImage()
+    suspend fun getFeedPosts(): List<Post>
 }

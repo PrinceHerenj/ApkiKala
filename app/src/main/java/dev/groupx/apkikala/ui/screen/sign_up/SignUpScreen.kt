@@ -1,19 +1,3 @@
-/*
-Copyright 2022 Google LLC
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
- */
-
 package dev.groupx.apkikala.ui.screen.sign_up
 
 import androidx.compose.foundation.layout.*
@@ -37,7 +21,7 @@ object SignUpNode: NavigationDestination {
 
 @Composable
 fun SignUpScreen(
-  openAndPopUp: (String, String) -> Unit,
+  openScreen: (String) -> Unit,
   modifier: Modifier = Modifier,
   viewModel: SignUpViewModel = hiltViewModel()
 ) {
@@ -55,17 +39,15 @@ fun SignUpScreen(
   ) {
     CustomField("Username", uiState.username, viewModel::onUsernameChange, fieldModifier) // username
     CustomField("Tell us about yourself a little", uiState.bio, viewModel::onBioChange, fieldModifier) //
-    CustomField("City",uiState.city, viewModel::onCityChange, fieldModifier) //
-    CustomField("State", uiState.state, viewModel::onStateChange, fieldModifier) //
-    CustomField("Country", uiState.country, viewModel::onCountryChange, fieldModifier) //
+    CustomField("Address", uiState.address, viewModel::onAddressChange, fieldModifier)
 
     EmailField(uiState.email, viewModel::onEmailChange, fieldModifier)
 
     PasswordField(uiState.password, viewModel::onPasswordChange, fieldModifier)
     RepeatPasswordField(uiState.repeatPassword, viewModel::onRepeatPasswordChange, fieldModifier)
 
-    BasicButton(AppText.create_account, Modifier.basicButton()) {
-      viewModel.onSignUpClick(openAndPopUp)
+    BasicButton(AppText.add_profile_image, Modifier.basicButton()) {
+      viewModel.onSignUpClick(openScreen)
     }
   }
 }

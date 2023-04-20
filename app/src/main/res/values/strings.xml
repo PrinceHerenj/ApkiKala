@@ -29,4 +29,7 @@
     <string name="add_post">Add Post</string>
     <string name="blank_title">Please add a title to your Post</string>
     <string name="blank_description">Please add a description to your post</string>
+    <string name="username_already_exists">Username already exists</string>
+    <string name="add_profile_image">Continue To Add Profile Image</string>
+    <string name="upload_image">Upload Image</string>
 </resources>

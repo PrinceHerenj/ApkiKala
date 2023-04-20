@@ -3,7 +3,7 @@ package dev.groupx.apkikala.model.service.impl
 import android.net.Uri
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import dev.groupx.apkikala.model.Post
 import dev.groupx.apkikala.model.service.StorageService
@@ -16,12 +16,6 @@ class StorageServiceImpl @Inject constructor(
 ) : StorageService {
 
     private var newPostRef = ""
-
-
-    override suspend fun getCurrentPost(postId: String): Post {
-        return firestore.collection(POSTS).document(postId)
-            .get().await().toObject<Post>()!!
-    }
 
     override suspend fun saveImageToStorageReturningUrl(imageUri: Uri): Uri {
         newPostRef = firestore.collection(POSTS).document().id
@@ -43,20 +37,19 @@ class StorageServiceImpl @Inject constructor(
         ).await()
     }
 
-
+    override suspend fun saveImageToFirestoreUser(downloadUrl: Uri, userId: String) {
+        firestore.collection(USERS).document(userId).update(
+            mapOf(
+                "profileImageUrl" to downloadUrl
+            )
+        )
+    }
 
     override suspend fun removeImage() {
         storage.reference.child(IMG).child("$newPostRef.jpg")
             .delete()
     }
 
-
-    // Not Required
-//    override suspend fun loadImageURLFromFirestore(postRef: String): String {
-//        return firestore.collection(POSTS).document(postRef).get().await().getString("URL")
-//            .toString()
-//
-//    }
     override suspend fun addUserToFirestoreOnSignUp(
         uid: String,
         username: String,
@@ -68,7 +61,8 @@ class StorageServiceImpl @Inject constructor(
                 hashMapOf(
                     "username" to username,
                     "address" to address,
-                    "bio" to bio
+                    "bio" to bio,
+                    "profileImageUrl" to ""
                 )
             )
     }
@@ -76,6 +70,28 @@ class StorageServiceImpl @Inject constructor(
     override suspend fun removeUserInfoFromFirestore(uid: String) {
         firestore.collection(USERS).document(uid)
             .delete()
+    }
+
+    override suspend fun getFeedPosts(): List<Post> {
+        val query: Query = firestore.collection(POSTS)
+            .orderBy("createdAt", Query.Direction.DESCENDING)
+            .limit(20)
+
+        val querySnapshot = query.get().await()
+
+        return querySnapshot.documents.mapNotNull { document ->
+            var username = ""
+            var profileImageUrl = ""
+            val user = document.getString("user")
+            if (user != null) {
+                username = firestore.collection(USERS).document(user).get().await()
+                    .getString("username").toString()
+                profileImageUrl = firestore.collection(USERS).document(user).get().await()
+                    .getString("profileImageUrl").toString()
+
+            }
+            document.toObject(Post::class.java)?.copy(postId = document.id, username = username, profileImageUrl = profileImageUrl)
+        }
     }
 
     companion object {
