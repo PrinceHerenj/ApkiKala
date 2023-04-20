@@ -25,4 +25,6 @@
     <string name="username_taken">Username already taken</string>
 
     <string name="delete_acc">Delete Account</string>
+    <string name="add_image">Add Image</string>
+    <string name="add_post">Add Post</string>
 </resources>

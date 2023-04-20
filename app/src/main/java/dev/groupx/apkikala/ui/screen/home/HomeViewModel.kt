@@ -8,6 +8,7 @@ import dev.groupx.apkikala.model.service.StorageService
 import dev.groupx.apkikala.ui.screen.AccountUiState
 import dev.groupx.apkikala.ui.screen.ApkiKalaViewModel
 import dev.groupx.apkikala.ui.screen.collab.CollabNode
+import dev.groupx.apkikala.ui.screen.create_post.CreatePostNode
 import dev.groupx.apkikala.ui.screen.login.LoginNode
 import dev.groupx.apkikala.ui.screen.profile_personal.PersonalProfileNode
 import dev.groupx.apkikala.ui.screen.search.SearchNode
@@ -33,5 +34,6 @@ class HomeViewModel @Inject constructor(
     fun onSearchClick(openScreen: (String) -> Unit) = openScreen(SearchNode.route)
     fun onCollabClick(openScreen: (String) -> Unit) = openScreen(CollabNode.route)
     fun onPersonalProfileClick(openScreen: (String) -> Unit) = openScreen(PersonalProfileNode.route)
+    fun onAddClick(openScreen: (String) -> Unit) = openScreen(CreatePostNode.route)
 
 }

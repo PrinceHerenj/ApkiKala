@@ -11,5 +11,6 @@ interface StorageService {
     suspend fun saveImageToStorageReturningUrl(imageUri: Uri) : Uri
     suspend fun saveImageUrlToFirestorePost(downloadUrl: Uri, userId: String)
     suspend fun getCurrentPost(postId: String) : Post?
-
+    suspend fun saveImageToTempStorageReturningUrl(imageUri: Uri): String
+    suspend fun removeTempImageAndReference()
 }

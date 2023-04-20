@@ -16,6 +16,8 @@ class StorageServiceImpl @Inject constructor(
 ) : StorageService {
 
     private var newPostRef = ""
+    private var tempPostRef = ""
+
 
     override suspend fun getCurrentPost(postId: String): Post {
         return firestore.collection(POSTS).document(postId)
@@ -40,6 +42,22 @@ class StorageServiceImpl @Inject constructor(
             )
         ).await()
     }
+
+    override suspend fun saveImageToTempStorageReturningUrl(imageUri: Uri): String {
+        tempPostRef = firestore.collection(POSTS).document().id
+        return storage.reference.child(IMGTEMP).child("$tempPostRef.jpg")
+            .putFile(imageUri).await()
+            .storage.downloadUrl.await()
+            .toString()
+    }
+
+    override suspend fun removeTempImageAndReference() {
+        storage.reference.child(IMGTEMP).child("$tempPostRef.jpg")
+            .delete()
+        firestore.collection(POSTS).document(tempPostRef)
+            .delete()
+    }
+
 
     // Not Required
 //    override suspend fun loadImageURLFromFirestore(postRef: String): String {
@@ -69,7 +87,7 @@ class StorageServiceImpl @Inject constructor(
     }
 
     companion object {
-
+        private const val IMGTEMP = "imagesTemp"
         private const val IMG = "imagesGlobal"
         private const val USERS = "users"
         private const val POSTS = "posts"

@@ -5,6 +5,8 @@ import androidx.navigation.compose.composable
 import dev.groupx.apkikala.ApkiKalaAppState
 import dev.groupx.apkikala.ui.screen.collab.CollabNode
 import dev.groupx.apkikala.ui.screen.collab.CollabScreen
+import dev.groupx.apkikala.ui.screen.create_post.CreatePostNode
+import dev.groupx.apkikala.ui.screen.create_post.CreatePostScreen
 import dev.groupx.apkikala.ui.screen.home.HomeNode
 import dev.groupx.apkikala.ui.screen.home.HomeScreen
 import dev.groupx.apkikala.ui.screen.login.LoginNode
@@ -43,6 +45,10 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
             openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
             restartApp = { route -> appState.clearAndNavigate(route) }
         )
+    }
+
+    composable(CreatePostNode.route) {
+        CreatePostScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
     }
 
     composable(SearchNode.route) {

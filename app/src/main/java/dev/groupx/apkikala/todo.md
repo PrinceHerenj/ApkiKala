@@ -3,6 +3,8 @@
 * add title, description
 * add facility to comment
 
+## For Post deletion from PersonalProfilePage
+
 ## For PostComposable 
 * post composable uses post() to render ☑️
 * posts render on a lazy list in feed

@@ -44,7 +44,7 @@ fun HomeScreen(
     Scaffold(
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = { galleryLauncher.launch("image/*") },
+                onClick = { viewModel.onAddClick(openScreen) },
             ) {
                 Icon(Icons.Filled.Add, contentDescription = "Add")
                 Text(text = "Add Post")
