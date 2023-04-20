@@ -1,5 +1,6 @@
 package dev.groupx.apkikala.ui.screen.create_post
 
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +16,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -51,11 +54,11 @@ fun CreatePostScreen(
         val galleryLauncher =
             rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { imageUri ->
                 imageUri?.let {
-                    viewModel.tempAddImageToStorage(imageUri)
+                    viewModel.addImageToStorage(imageUri)
                 }
             }
 
-        if (!uiState.isImageAdded) {
+        if (!uiState.isImageUrlAdded) {
             BasicButton(
                 text = AppText.add_image,
                 modifier = Modifier
@@ -64,7 +67,7 @@ fun CreatePostScreen(
 
             ) { galleryLauncher.launch("image/*") }
         } else {
-            GetPostImage(postImageUrl = uiState.tempPostImageURL) { imageUrl ->
+            GetPostImage(postImageUrl = uiState.postImageURL) { imageUrl ->
                 ImageCommon(
                     imageUrl = imageUrl,
                     height = 400.dp,
@@ -89,16 +92,21 @@ fun CreatePostScreen(
             onNewValue = viewModel::onDescriptionChange
         )
 
-        if (uiState.isImageAdded) {
+        if (uiState.isImageUrlAdded) {
+            val canHandleBackButton by remember { mutableStateOf(true) }
+
             BasicButton(
                 text = AppText.add_post,
                 modifier = Modifier
                     .width(250.dp)
                     .padding(vertical = 8.dp)
             ) {
+                viewModel.onAddPostClick(openAndPopUp)
+            }
 
+            BackHandler(enabled = canHandleBackButton) {
+                viewModel.onCancel(openAndPopUp)
             }
         }
-
     }
 }

@@ -1,6 +1,6 @@
 ## For Post addition
-* divide post process
-* add title, description
+* divide post process ☑️
+* add title, description 
 * add facility to comment
 
 ## For Post deletion from PersonalProfilePage

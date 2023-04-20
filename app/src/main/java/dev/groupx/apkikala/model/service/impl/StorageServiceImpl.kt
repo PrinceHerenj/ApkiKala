@@ -16,7 +16,6 @@ class StorageServiceImpl @Inject constructor(
 ) : StorageService {
 
     private var newPostRef = ""
-    private var tempPostRef = ""
 
 
     override suspend fun getCurrentPost(postId: String): Post {
@@ -30,31 +29,24 @@ class StorageServiceImpl @Inject constructor(
         return storage.reference.child(IMG).child("$newPostRef.jpg")
             .putFile(imageUri).await()
             .storage.downloadUrl.await()
-
     }
 
-    override suspend fun saveImageUrlToFirestorePost(downloadUrl: Uri, userId: String) {
+    override suspend fun saveImageToFirestorePost(downloadUrl: Uri, userId: String, title: String, description: String) {
         firestore.collection(POSTS).document(newPostRef).set(
             mapOf(
-                "URL" to downloadUrl,
-                "CREATED_AT" to FieldValue.serverTimestamp(),
-                "USER" to userId
+                "postImageUrl" to downloadUrl,
+                "createdAt" to FieldValue.serverTimestamp(),
+                "title" to title,
+                "description" to description,
+                "user" to userId,
             )
         ).await()
     }
 
-    override suspend fun saveImageToTempStorageReturningUrl(imageUri: Uri): String {
-        tempPostRef = firestore.collection(POSTS).document().id
-        return storage.reference.child(IMGTEMP).child("$tempPostRef.jpg")
-            .putFile(imageUri).await()
-            .storage.downloadUrl.await()
-            .toString()
-    }
 
-    override suspend fun removeTempImageAndReference() {
-        storage.reference.child(IMGTEMP).child("$tempPostRef.jpg")
-            .delete()
-        firestore.collection(POSTS).document(tempPostRef)
+
+    override suspend fun removeImage() {
+        storage.reference.child(IMG).child("$newPostRef.jpg")
             .delete()
     }
 
@@ -87,7 +79,6 @@ class StorageServiceImpl @Inject constructor(
     }
 
     companion object {
-        private const val IMGTEMP = "imagesTemp"
         private const val IMG = "imagesGlobal"
         private const val USERS = "users"
         private const val POSTS = "posts"

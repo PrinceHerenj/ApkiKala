@@ -1,7 +1,5 @@
 package dev.groupx.apkikala.ui.screen.home
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts.GetContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -11,14 +9,11 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.firebase.Timestamp
 import dev.groupx.apkikala.model.Post
 import dev.groupx.apkikala.ui.navigation.NavigationDestination
-import dev.groupx.apkikala.ui.screen.AccountUiState
 import dev.groupx.apkikala.ui.screen.post.PostItem
 import dev.groupx.apkikala.R.string as AppText
 
@@ -33,14 +28,6 @@ fun HomeScreen(
     openScreen: (String) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsState(initial = AccountUiState(false))
-
-    val galleryLauncher = rememberLauncherForActivityResult(GetContent()) { imageUri ->
-        imageUri?.let {
-            viewModel.addImageToStorageAndFirestore(imageUri)
-        }
-    }
-
     Scaffold(
         floatingActionButton = {
             ExtendedFloatingActionButton(
