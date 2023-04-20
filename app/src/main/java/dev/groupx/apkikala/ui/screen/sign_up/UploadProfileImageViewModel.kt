@@ -3,11 +3,9 @@ package dev.groupx.apkikala.ui.screen.sign_up
 import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.groupx.apkikala.R
 import dev.groupx.apkikala.model.service.AccountService
 import dev.groupx.apkikala.model.service.LogService
 import dev.groupx.apkikala.model.service.StorageService
-import dev.groupx.apkikala.ui.common.snackbar.SnackbarManager
 import dev.groupx.apkikala.ui.screen.ApkiKalaViewModel
 import dev.groupx.apkikala.ui.screen.create_post.CreatePostNode
 import dev.groupx.apkikala.ui.screen.home.HomeNode
@@ -31,10 +29,10 @@ class UploadProfileImageViewModel @Inject constructor(
         }
     }
 
-    fun onAddProfileImageClick(openAndPopUp: (String, String) -> Unit) {
+    fun onAddProfileImageClick(restartApp: (String) -> Unit) {
         launchCatching {
             storageService.saveImageToFirestoreUser(setUrl, accountService.currentUserId)
-            openAndPopUp(HomeNode.route, CreatePostNode.route)
+            restartApp(HomeNode.route)
         }
     }
 

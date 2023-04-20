@@ -58,6 +58,7 @@ class CreatePostViewModel @Inject constructor(
         launchCatching {
             storageService.saveImageToFirestorePost(setUrl, accountService.currentUserId, uiState.value.title, uiState.value.description )
             openAndPopUp(HomeNode.route, CreatePostNode.route)
+
         }
     }
 

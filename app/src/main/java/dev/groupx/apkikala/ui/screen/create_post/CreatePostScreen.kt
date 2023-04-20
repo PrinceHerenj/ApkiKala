@@ -66,18 +66,6 @@ fun CreatePostScreen(
                     .padding(bottom = 8.dp)
 
             ) { galleryLauncher.launch("image/*") }
-        } else {
-            GetPostImage(postImageUrl = uiState.postImageURL) { imageUrl ->
-                ImageCommon(
-                    imageUrl = imageUrl,
-                    height = 400.dp,
-                    width = 400.dp,
-                    shape = RoundedCornerShape(4.dp),
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier.padding(16.dp, 8.dp)
-                )
-
-            }
         }
 
         CustomField(
@@ -94,7 +82,17 @@ fun CreatePostScreen(
 
         if (uiState.isImageUrlAdded) {
             val canHandleBackButton by remember { mutableStateOf(true) }
+            GetPostImage(postImageUrl = uiState.postImageURL) { imageUrl ->
+                ImageCommon(
+                    imageUrl = imageUrl,
+                    height = 400.dp,
+                    width = 400.dp,
+                    shape = RoundedCornerShape(4.dp),
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier.padding(16.dp, 8.dp)
+                )
 
+            }
             BasicButton(
                 text = AppText.add_post,
                 modifier = Modifier
