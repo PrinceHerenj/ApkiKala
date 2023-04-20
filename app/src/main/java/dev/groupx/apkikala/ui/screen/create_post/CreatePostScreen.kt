@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,13 +18,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import dev.groupx.apkikala.R
 import dev.groupx.apkikala.ui.common.composables.BasicButton
 import dev.groupx.apkikala.ui.common.composables.CustomField
-import dev.groupx.apkikala.ui.common.utils.basicButton
 import dev.groupx.apkikala.ui.navigation.NavigationDestination
 import dev.groupx.apkikala.ui.screen.post.GetPostImage
 import dev.groupx.apkikala.ui.screen.post.ImageCommon
@@ -99,7 +95,9 @@ fun CreatePostScreen(
                 modifier = Modifier
                     .width(250.dp)
                     .padding(vertical = 8.dp)
-            ) { }
+            ) {
+
+            }
         }
 
     }
