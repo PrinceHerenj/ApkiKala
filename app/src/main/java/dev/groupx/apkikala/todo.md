@@ -1,6 +1,7 @@
 ## For Post addition
 * divide post process ☑️
 * add title, description ☑️
+* add facility to like
 * add facility to comment
 
 ## For Post deletion from PersonalProfilePage
@@ -21,3 +22,9 @@
 ## Develop Chat Page
 
 ## Develop Settings Page
+
+
+## Common TODO
+- TopAppBar
+- Search
+- DeletePost

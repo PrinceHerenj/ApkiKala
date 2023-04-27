@@ -13,9 +13,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.firebase.Timestamp
@@ -44,7 +46,10 @@ import java.util.Locale
 
 
 @Composable
-fun PostItem(post: Post) {
+fun PostItem(
+    post: Post,
+    viewModel: PostsViewModel = hiltViewModel(),
+) {
     ElevatedCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary
@@ -64,57 +69,31 @@ fun PostItem(post: Post) {
                 post.username
             )
             PostContent(post.postImageUrl)
-            PostBottomBar()
+            PostBottomBar(
+                post.likedByCurrentUser,
+                { viewModel.likePost(post.postId) },
+//                {viewModel.temp()},
+                { viewModel.dislikePost(post.postId) }
+            )
         }
     }
 
     PostDescription(
+        post.likes,
         post.title,
         timestampToString(post.createdAt, "MMMM dd"),
         post.description
     )
 }
 
-fun timestampToString(timestamp: Timestamp, format: String): String {
-    val sdf = SimpleDateFormat(format, Locale.getDefault())
-    val date = timestamp.toDate()
-    return sdf.format(date)
-}
-
-@Composable
-fun PostDescription(
-    title: String,
-    createdAt: String,
-    description: String,
-) {
-    Column(
-        Modifier
-            .padding(horizontal = 16.dp)
-            .padding(bottom = 16.dp)
-    ) {
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(text = title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-            Text(text = createdAt)
-        }
-        Spacer(modifier = Modifier.size(8.dp))
-        Text(
-            text = description,
-            style = MaterialTheme.typography.bodySmall,
-            modifier = Modifier.padding(start = 10.dp)
-        )
-
-    }
-}
 
 @Composable
 fun PostTopBar(profileImageUrl: String, username: String) {
     Row(
         modifier = Modifier
-            .padding(top = 8.dp)
-            .padding(horizontal = 8.dp)
+            .padding(vertical = 8.dp)
+            .padding(horizontal = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         GetProfileImage(
             profileImageUrl = profileImageUrl,
@@ -169,21 +148,71 @@ fun PostContent(postImageUrl: String) {
 }
 
 @Composable
-fun PostBottomBar() {
+fun PostBottomBar(
+    likedByCurrentUser: Boolean,
+    actionOnLike: () -> Unit,
+    actionOnDislike: () -> Unit,
+) {
     BottomAppBar(
         containerColor = MaterialTheme.colorScheme.primary,
         modifier = Modifier
             .padding(bottom = 8.dp)
             .height(48.dp)
     ) {
-        IconButton(onClick = { /*TODO*/ }) {
-            Icon(Icons.Outlined.FavoriteBorder, contentDescription = null)
+
+        if (!likedByCurrentUser) {
+            IconButton(onClick = { actionOnLike() }) {
+                Icon(Icons.Filled.FavoriteBorder, contentDescription = null)
+            }
+        } else {
+            IconButton(onClick = { actionOnDislike() }) {
+                Icon(Icons.Filled.Favorite, contentDescription = null)
+            }
         }
+
         Spacer(modifier = Modifier.width(8.dp))
         IconButton(onClick = { /*TODO*/ }) {
             Icon(Icons.Filled.Notifications, contentDescription = null)
         }
     }
+}
+
+@Composable
+fun PostDescription(
+    likes: Int,
+    title: String,
+    createdAt: String,
+    description: String,
+) {
+    Column(
+        Modifier
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 16.dp)
+    ) {
+        Text(text = "$likes likes")
+        Spacer(modifier = Modifier.size(4.dp))
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(text = title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+            Text(text = createdAt)
+        }
+        Spacer(modifier = Modifier.size(8.dp))
+        Text(
+            text = description,
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.padding(start = 10.dp)
+        )
+
+    }
+}
+
+
+fun timestampToString(timestamp: Timestamp, format: String): String {
+    val sdf = SimpleDateFormat(format, Locale.getDefault())
+    val date = timestamp.toDate()
+    return sdf.format(date)
 }
 
 @Composable

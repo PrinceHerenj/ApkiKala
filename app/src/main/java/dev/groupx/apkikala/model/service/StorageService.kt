@@ -27,4 +27,8 @@ interface StorageService {
 
     suspend fun removeImage()
     suspend fun getFeedPosts(): List<Post>
+
+    suspend fun createLikeDocumentAndIncreasePostLikeCount(postId: String, uid: String)
+    suspend fun removeLikeDocumentAndDecreasePostLikeCount(postId: String, uid: String)
+    suspend fun isLikedByUser(documentRef: String): Boolean
 }
