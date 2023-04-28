@@ -53,7 +53,7 @@ fun HomePostScreen(
     }
 
     when {
-        uiState.loading -> PostLoadingScreen()
+        uiState.loading -> PostLoadingScreen(modifier)
         uiState.posts.isNotEmpty() -> {
             Box(modifier.pullRefresh(state)) {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -70,8 +70,10 @@ fun HomePostScreen(
 }
 
 @Composable
-fun PostLoadingScreen() {
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+fun PostLoadingScreen(
+    modifier: Modifier = Modifier
+) {
+    Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column {
             DefaultPostItem()
             DefaultPostItem()

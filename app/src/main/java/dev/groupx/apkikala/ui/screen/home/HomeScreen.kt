@@ -12,7 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import dev.groupx.apkikala.R
 import dev.groupx.apkikala.ui.navigation.NavigationDestination
 import dev.groupx.apkikala.ui.screen.AccountUiState
 import dev.groupx.apkikala.ui.screen.post.HomePostScreen
@@ -31,8 +35,21 @@ fun HomeScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState(initial = AccountUiState(false))
     Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                modifier = Modifier.height(48.dp),
+                title = { Icon(
+                    painter = painterResource(id = R.drawable.icons8_son_goku),
+                    contentDescription = "Back",
+                    tint = Color.Black,
+                    modifier = Modifier
+                        .padding(vertical = 2.dp)
+                ) }
+            )
+        },
         floatingActionButton = {
             ExtendedFloatingActionButton(
+                containerColor = MaterialTheme.colorScheme.secondary,
                 onClick = {
                     if (!uiState.isAnonymousAccount) viewModel.onAddClick(openScreen)
                     else {

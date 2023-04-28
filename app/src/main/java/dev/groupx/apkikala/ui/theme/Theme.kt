@@ -28,13 +28,13 @@ private val DarkColorPalette = darkColorScheme(
 )
 
 private val LightColorPalette = lightColorScheme(
-    primary = Earth50,
+    primary = Earth50, //
     secondary = Nut3,
-    background = Rose10,
+    background = Rose10, //
     onBackground = Earth100,
     tertiary  =  Rose20,
-    primaryContainer = Rose70,
-    onPrimaryContainer = Rose30,
+    primaryContainer = Rose20,
+//    onPrimaryContainer = Rose10,
 
 
     /* Other default colors to override
