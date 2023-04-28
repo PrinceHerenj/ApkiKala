@@ -29,7 +29,11 @@ private val DarkColorPalette = darkColorScheme(
 
 private val LightColorPalette = lightColorScheme(
     primary = Earth50,
-    secondary = Nut3
+    secondary = Nut3,
+    background = Rose30,
+    onBackground = Earth100,
+    tertiary  =  Rose10
+
 
     /* Other default colors to override
     background = Color.White,

@@ -7,7 +7,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import dagger.hilt.android.AndroidEntryPoint
 import dev.groupx.apkikala.ui.theme.ApkiKalaTheme
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @SuppressLint("SourceLockedOrientationActivity")
@@ -16,7 +15,7 @@ class MainActivity : ComponentActivity() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         setContent {
             ApkiKalaTheme {
-                ApkiKalaApp()
+                ApkiKalaApp( )
             }
         }
     }
