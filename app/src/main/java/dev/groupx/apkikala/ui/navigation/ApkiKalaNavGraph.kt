@@ -75,7 +75,10 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
     }
 
     composable(CollabNode.route) {
-        CollabScreen()
+        CollabScreen(
+            openScreen = { route -> appState.navigate(route) },
+            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
+        )
     }
 
     composable(UploadProfileImageNode.route) {
