@@ -27,6 +27,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomePostScreen(
+    openScreen: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PostsViewModel = hiltViewModel(),
 ) {
@@ -54,7 +55,7 @@ fun HomePostScreen(
             Box(modifier.pullRefresh(state)) {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(uiState.posts) { post ->
-                        PostItem(post)
+                        PostItem(post, openScreen)
                     }
                 }
                 PullRefreshIndicator(refreshing, state, Modifier.align(Alignment.TopCenter))

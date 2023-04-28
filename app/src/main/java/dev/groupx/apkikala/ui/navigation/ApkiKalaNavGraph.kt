@@ -7,7 +7,6 @@ import androidx.navigation.navArgument
 import dev.groupx.apkikala.ApkiKalaAppState
 import dev.groupx.apkikala.ui.screen.collab.CollabNode
 import dev.groupx.apkikala.ui.screen.collab.CollabScreen
-import dev.groupx.apkikala.ui.screen.common_profile.Args
 import dev.groupx.apkikala.ui.screen.common_profile.CommonProfileNode
 import dev.groupx.apkikala.ui.screen.common_profile.CommonProfileScreen
 import dev.groupx.apkikala.ui.screen.create_post.CreatePostNode
@@ -42,7 +41,7 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
 
     composable(HomeNode.route) {
         HomeScreen(
-            openScreen = { route -> appState.navigate(route) }
+            openScreen = { route -> appState.navigate(route) },
         )
     }
 
@@ -72,7 +71,7 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
         )
     ) {
         val uid = it.arguments?.getString("uid") ?: ""
-        CommonProfileScreen(Args(uid))
+        CommonProfileScreen(uid)
     }
 
     composable(CollabNode.route) {

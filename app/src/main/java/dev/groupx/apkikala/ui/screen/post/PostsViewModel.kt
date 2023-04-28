@@ -9,6 +9,7 @@ import dev.groupx.apkikala.model.service.StorageService
 import dev.groupx.apkikala.ui.common.snackbar.SnackbarManager
 import dev.groupx.apkikala.ui.screen.AccountUiState
 import dev.groupx.apkikala.ui.screen.ApkiKalaViewModel
+import dev.groupx.apkikala.ui.screen.common_profile.CommonProfileNode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -41,6 +42,10 @@ class PostsViewModel @Inject constructor(
                 Log.d("here", e.toString())
             }
         }
+    }
+    fun onTopBarClick(openScreen: (String) -> Unit, user: String) {
+        val newRoute = "${CommonProfileNode.route}/$user"
+        openScreen(newRoute)
     }
 
     fun likePost(postId: String) {

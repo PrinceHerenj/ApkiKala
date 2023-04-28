@@ -1,5 +1,6 @@
 package dev.groupx.apkikala.ui.screen.post
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,7 +36,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,6 +52,7 @@ import java.util.Locale
 @Composable
 fun PostItem(
     post: Post,
+    openScreen: (String) -> Unit,
     viewModel: PostsViewModel = hiltViewModel(),
 ) {
     val accUiState by viewModel.accUiState.collectAsState(initial = AccountUiState(false))
@@ -71,8 +72,10 @@ fun PostItem(
                 .fillMaxWidth()
         ) {
             PostTopBar(
+                post.user,
                 post.profileImageUrl,
-                post.username
+                post.username,
+                openScreen
             )
             PostContent(post.postImageUrl)
             if (!accUiState.isAnonymousAccount) {
@@ -101,11 +104,19 @@ fun PostItem(
 
 
 @Composable
-fun PostTopBar(profileImageUrl: String, username: String) {
+fun PostTopBar(
+    uid: String,
+    profileImageUrl: String,
+    username: String,
+    openScreen: (String) -> Unit,
+    viewModel: PostsViewModel = hiltViewModel(),
+) {
     Row(
         modifier = Modifier
             .padding(vertical = 8.dp)
-            .padding(horizontal = 8.dp),
+            .padding(horizontal = 8.dp)
+            .clickable { viewModel.onTopBarClick(openScreen, uid) }
+        ,
         verticalAlignment = Alignment.CenterVertically
     ) {
         GetProfileImage(

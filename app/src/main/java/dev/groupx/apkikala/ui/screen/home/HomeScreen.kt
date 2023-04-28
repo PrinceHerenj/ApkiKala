@@ -77,7 +77,7 @@ fun HomeScreen(
         }
 
     ) {
-        HomePostScreen(modifier = Modifier.padding(it))
+        HomePostScreen(modifier = Modifier.padding(it), openScreen = openScreen)
     }
 }
 
