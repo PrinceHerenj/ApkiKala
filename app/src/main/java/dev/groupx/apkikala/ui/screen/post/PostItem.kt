@@ -217,7 +217,11 @@ fun PostDescription(
             .padding(horizontal = 16.dp)
 //            .padding(bottom = 16.dp)
     ) {
-        Text(text = "$likes likes")
+        if (likes == 1) {
+            Text(text = "$likes like")
+        } else {
+            Text(text = "$likes likes")
+        }
         Spacer(modifier = Modifier.size(4.dp))
         Row(
             Modifier.fillMaxWidth(),
