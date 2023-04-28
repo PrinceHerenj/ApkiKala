@@ -15,6 +15,8 @@ import dev.groupx.apkikala.ui.screen.create_post.CreatePostNode
 import dev.groupx.apkikala.ui.screen.create_post.CreatePostScreen
 import dev.groupx.apkikala.ui.screen.home.HomeNode
 import dev.groupx.apkikala.ui.screen.home.HomeScreen
+import dev.groupx.apkikala.ui.screen.like_screen.CommonLikeNode
+import dev.groupx.apkikala.ui.screen.like_screen.CommonLikeScreen
 import dev.groupx.apkikala.ui.screen.login.LoginNode
 import dev.groupx.apkikala.ui.screen.login.LoginScreen
 import dev.groupx.apkikala.ui.screen.profile_personal.PersonalProfileNode
@@ -85,6 +87,18 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
         val postId = it.arguments?.getString("postId") ?: ""
         CommonCommentScreen(postId)
     }
+
+    composable(
+        route = "${CommonLikeNode.route}/{postId}",
+        arguments = listOf(
+            navArgument("postId") {type = NavType.StringType}
+        )
+    ) {
+        val postId = it.arguments?.getString("postId") ?: ""
+        CommonLikeScreen(postId)
+    }
+
+
 
     composable(CollabNode.route) {
         CollabScreen(
