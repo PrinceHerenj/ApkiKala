@@ -1,10 +1,15 @@
 package dev.groupx.apkikala.ui.navigation
 
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import dev.groupx.apkikala.ApkiKalaAppState
 import dev.groupx.apkikala.ui.screen.collab.CollabNode
 import dev.groupx.apkikala.ui.screen.collab.CollabScreen
+import dev.groupx.apkikala.ui.screen.common_profile.Args
+import dev.groupx.apkikala.ui.screen.common_profile.CommonProfileNode
+import dev.groupx.apkikala.ui.screen.common_profile.CommonProfileScreen
 import dev.groupx.apkikala.ui.screen.create_post.CreatePostNode
 import dev.groupx.apkikala.ui.screen.create_post.CreatePostScreen
 import dev.groupx.apkikala.ui.screen.home.HomeNode
@@ -31,14 +36,14 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
         LoginScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
     }
 
+    composable(SignUpNode.route) {
+        SignUpScreen(openScreen = { route -> appState.navigate(route) })
+    }
+
     composable(HomeNode.route) {
         HomeScreen(
             openScreen = { route -> appState.navigate(route) }
         )
-    }
-
-    composable(SignUpNode.route) {
-        SignUpScreen(openScreen = { route -> appState.navigate(route) })
     }
 
     composable(PersonalProfileNode.route) {
@@ -56,8 +61,18 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
     composable(SearchNode.route) {
         SearchScreen(
             openScreen = { route -> appState.navigate(route) },
-            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) }
+            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
         )
+    }
+
+    composable(
+        route = "${CommonProfileNode.route}/{uid}",
+        arguments = listOf(
+            navArgument("uid") {type = NavType.StringType}
+        )
+    ) {
+        val uid = it.arguments?.getString("uid") ?: ""
+        CommonProfileScreen(Args(uid))
     }
 
     composable(CollabNode.route) {

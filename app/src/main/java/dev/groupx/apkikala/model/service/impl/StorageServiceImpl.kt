@@ -7,6 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
 import dev.groupx.apkikala.model.Post
+import dev.groupx.apkikala.model.SearchResult
 import dev.groupx.apkikala.model.service.StorageService
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.tasks.await
@@ -111,6 +112,20 @@ class StorageServiceImpl @Inject constructor(
         }
     }
 
+    override suspend fun getSearchResults(searchString: String): List<SearchResult> {
+        val query = firestore.collectionGroup(USERS)
+            .whereGreaterThanOrEqualTo("username", searchString)
+            .whereLessThan("username", searchString + "\uf8ff")
+            .limit(6)
+
+        val querySnapshot = query.get().await()
+
+        return querySnapshot.documents.mapNotNull { document ->
+            document.toObject(SearchResult::class.java)?.copy(user = document.id)
+        }
+
+    }
+
     override suspend fun createLikeDocumentAndIncreasePostLikeCount(postId: String, uid: String) {
         val documentRef = "${uid}_$postId"
         firestore.collection(LIKES).document(documentRef).set(
@@ -154,6 +169,8 @@ class StorageServiceImpl @Inject constructor(
             "likes", updatedLikes
         )
     }
+
+
 
 
 
