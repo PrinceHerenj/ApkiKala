@@ -27,8 +27,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,6 +60,10 @@ fun PostItem(
 ) {
     val accUiState by viewModel.accUiState.collectAsState(initial = AccountUiState(false))
 
+    val uiState = remember {
+        mutableStateOf(post)
+    }
+
     ElevatedCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary
@@ -72,22 +79,22 @@ fun PostItem(
                 .fillMaxWidth()
         ) {
             PostTopBar(
-                post.user,
-                post.profileImageUrl,
-                post.username,
+                uiState.value.user,
+                uiState.value.profileImageUrl,
+                uiState.value.username,
                 openScreen
             )
-            PostContent(post.postImageUrl)
+            PostContent(uiState.value.postImageUrl)
             if (!accUiState.isAnonymousAccount) {
                 PostBottomBar(
-                    post.likedByCurrentUser,
-                    { viewModel.likePost(post.postId) },
-                    { viewModel.dislikePost(post.postId) },
-                    { viewModel.onViewCommentsClick(openScreen, postId = post.postId) }
-
+                    uiState,
+                    { viewModel.likePost(uiState.value.postId) },
+                    { viewModel.dislikePost(uiState.value.postId) },
+                    { viewModel.onViewCommentsClick(openScreen, postId = uiState.value.postId) }
                 )
             } else {
-                PostBottomBar(likedByCurrentUser = post.likedByCurrentUser,
+                PostBottomBar(
+                    uiState,
                     { viewModel.showAnonymousError() },
                     { viewModel.showAnonymousError() },
                     { viewModel.showAnonymousError() }
@@ -98,10 +105,10 @@ fun PostItem(
     }
 
     PostDescription(
-        post.likes,
-        post.title,
-        timestampToString(post.createdAt, "MMMM dd"),
-        post.description
+        uiState,
+        uiState.value.title,
+        timestampToString(uiState.value.createdAt, "MMMM dd"),
+        uiState.value.description
     )
 
 }
@@ -176,7 +183,7 @@ fun PostContent(postImageUrl: String) {
 
 @Composable
 fun PostBottomBar(
-    likedByCurrentUser: Boolean,
+    uiState: MutableState<Post>,
     actionOnLike: () -> Unit,
     actionOnDislike: () -> Unit,
     actionOnComment: () -> Unit,
@@ -187,13 +194,15 @@ fun PostBottomBar(
             .padding(bottom = 8.dp)
             .height(48.dp)
     ) {
+        val likedByCurrentUser = uiState.value.likedByCurrentUser
+        val currentLikes = uiState.value.likes
 
         if (!likedByCurrentUser) {
-            IconButton(onClick = { actionOnLike() }) {
+            IconButton(onClick = { uiState.value = uiState.value.copy(likedByCurrentUser = true, likes = (currentLikes+1)) ; actionOnLike() }) {
                 Icon(Icons.Filled.FavoriteBorder, contentDescription = null)
             }
         } else {
-            IconButton(onClick = { actionOnDislike() }) {
+            IconButton(onClick = { uiState.value = uiState.value.copy(likedByCurrentUser = false, likes = (currentLikes-1)); actionOnDislike() }) {
                 Icon(Icons.Filled.Favorite, contentDescription = null)
             }
         }
@@ -207,11 +216,12 @@ fun PostBottomBar(
 
 @Composable
 fun PostDescription(
-    likes: Int,
+    uiState: MutableState<Post>,
     title: String,
     createdAt: String,
     description: String,
 ) {
+    val likes = uiState.value.likes
     Column(
         Modifier
             .padding(horizontal = 16.dp)

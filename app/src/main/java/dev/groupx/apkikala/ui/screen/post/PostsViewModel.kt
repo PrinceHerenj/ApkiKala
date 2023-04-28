@@ -54,7 +54,6 @@ class PostsViewModel @Inject constructor(
             storageService.createLikeDocumentAndIncreasePostLikeCount(
                 postId, accountService.currentUserId
             )
-            getPosts()
         }
     }
 
@@ -63,7 +62,6 @@ class PostsViewModel @Inject constructor(
             storageService.removeLikeDocumentAndDecreasePostLikeCount(
                 postId, accountService.currentUserId
             )
-            getPosts()
         }
     }
 
