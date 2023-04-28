@@ -11,6 +11,7 @@ import dev.groupx.apkikala.ui.screen.AccountUiState
 import dev.groupx.apkikala.ui.screen.ApkiKalaViewModel
 import dev.groupx.apkikala.ui.screen.comment_screen.CommonCommentNode
 import dev.groupx.apkikala.ui.screen.common_profile.CommonProfileNode
+import dev.groupx.apkikala.ui.screen.like_screen.CommonLikeNode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -68,6 +69,11 @@ class PostsViewModel @Inject constructor(
     fun showAnonymousError() = SnackbarManager.showMessage(R.string.Anonym_Error)
     fun onViewCommentsClick(openScreen: (String) -> Unit, postId: String) {
         val newRoute = "${CommonCommentNode.route}/${postId}"
+        openScreen(newRoute)
+    }
+
+    fun onLikeClick(openScreen: (String) -> Unit, postId: String) {
+        val newRoute = "${CommonLikeNode.route}/${postId}"
         openScreen(newRoute)
     }
 

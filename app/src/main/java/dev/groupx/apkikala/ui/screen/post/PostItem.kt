@@ -106,6 +106,7 @@ fun PostItem(
 
     PostDescription(
         uiState,
+        { viewModel.onLikeClick(openScreen, uiState.value.postId) },
         uiState.value.title,
         timestampToString(uiState.value.createdAt, "MMMM dd"),
         uiState.value.description
@@ -217,6 +218,7 @@ fun PostBottomBar(
 @Composable
 fun PostDescription(
     uiState: MutableState<Post>,
+    actionOnLikeCount: () -> Unit,
     title: String,
     createdAt: String,
     description: String,
@@ -225,12 +227,11 @@ fun PostDescription(
     Column(
         Modifier
             .padding(horizontal = 16.dp)
-//            .padding(bottom = 16.dp)
     ) {
         if (likes == 1) {
-            Text(text = "$likes like")
+            Text(text = "$likes like", modifier = Modifier.clickable { actionOnLikeCount() })
         } else {
-            Text(text = "$likes likes")
+            Text(text = "$likes likes", modifier = Modifier.clickable { actionOnLikeCount() })
         }
         Spacer(modifier = Modifier.size(4.dp))
         Row(
