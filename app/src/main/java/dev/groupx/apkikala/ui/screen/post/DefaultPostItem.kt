@@ -15,7 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -98,7 +98,7 @@ private fun DefaultBottomAppBar() {
         }
         Spacer(modifier = Modifier.width(8.dp))
         IconButton(onClick = {  }) {
-            Icon(Icons.Filled.Notifications, contentDescription = null)
+            Icon(Icons.Outlined.Article, contentDescription = null)
         }
     }
 }

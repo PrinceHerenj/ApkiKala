@@ -7,6 +7,8 @@ import androidx.navigation.navArgument
 import dev.groupx.apkikala.ApkiKalaAppState
 import dev.groupx.apkikala.ui.screen.collab.CollabNode
 import dev.groupx.apkikala.ui.screen.collab.CollabScreen
+import dev.groupx.apkikala.ui.screen.comment_screen.CommonCommentNode
+import dev.groupx.apkikala.ui.screen.comment_screen.CommonCommentScreen
 import dev.groupx.apkikala.ui.screen.common_profile.CommonProfileNode
 import dev.groupx.apkikala.ui.screen.common_profile.CommonProfileScreen
 import dev.groupx.apkikala.ui.screen.create_post.CreatePostNode
@@ -72,6 +74,16 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
     ) {
         val uid = it.arguments?.getString("uid") ?: ""
         CommonProfileScreen(uid)
+    }
+
+    composable(
+        route = "${CommonCommentNode.route}/{postId}",
+        arguments = listOf(
+            navArgument("postId") {type = NavType.StringType}
+        )
+    ) {
+        val postId = it.arguments?.getString("postId") ?: ""
+        CommonCommentScreen(postId)
     }
 
     composable(CollabNode.route) {

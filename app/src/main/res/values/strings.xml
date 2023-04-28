@@ -32,5 +32,6 @@
     <string name="username_already_exists">Username already exists</string>
     <string name="add_profile_image">Continue To Add Profile Image</string>
     <string name="upload_image">Upload Image</string>
-    <string name="Anonym_AddPost">You must be logged in to add or like a post</string>
+    <string name="Anonym_Error">Log In to Perform Action</string>
+    <string name="view_comments">View Comments</string>
 </resources>

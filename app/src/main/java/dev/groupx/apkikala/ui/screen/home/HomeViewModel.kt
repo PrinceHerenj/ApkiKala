@@ -30,5 +30,5 @@ class HomeViewModel @Inject constructor(
 
     fun onAddClick(openScreen: (String) -> Unit) = openScreen(CreatePostNode.route)
 
-    fun showAnonymousError() = SnackbarManager.showMessage(R.string.Anonym_AddPost)
+    fun showAnonymousError() = SnackbarManager.showMessage(R.string.Anonym_Error)
 }

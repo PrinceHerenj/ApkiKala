@@ -9,6 +9,7 @@ import dev.groupx.apkikala.model.service.StorageService
 import dev.groupx.apkikala.ui.common.snackbar.SnackbarManager
 import dev.groupx.apkikala.ui.screen.AccountUiState
 import dev.groupx.apkikala.ui.screen.ApkiKalaViewModel
+import dev.groupx.apkikala.ui.screen.comment_screen.CommonCommentNode
 import dev.groupx.apkikala.ui.screen.common_profile.CommonProfileNode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,15 +33,15 @@ class PostsViewModel @Inject constructor(
 
     fun getPosts() {
         launchCatching {
-            uiState.value = uiState.value.copy(loading = true)
-            try {
-                val posts = withContext(Dispatchers.IO) {
-                    storageService.getFeedPosts()
+                uiState.value = uiState.value.copy(loading = true)
+                try {
+                    val posts = withContext(Dispatchers.IO) {
+                        storageService.getFeedPosts()
+                    }
+                    uiState.value = uiState.value.copy(loading = false, posts = posts)
+                } catch (e: Exception) {
+                    Log.d("here", e.toString())
                 }
-                uiState.value = uiState.value.copy(loading = false, posts = posts)
-            } catch (e: Exception) {
-                Log.d("here", e.toString())
-            }
         }
     }
     fun onTopBarClick(openScreen: (String) -> Unit, user: String) {
@@ -66,7 +67,11 @@ class PostsViewModel @Inject constructor(
         }
     }
 
-    fun showAnonymousError() = SnackbarManager.showMessage(R.string.Anonym_AddPost)
+    fun showAnonymousError() = SnackbarManager.showMessage(R.string.Anonym_Error)
+    fun onViewCommentsClick(openScreen: (String) -> Unit, postId: String) {
+        val newRoute = "${CommonCommentNode.route}/${postId}"
+        openScreen(newRoute)
+    }
 
 
 }

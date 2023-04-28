@@ -17,7 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -82,10 +82,13 @@ fun PostItem(
                 PostBottomBar(
                     post.likedByCurrentUser,
                     { viewModel.likePost(post.postId) },
-                    { viewModel.dislikePost(post.postId) }
+                    { viewModel.dislikePost(post.postId) },
+                    { viewModel.onViewCommentsClick(openScreen, postId = post.postId) }
+
                 )
             } else {
                 PostBottomBar(likedByCurrentUser = post.likedByCurrentUser,
+                    { viewModel.showAnonymousError() },
                     { viewModel.showAnonymousError() },
                     { viewModel.showAnonymousError() }
                 )
@@ -100,6 +103,7 @@ fun PostItem(
         timestampToString(post.createdAt, "MMMM dd"),
         post.description
     )
+
 }
 
 
@@ -115,8 +119,7 @@ fun PostTopBar(
         modifier = Modifier
             .padding(vertical = 8.dp)
             .padding(horizontal = 8.dp)
-            .clickable { viewModel.onTopBarClick(openScreen, uid) }
-        ,
+            .clickable { viewModel.onTopBarClick(openScreen, uid) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         GetProfileImage(
@@ -176,6 +179,7 @@ fun PostBottomBar(
     likedByCurrentUser: Boolean,
     actionOnLike: () -> Unit,
     actionOnDislike: () -> Unit,
+    actionOnComment: () -> Unit,
 ) {
     BottomAppBar(
         containerColor = MaterialTheme.colorScheme.primary,
@@ -195,8 +199,8 @@ fun PostBottomBar(
         }
 
         Spacer(modifier = Modifier.width(8.dp))
-        IconButton(onClick = { /*TODO*/ }) {
-            Icon(Icons.Filled.Notifications, contentDescription = null)
+        IconButton(onClick = { actionOnComment() }) {
+            Icon(Icons.Outlined.Article, contentDescription = null)
         }
     }
 }
@@ -211,7 +215,7 @@ fun PostDescription(
     Column(
         Modifier
             .padding(horizontal = 16.dp)
-            .padding(bottom = 16.dp)
+//            .padding(bottom = 16.dp)
     ) {
         Text(text = "$likes likes")
         Spacer(modifier = Modifier.size(4.dp))
