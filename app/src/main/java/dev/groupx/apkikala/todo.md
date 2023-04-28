@@ -17,14 +17,19 @@
 ## For Signup
 * divide the signup process ☑️
 
-## Develop Search Page
 
 ## Develop Chat Page
 
-## Develop Settings Page
-
 
 ## Common TODO
-- TopAppBar
-- Search
-- DeletePost
+- TopAppBar ☑️
+- Search ☑️
+
+## Like Screen
+## Comment Screen
+- add Comment, see comments
+
+
+## DeleteAccount
+- DeletePosts
+- DeleteAccount
