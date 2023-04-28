@@ -89,7 +89,7 @@ fun PersonalProfileScreen(
             } else {
                 Row {
                     BasicButton(AppText.sign_out, modifier = Modifier.padding(start = 8.dp)) {
-                        viewModel.onSignOutClick(openScreen)
+                        viewModel.onSignOutClick(openAndPopUp)
                     }
                     BasicButton(AppText.delete_acc, modifier = Modifier.padding(start = 8.dp)) {
                         viewModel.onDeleteAccClick(openAndPopUp, uiState.currentUserId)

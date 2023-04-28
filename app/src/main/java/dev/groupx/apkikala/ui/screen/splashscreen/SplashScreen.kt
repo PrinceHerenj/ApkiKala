@@ -1,10 +1,14 @@
 package dev.groupx.apkikala.ui.screen.splashscreen
 
 import androidx.compose.foundation.Image
-import dev.groupx.apkikala.R
-import dev.groupx.apkikala.ui.navigation.NavigationDestination
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -13,6 +17,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,10 +26,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import dev.groupx.apkikala.R.string as AppText
+import dev.groupx.apkikala.R
 import dev.groupx.apkikala.ui.common.composables.BasicButton
 import dev.groupx.apkikala.ui.common.utils.basicButton
+import dev.groupx.apkikala.ui.navigation.NavigationDestination
+import dev.groupx.apkikala.ui.screen.AccountUiState
 import kotlinx.coroutines.delay
+import dev.groupx.apkikala.R.string as AppText
 
 object SplashNode : NavigationDestination {
     override val route = "SplashScreen"
@@ -38,6 +47,7 @@ fun SplashScreen(
     modifier: Modifier = Modifier,
     viewModel: SplashViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState(initial = AccountUiState(false))
     Column(
         modifier =
         modifier
@@ -53,7 +63,8 @@ fun SplashScreen(
 
             BasicButton(AppText.try_again, Modifier.basicButton()) {
                 viewModel.onAppStart(
-                    openAndPopUp
+                    openAndPopUp,
+                    uiState
                 )
             }
         } else {
@@ -74,6 +85,6 @@ fun SplashScreen(
 
     LaunchedEffect(true) {
         delay(SPLASH_TIMEOUT)
-        viewModel.onAppStart(openAndPopUp)
+        viewModel.onAppStart(openAndPopUp, uiState)
     }
 }

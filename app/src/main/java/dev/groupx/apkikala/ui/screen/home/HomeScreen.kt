@@ -9,9 +9,12 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.groupx.apkikala.ui.navigation.NavigationDestination
+import dev.groupx.apkikala.ui.screen.AccountUiState
 import dev.groupx.apkikala.ui.screen.post.HomePostScreen
 import dev.groupx.apkikala.R.string as AppText
 
@@ -26,10 +29,16 @@ fun HomeScreen(
     openScreen: (String) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
+    val uiState by viewModel.uiState.collectAsState(initial = AccountUiState(false))
     Scaffold(
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = { viewModel.onAddClick(openScreen) },
+                onClick = {
+                    if (!uiState.isAnonymousAccount) viewModel.onAddClick(openScreen)
+                    else {
+                        viewModel.showAnonymousError()
+                    }
+                },
             ) {
                 Icon(Icons.Filled.Add, contentDescription = "Add")
                 Text(text = "Add Post")

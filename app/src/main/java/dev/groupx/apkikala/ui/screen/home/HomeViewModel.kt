@@ -1,8 +1,10 @@
 package dev.groupx.apkikala.ui.screen.home
 
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.groupx.apkikala.R
 import dev.groupx.apkikala.model.service.AccountService
 import dev.groupx.apkikala.model.service.LogService
+import dev.groupx.apkikala.ui.common.snackbar.SnackbarManager
 import dev.groupx.apkikala.ui.screen.AccountUiState
 import dev.groupx.apkikala.ui.screen.ApkiKalaViewModel
 import dev.groupx.apkikala.ui.screen.collab.CollabNode
@@ -27,4 +29,6 @@ class HomeViewModel @Inject constructor(
     fun onPersonalProfileClick(openScreen: (String) -> Unit) = openScreen(PersonalProfileNode.route)
 
     fun onAddClick(openScreen: (String) -> Unit) = openScreen(CreatePostNode.route)
+
+    fun showAnonymousError() = SnackbarManager.showMessage(R.string.Anonym_AddPost)
 }

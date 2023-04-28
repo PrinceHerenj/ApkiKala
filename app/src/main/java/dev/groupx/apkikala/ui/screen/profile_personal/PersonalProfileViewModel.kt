@@ -24,10 +24,10 @@ class PersonalProfileViewModel @Inject constructor(
     fun onLoginClick(openScreen: (String) -> Unit) = openScreen(LoginNode.route)
     fun onSignUpClick(openScreen: (String) -> Unit) = openScreen(SignUpNode.route)
 
-    fun onSignOutClick(openScreen: (String) -> Unit) {
+    fun onSignOutClick(openAndPopUp: (String, String) -> Unit) {
         launchCatching {
             accountService.signOut()
-            openScreen(LoginNode.route)
+            openAndPopUp(LoginNode.route, PersonalProfileNode.route)
         }
     }
 

@@ -26,6 +26,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,6 +43,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.firebase.Timestamp
 import dev.groupx.apkikala.model.Post
+import dev.groupx.apkikala.ui.screen.AccountUiState
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -50,6 +53,8 @@ fun PostItem(
     post: Post,
     viewModel: PostsViewModel = hiltViewModel(),
 ) {
+    val accUiState by viewModel.accUiState.collectAsState(initial = AccountUiState(false))
+
     ElevatedCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary
@@ -69,12 +74,19 @@ fun PostItem(
                 post.username
             )
             PostContent(post.postImageUrl)
-            PostBottomBar(
-                post.likedByCurrentUser,
-                { viewModel.likePost(post.postId) },
-//                {viewModel.temp()},
-                { viewModel.dislikePost(post.postId) }
-            )
+            if (!accUiState.isAnonymousAccount) {
+                PostBottomBar(
+                    post.likedByCurrentUser,
+                    { viewModel.likePost(post.postId) },
+                    { viewModel.dislikePost(post.postId) }
+                )
+            } else {
+                PostBottomBar(likedByCurrentUser = post.likedByCurrentUser,
+                    { viewModel.showAnonymousError() },
+                    { viewModel.showAnonymousError() }
+                )
+            }
+
         }
     }
 
