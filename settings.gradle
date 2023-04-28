@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Apki Kala"
 include ':app'
+include ':answerandquestion'

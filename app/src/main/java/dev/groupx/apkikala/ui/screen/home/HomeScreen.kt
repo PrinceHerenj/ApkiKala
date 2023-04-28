@@ -1,5 +1,7 @@
 package dev.groupx.apkikala.ui.screen.home
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -12,7 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.answerandquestion.loginactivity
 import dev.groupx.apkikala.ui.navigation.NavigationDestination
 import dev.groupx.apkikala.ui.screen.AccountUiState
 import dev.groupx.apkikala.ui.screen.post.HomePostScreen
@@ -28,8 +32,10 @@ object HomeNode : NavigationDestination {
 fun HomeScreen(
     openScreen: (String) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
+//    context: Context
 ) {
     val uiState by viewModel.uiState.collectAsState(initial = AccountUiState(false))
+    val context = LocalContext.current
     Scaffold(
         floatingActionButton = {
             ExtendedFloatingActionButton(
@@ -62,9 +68,12 @@ fun HomeScreen(
                 NavigationBarItem(
                     selected = false,
                     onClick = {
-                        viewModel.onCollabClick(openScreen)
+                        val intent = Intent(context, loginactivity::class.java)
+                        context.startActivity(intent)
                     },
                     icon = { Icon(Icons.Filled.PlayArrow, contentDescription = null) }
+//                    icon.setOnClickListener()
+//                button.setOnClickListener()
                 )
                 NavigationBarItem(
                     selected = false,
