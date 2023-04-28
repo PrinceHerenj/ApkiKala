@@ -38,7 +38,7 @@ class PersonalProfileViewModel @Inject constructor(
         }
     }
 
-    fun onHomeClick(openScreen: (String) -> Unit) = openScreen(HomeNode.route)
+    fun onHomeClick(openAndPopUp: (String, String) -> Unit) = openAndPopUp(HomeNode.route, PersonalProfileNode.route)
     fun onSearchClick(openScreen: (String) -> Unit) = openScreen(SearchNode.route)
     fun onCollabClick(openScreen: (String) -> Unit) = openScreen(CollabNode.route)
 }

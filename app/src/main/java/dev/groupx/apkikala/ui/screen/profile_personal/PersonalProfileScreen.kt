@@ -46,7 +46,7 @@ fun PersonalProfileScreen(
                 NavigationBarItem(
                     selected = false,
                     onClick = {
-                        viewModel.onHomeClick(openScreen)
+                        viewModel.onHomeClick(openAndPopUp)
                     },
                     icon = { Icon(Icons.Filled.Home, contentDescription = null) }
                 )

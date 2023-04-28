@@ -89,6 +89,8 @@ class StorageServiceImpl @Inject constructor(
 
         val querySnapshot = query.get().await()
 
+        val currentUserId = auth.currentUser?.uid
+
         return querySnapshot.documents.mapNotNull { document ->
             var username = ""
             var profileImageUrl = ""
@@ -99,8 +101,8 @@ class StorageServiceImpl @Inject constructor(
                     .getString("username").toString()
                 profileImageUrl = firestore.collection(USERS).document(user).get().await()
                     .getString("profileImageUrl").toString()
-                likedByCurrentUser = isLikedByUser("${auth.currentUser?.uid}_${document.id}")
-                Log.d("Here", "$likedByCurrentUser, ${auth.currentUser?.uid}_${document.id}")
+                likedByCurrentUser = isLikedByUser("${currentUserId}_${document.id}")
+                Log.d("Here", "$likedByCurrentUser, ${currentUserId}_${document.id}")
             }
             document.toObject(Post::class.java)?.copy(
                 postId = document.id,
