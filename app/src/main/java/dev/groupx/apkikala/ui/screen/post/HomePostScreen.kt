@@ -1,6 +1,8 @@
 package dev.groupx.apkikala.ui.screen.post
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,6 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -50,7 +53,7 @@ fun HomePostScreen(
     }
 
     when {
-        uiState.loading -> LoadingScreen()
+        uiState.loading -> PostLoadingScreen()
         uiState.posts.isNotEmpty() -> {
             Box(modifier.pullRefresh(state)) {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -67,10 +70,27 @@ fun HomePostScreen(
 }
 
 @Composable
+fun PostLoadingScreen() {
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Column {
+            DefaultPostItem()
+            DefaultPostItem()
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White.copy(alpha = 0.7f))
+        )
+
+        CircularProgressIndicator()
+    }
+
+}
+
+@Composable
 fun LoadingScreen() {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         CircularProgressIndicator()
-//        DefaultPostItem()
     }
 
 }

@@ -4,10 +4,10 @@ package dev.groupx.apkikala.ui.common.composables
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -36,12 +36,15 @@ fun BasicField(
 
 @Composable
 fun CustomField(text: String, value: String, onNewValue: (String) -> Unit, modifier: Modifier = Modifier) {
-  OutlinedTextField(
+  TextField(
     singleLine = true,
     modifier = modifier,
     value = value,
     onValueChange = { onNewValue(it) },
     placeholder = { Text(text) },
+    colors = TextFieldDefaults.textFieldColors(
+      containerColor = MaterialTheme.colorScheme.tertiary
+    )
 //    leadingIcon = { Icon(imageVector = Icons.Filled., contentDescription = "Email") }
   )
 }
