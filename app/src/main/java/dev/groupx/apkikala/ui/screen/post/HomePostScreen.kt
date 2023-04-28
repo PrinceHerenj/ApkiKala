@@ -9,6 +9,8 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,7 +29,7 @@ fun HomePostScreen(
     modifier: Modifier = Modifier,
     viewModel: PostsViewModel = hiltViewModel(),
 ) {
-    val uiState = viewModel.uiState
+    val uiState by viewModel.uiState.collectAsState()
 
     val refreshScope = rememberCoroutineScope()
     var refreshing by remember { mutableStateOf(false) }
@@ -41,12 +43,32 @@ fun HomePostScreen(
 
     val state = rememberPullRefreshState(refreshing, ::refresh)
 
-        Box(modifier.pullRefresh(state)) {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(uiState.value.posts) { post ->
-                    PostItem(post)
+    LaunchedEffect(Unit) {
+        viewModel.getPosts()
+    }
+
+    when {
+        uiState.loading -> LoadingScreen()
+        uiState.posts.isNotEmpty() -> {
+            Box(modifier.pullRefresh(state)) {
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    items(uiState.posts) { post ->
+                        PostItem(post)
+                    }
                 }
+                PullRefreshIndicator(refreshing, state, Modifier.align(Alignment.TopCenter))
             }
-            PullRefreshIndicator(refreshing, state, Modifier.align(Alignment.TopCenter))
         }
+    }
+
+
+}
+
+@Composable
+fun LoadingScreen() {
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+//        CircularProgressIndicator()
+        DefaultPostItem()
+    }
+
 }

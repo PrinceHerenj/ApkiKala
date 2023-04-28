@@ -1,7 +1,6 @@
 package dev.groupx.apkikala.model.service.impl
 
 import android.net.Uri
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -102,7 +101,6 @@ class StorageServiceImpl @Inject constructor(
                 profileImageUrl = firestore.collection(USERS).document(user).get().await()
                     .getString("profileImageUrl").toString()
                 likedByCurrentUser = isLikedByUser("${currentUserId}_${document.id}")
-                Log.d("Here", "$likedByCurrentUser, ${currentUserId}_${document.id}")
             }
             document.toObject(Post::class.java)?.copy(
                 postId = document.id,
