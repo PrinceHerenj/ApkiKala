@@ -5,6 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -14,17 +16,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImagePainter.State.Empty.painter
 import dev.groupx.apkikala.R
+import dev.groupx.apkikala.model.Post
+import dev.groupx.apkikala.ui.common.composables.BasicButton
 import dev.groupx.apkikala.ui.navigation.NavigationDestination
 import dev.groupx.apkikala.ui.screen.AccountUiState
 import dev.groupx.apkikala.R.string as AppText
@@ -38,6 +49,7 @@ object PersonalProfileNode : NavigationDestination {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PersonalProfileScreen(
+
     restartApp: (String) -> Unit,
     openScreen: (String) -> Unit,
     openAndPopUp: (String, String) -> Unit,
@@ -47,21 +59,71 @@ fun PersonalProfileScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState(initial = AccountUiState(false))
     Column(modifier = Modifier.fillMaxSize()) {
-        Topbar(name = "" )
+        //Topbar(name = "" )
 
-        ProfileSection ()
+       // ProfileSection ()
 
     Scaffold(
-        modifier = Modifier.background(color = MaterialTheme.colorScheme.secondary),
-        /*topBar = {
-                 TopAppBar(
-                     title = {
-                         Text("Profile")
-                     },
+        modifier = Modifier.padding(top= 8.dp)
+            .background(color = MaterialTheme.colorScheme.secondary),
 
-                 )
+        topBar = {
+                 androidx.compose.material.TopAppBar(
 
-        },*/
+                     modifier = Modifier.fillMaxWidth(),
+
+                 ) {
+
+
+                     var expanded by remember { mutableStateOf(false) }
+                     IconButton(onClick = {viewModel.onHomeClick(openAndPopUp)}) {
+                         Icon(
+                             Icons.Default.ArrowBack,
+                             contentDescription = "Back",
+                             tint = Color.Black, modifier = Modifier.size(25.dp)
+                         )
+
+                     }
+
+                     /*Text(
+                         text = name,
+                         overflow = TextOverflow.Ellipsis,
+                         fontWeight = FontWeight.Bold,
+                         fontSize = 20.sp,
+
+
+                         )*/
+                     Box(
+                         modifier = Modifier.fillMaxWidth()
+                             .wrapContentSize(Alignment.TopEnd)
+
+
+                         ){
+                     IconButton(onClick = {expanded = !expanded}) {
+                         Icon(
+                             Icons.Default.MoreVert,
+                             contentDescription = "options",
+                             tint = Color.Black, modifier = Modifier.size(25.dp)
+                         )
+
+                         DropdownMenu(expanded = expanded, onDismissRequest = { expanded= false }) {
+                             if (uiState.isAnonymousAccount){
+                                 DropdownMenuItem(text = { "Login" }, onClick = { viewModel.onLoginClick(openScreen) })
+                                 DropdownMenuItem(text = { "SignUp" }, onClick = { viewModel.onSignUpClick(openScreen) })
+                             }else
+                             {
+                                 DropdownMenuItem(text = { "Logout" }, onClick = { viewModel.onSignOutClick(openAndPopUp) })
+                                 DropdownMenuItem(text = { "Delete" }, onClick = { viewModel.onDeleteAccClick(openAndPopUp, uiState.currentUserId) })
+                             }
+                         }
+
+                     }}
+                 }
+        },
+        content = {
+            var modifier= Modifier.padding(it)
+            ProfileSection()
+        },
         bottomBar = {
             NavigationBar {
                 NavigationBarItem(
@@ -91,10 +153,13 @@ fun PersonalProfileScreen(
                     icon = { Icon(Icons.Filled.Person, contentDescription = null) }
                 )
             }
-        }
-    ){
+        },
+
+
+    )/*{
         Column(Modifier.padding(it)) {
-           // Text(text = uiState.currentUserId, modifier = Modifier.padding(start = 8.dp))
+
+        // Text(text = uiState.currentUserId, modifier = Modifier.padding(start = 8.dp))
            /*
             if (uiState.isAnonymousAccount) {
                 Row {
@@ -118,7 +183,7 @@ fun PersonalProfileScreen(
                 }
             }*/
         }
-    }
+    }*/
 
     }
 }

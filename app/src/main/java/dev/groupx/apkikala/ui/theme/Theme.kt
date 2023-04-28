@@ -32,7 +32,9 @@ private val LightColorPalette = lightColorScheme(
     secondary = Nut3,
     background = Rose10,
     onBackground = Earth100,
-    tertiary  =  Rose20
+    tertiary  =  Rose20,
+    primaryContainer = Rose70,
+    onPrimaryContainer = Rose30,
 
 
     /* Other default colors to override
