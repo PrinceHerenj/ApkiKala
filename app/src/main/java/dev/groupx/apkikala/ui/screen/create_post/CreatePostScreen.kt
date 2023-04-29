@@ -71,8 +71,6 @@ fun CreatePostScreen(
             )
         }
     ) {
-
-
         Column(
             modifier = modifier
                 .padding(it)

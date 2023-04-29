@@ -6,6 +6,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
+import dev.groupx.apkikala.model.Like
 import dev.groupx.apkikala.model.Post
 import dev.groupx.apkikala.model.SearchResult
 import dev.groupx.apkikala.model.service.StorageService
@@ -124,6 +125,19 @@ class StorageServiceImpl @Inject constructor(
             document.toObject(SearchResult::class.java)?.copy(user = document.id)
         }
 
+    }
+
+    override suspend fun getLikes(postId: String): List<Like> {
+        return firestore.collection(LIKES)
+            .whereEqualTo("postId", postId)
+            .get().await()
+            .documents.mapNotNull { document ->
+                val userId = document.getString("userId").toString()
+                var username = "Deleted User"
+                val userExist = firestore.collection(USERS).document(userId).get().await()
+                if (userExist.exists()) username = userExist.getString("username").toString()
+                document.toObject(Like::class.java)?.copy(username = username)
+            }
     }
 
     override suspend fun createLikeDocumentAndIncreasePostLikeCount(postId: String, uid: String) {

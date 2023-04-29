@@ -90,7 +90,7 @@ fun SearchScreen(
             )
         }
     }) {
-        Column(Modifier.padding(it)) {
+        Column(Modifier.padding(it).padding(top = 24.dp)) {
             CustomField(
                 text = "Search",
                 value = uiState.searchString,

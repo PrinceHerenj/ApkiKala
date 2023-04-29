@@ -1,6 +1,7 @@
 package dev.groupx.apkikala.model.service
 
 import android.net.Uri
+import dev.groupx.apkikala.model.Like
 import dev.groupx.apkikala.model.Post
 import dev.groupx.apkikala.model.SearchResult
 
@@ -33,4 +34,5 @@ interface StorageService {
     suspend fun removeLikeDocumentAndDecreasePostLikeCount(postId: String, uid: String)
     suspend fun isLikedByUser(documentRef: String): Boolean
     suspend fun getSearchResults(searchString: String): List<SearchResult>
+    suspend fun getLikes(postId: String): List<Like>
 }

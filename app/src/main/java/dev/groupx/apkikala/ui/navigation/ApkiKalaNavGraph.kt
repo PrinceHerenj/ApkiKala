@@ -100,7 +100,7 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
         )
     ) {
         val postId = it.arguments?.getString("postId") ?: ""
-        CommonLikeScreen(postId)
+        CommonLikeScreen(postId, popUp = { appState.popUp() }, )
     }
 
 
