@@ -45,3 +45,4 @@ class PersonalProfileViewModel @Inject constructor(
     fun onCollabClick(openScreen: (String) -> Unit) = openScreen(CollabNode.route)
     fun onBackClick(popUp: () -> Unit) = popUp()
 }
+    fun onEditClick(openScreen: (String) -> Unit) = openScreen(EditNode.route)

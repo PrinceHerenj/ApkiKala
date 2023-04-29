@@ -3,8 +3,10 @@ package dev.groupx.apkikala.ui.screen.profile_personal
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -13,8 +15,10 @@ import androidx.compose.runtime.Composable.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.HorizontalAlignmentLine
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -83,6 +87,9 @@ fun PersonalProfileScreen(
                                     DropdownMenuItem(text = { Text("SignUp") },
                                         onClick = { viewModel.onSignUpClick(openScreen) })
                                 } else {
+                                    DropdownMenuItem(
+                                        text = { Text("Edit Profile") },
+                                        onClick = { /*viewModel.onEditClick(openScreen)*/ })
                                     DropdownMenuItem(text = { Text("Logout") },
                                         onClick = { viewModel.onSignOutClick(clearAndNavigate) })
                                     DropdownMenuItem(text = { Text("Delete") }, onClick = {
@@ -130,67 +137,67 @@ fun ProfileSection(modifier: Modifier = Modifier) {
         modifier = modifier
             .background(color = MaterialTheme.colorScheme.tertiary)
             .fillMaxWidth()
-            .padding(16.dp)
-            .padding(vertical = 5.dp).fillMaxSize()
+
+            .padding(vertical = 5.dp)
+            .fillMaxSize()
             , horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-            Image(
-                painter = painterResource(id = R.drawable.icons8_son_goku),
-                contentDescription = null,
-                contentScale = ContentScale.FillWidth
-            )
-            Row(
-
-                modifier = modifier
-                    .size(300.dp)
-                    .fillMaxWidth()
-                    .padding(horizontal = 120.dp)
-                    .padding(top = 40.dp)
+                Column(
+                    modifier = Modifier
+                        .background(Color.LightGray)
+                        .fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally,
+                                                                                    verticalArrangement = Arrangement.Center
+                ){
 
 
-            ) {
+
+               Image(
+                   painter = painterResource(id = R.drawable.icons8_son_goku),
+                   contentDescription = null,
+                   contentScale = ContentScale.Fit,
+
+                   modifier = modifier
+                       .size(100.dp)
+                       .border(
+                           width = 1.dp, color = Color.LightGray, shape = CircleShape
+                       )
+
+                       .padding(2.dp)
+                       .clip(CircleShape),
 
 
-                Image(
-                    painter = painterResource(id = R.drawable.icons8_son_goku),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
+                   )
 
-                    modifier = modifier
-                        .size(100.dp)
+               /*Box() {
+                   Image(
+                       painter = painterResource(id = R.drawable.post_image_blank),
+                       contentDescription = null,
+                       contentScale = ContentScale.FillWidth,
+                       modifier = Modifier.fillMaxWidth()
+                   )
+*/
 
-
-                        .border(
-                            width = 1.dp, color = Color.LightGray, shape = CircleShape
-                        )
-
-                        .padding(2.dp)
-                        .clip(CircleShape),
-
-                    )
 
             }}
 
-
-
-            Column(
-                modifier = Modifier.padding(top = 350.dp)
+           Column(
+                modifier = Modifier.padding(top = 250.dp)
             )
             {
             Card(elevation = CardDefaults.cardElevation(3.dp)){
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceAround,
-                modifier = modifier
-                    .padding(start = 40.dp)
-                    .padding(top = 10.dp)
+                modifier = modifier.padding(horizontal = 45.dp )
+
+
             ) {
 
                 stats(numberText = "11", text = "Posts")
-                Spacer(modifier = Modifier.weight(3f))
+                Spacer(modifier = Modifier.weight(4f))
                 stats(numberText = "11k", text = "Followers")
-                Spacer(modifier = Modifier.weight(2f))
+                Spacer(modifier = Modifier.weight(3f))
                 stats(numberText = "111", text = "Following")
                 Spacer(modifier = Modifier.weight(1f))
 
