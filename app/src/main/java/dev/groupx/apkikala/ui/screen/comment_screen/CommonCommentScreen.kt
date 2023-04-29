@@ -76,7 +76,6 @@ fun CommonCommentScreen(
             ) {
                 CommentField(value = uiState.comment, onNewValue = viewModel::onCommentChange)
                 BasicButton(text = R.string.add_comment, modifier = Modifier.padding(horizontal = 8.dp)) {
-                    // Action
                     viewModel.addComment(uiState.comment, postId)
                 }
             }
