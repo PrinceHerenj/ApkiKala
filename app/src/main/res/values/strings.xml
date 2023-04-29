@@ -35,4 +35,6 @@
     <string name="Anonym_Error">Log In to Perform Action</string>
     <string name="view_comments">View Comments</string>
     <string name="back_again_to_exit">Press Back again to Exit</string>
+    <string name="add_new_comment">Add New Comment</string>
+    <string name="add_comment">Add</string>
 </resources>

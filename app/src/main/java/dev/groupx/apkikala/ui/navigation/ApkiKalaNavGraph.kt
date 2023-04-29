@@ -90,7 +90,7 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
         )
     ) {
         val postId = it.arguments?.getString("postId") ?: ""
-        CommonCommentScreen(postId)
+        CommonCommentScreen(postId,  popUp = { appState.popUp() })
     }
 
     composable(

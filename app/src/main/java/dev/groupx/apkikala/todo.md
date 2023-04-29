@@ -1,8 +1,8 @@
 ## For Post addition
 * divide post process ☑️
 * add title, description ☑️
-* add facility to like
-* add facility to comment
+* add facility to like ☑️
+* add facility to comment ☑️
 
 ## For Post deletion from PersonalProfilePage
 
@@ -25,9 +25,9 @@
 - TopAppBar ☑️
 - Search ☑️
 
-## Like Screen
+## Like Screen☑️
 ## Comment Screen
-- add Comment, see comments
+- add Comment, see comments☑️
 
 
 ## DeleteAccount
