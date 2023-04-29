@@ -1,5 +1,6 @@
 package dev.groupx.apkikala.ui.screen.post
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
+import dev.groupx.apkikala.R
+import dev.groupx.apkikala.ui.common.snackbar.SnackbarManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -55,6 +58,9 @@ fun HomePostScreen(
     when {
         uiState.loading -> PostLoadingScreen(modifier)
         uiState.posts.isNotEmpty() -> {
+            var canHandleBackButton by remember {
+                mutableStateOf(true)
+            }
             Box(modifier.pullRefresh(state)) {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(uiState.posts) { post ->
@@ -62,6 +68,10 @@ fun HomePostScreen(
                     }
                 }
                 PullRefreshIndicator(refreshing, state, Modifier.align(Alignment.TopCenter))
+                BackHandler(enabled = canHandleBackButton) {
+                    canHandleBackButton = false
+                    SnackbarManager.showMessage(R.string.back_again_to_exit)
+                }
             }
         }
     }

@@ -46,6 +46,7 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
     composable(HomeNode.route) {
         HomeScreen(
             openScreen = { route -> appState.navigate(route) },
+            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
         )
     }
 

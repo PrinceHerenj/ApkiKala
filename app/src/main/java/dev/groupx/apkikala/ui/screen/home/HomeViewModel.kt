@@ -22,6 +22,7 @@ class HomeViewModel @Inject constructor(
     var uiState = accountService.currentUser.map { AccountUiState(it.isAnonymous, it.id) }
         private set
 
+    fun onHomeClick(openAndPopUp: (String, String) -> Unit) = openAndPopUp(HomeNode.route, HomeNode.route)
     fun onSearchClick(openScreen: (String) -> Unit) = openScreen(SearchNode.route)
 
     fun onCollabClick(openScreen: (String) -> Unit) = openScreen(CollabNode.route)
@@ -31,4 +32,5 @@ class HomeViewModel @Inject constructor(
     fun onAddClick(openScreen: (String) -> Unit) = openScreen(CreatePostNode.route)
 
     fun showAnonymousError() = SnackbarManager.showMessage(R.string.Anonym_Error)
+
 }

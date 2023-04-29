@@ -31,6 +31,7 @@ object HomeNode : NavigationDestination {
 @Composable
 fun HomeScreen(
     openScreen: (String) -> Unit,
+    openAndPopUp: (String, String) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState(initial = AccountUiState(false))
@@ -66,7 +67,7 @@ fun HomeScreen(
             NavigationBar {
                 NavigationBarItem(
                     selected = true,
-                    onClick = { },
+                    onClick = { viewModel.onHomeClick(openAndPopUp) },
                     icon = { Icon(Icons.Filled.Home, contentDescription = null) }
                 )
                 NavigationBarItem(

@@ -171,9 +171,6 @@ class StorageServiceImpl @Inject constructor(
     }
 
 
-
-
-
     companion object {
         private const val IMG = "imagesGlobal"
         private const val USERS = "users"
