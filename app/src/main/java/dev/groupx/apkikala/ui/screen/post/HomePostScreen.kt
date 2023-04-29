@@ -94,7 +94,7 @@ fun PostLoadingScreen(
                 .background(Color.White.copy(alpha = 0.7f))
         )
 
-        CircularProgressIndicator()
+//        CircularProgressIndicator()
     }
 
 }

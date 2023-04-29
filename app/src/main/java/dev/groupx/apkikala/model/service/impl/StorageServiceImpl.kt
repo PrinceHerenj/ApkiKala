@@ -131,7 +131,7 @@ class StorageServiceImpl @Inject constructor(
 
     override suspend fun getLikes(postId: String): List<Like> {
         return firestore.collection(LIKES)
-            .whereEqualTo("postId", postId).orderBy("createdAt")
+            .whereEqualTo("postId", postId)
             .get().await()
             .documents.mapNotNull { document ->
                 val userId = document.getString("userId").toString()
