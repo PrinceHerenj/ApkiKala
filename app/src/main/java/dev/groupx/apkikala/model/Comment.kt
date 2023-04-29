@@ -4,7 +4,7 @@ import com.google.firebase.Timestamp
 
 data class Comment(
     val commentContent: String = "",
-    val userId: String = "",
-    val postId: String = "",
+    val username: String = "",
     val createdAt: Timestamp = Timestamp(0, 0),
+    val postId: String = ""
 )

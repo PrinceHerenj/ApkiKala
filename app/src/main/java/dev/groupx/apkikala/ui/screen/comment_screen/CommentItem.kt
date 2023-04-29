@@ -30,7 +30,7 @@ fun CommentItem(comment: Comment) {
         ),
         modifier = Modifier.padding(horizontal = 12.dp).padding(vertical = 5.dp)
     ) {
-        CommentComposable(commentContent = comment.commentContent, username = comment.userId)
+        CommentComposable(commentContent = comment.commentContent, username = comment.username)
     }
 }
 

@@ -11,7 +11,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -41,7 +40,6 @@ fun CommonLikeScreen(
     popUp: () -> Unit,
     viewModel: LikesViewModel = hiltViewModel(),
 ) {
-    Text(text = "Like screen for $postId")
     val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(Unit) {
@@ -70,7 +68,6 @@ fun CommonLikeScreen(
     )     {
         Box(modifier = Modifier.padding(it).padding(top = 24.dp)) {
             when {
-                uiState.loading -> CircularProgressIndicator()
                 uiState.likes.isNotEmpty() -> {
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
                         items(uiState.likes) { like ->

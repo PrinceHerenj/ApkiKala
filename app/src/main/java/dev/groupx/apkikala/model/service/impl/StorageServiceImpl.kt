@@ -1,11 +1,13 @@
 package dev.groupx.apkikala.model.service.impl
 
 import android.net.Uri
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
+import dev.groupx.apkikala.model.Comment
 import dev.groupx.apkikala.model.Like
 import dev.groupx.apkikala.model.Post
 import dev.groupx.apkikala.model.SearchResult
@@ -129,7 +131,7 @@ class StorageServiceImpl @Inject constructor(
 
     override suspend fun getLikes(postId: String): List<Like> {
         return firestore.collection(LIKES)
-            .whereEqualTo("postId", postId)
+            .whereEqualTo("postId", postId).orderBy("createdAt")
             .get().await()
             .documents.mapNotNull { document ->
                 val userId = document.getString("userId").toString()
@@ -137,6 +139,22 @@ class StorageServiceImpl @Inject constructor(
                 val userExist = firestore.collection(USERS).document(userId).get().await()
                 if (userExist.exists()) username = userExist.getString("username").toString()
                 document.toObject(Like::class.java)?.copy(username = username)
+            }
+    }
+
+    override suspend fun getComments(postId: String): List<Comment> {
+        return firestore.collection(COMMENTS)
+            .whereEqualTo("postId", postId).orderBy("createdAt", Query.Direction.DESCENDING)
+            .get().await()
+            .documents.mapNotNull { document ->
+                val userId = document.getString("userId").toString()
+                var username = "Deleted User"
+                val userExist = firestore.collection(USERS).document(userId).get().await()
+                if (userExist.exists())
+                {  username = userExist.getString("username").toString()
+                    Log.d("Here", userId)
+                }
+                document.toObject(Comment::class.java)?.copy(username = username)
             }
     }
 
@@ -155,6 +173,20 @@ class StorageServiceImpl @Inject constructor(
         firestore.collection(POSTS).document(postId).update(
             "likes", updatedLikes
         )
+    }
+
+    override suspend fun addCommentDocument(comment: String, postId: String, uid: String) {
+
+        val newCommentRef = firestore.collection(POSTS).document().id
+        firestore.collection(COMMENTS).document(newCommentRef).set(
+            hashMapOf(
+                "commentContent" to comment,
+                "createdAt" to FieldValue.serverTimestamp(),
+                "userId" to uid,
+                "postId" to postId
+            )
+        )
+
     }
 
     override suspend fun isLikedByUser(documentRef: String): Boolean {
@@ -190,6 +222,8 @@ class StorageServiceImpl @Inject constructor(
         private const val USERS = "users"
         private const val POSTS = "posts"
         private const val LIKES = "likes"
+        private const val COMMENTS = "comments"
+
     }
 
 }
