@@ -4,6 +4,7 @@ import android.net.Uri
 import dev.groupx.apkikala.model.Comment
 import dev.groupx.apkikala.model.Like
 import dev.groupx.apkikala.model.Post
+import dev.groupx.apkikala.model.Profile
 import dev.groupx.apkikala.model.SearchResult
 
 interface StorageService {
@@ -36,6 +37,10 @@ interface StorageService {
     suspend fun isLikedByUser(documentRef: String): Boolean
     suspend fun getSearchResults(searchString: String): List<SearchResult>
     suspend fun getLikes(postId: String): List<Like>
+
+    suspend fun getProfile(userId: String): Profile
+
     suspend fun addCommentDocument(comment: String, postId: String, uid: String)
     suspend fun getComments(postId: String): List<Comment>
+
 }

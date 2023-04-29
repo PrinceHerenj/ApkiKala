@@ -10,6 +10,7 @@ import com.google.firebase.storage.FirebaseStorage
 import dev.groupx.apkikala.model.Comment
 import dev.groupx.apkikala.model.Like
 import dev.groupx.apkikala.model.Post
+import dev.groupx.apkikala.model.Profile
 import dev.groupx.apkikala.model.SearchResult
 import dev.groupx.apkikala.model.service.StorageService
 import kotlinx.coroutines.CompletableDeferred
@@ -72,10 +73,14 @@ class StorageServiceImpl @Inject constructor(
         firestore.collection(USERS).document(uid)
             .set(
                 hashMapOf(
+                    "userId" to uid,
                     "username" to username,
                     "address" to address,
                     "bio" to bio,
-                    "profileImageUrl" to ""
+                    "profileImageUrl" to "",
+                    "followers" to 0,
+                    "following" to 0,
+                    "posts" to 0
                 )
             )
     }
@@ -142,6 +147,31 @@ class StorageServiceImpl @Inject constructor(
             }
     }
 
+
+    override suspend fun getProfile(userId: String): Profile {
+
+        val docSnapshot = firestore.collection(USERS)
+            .whereEqualTo("userId", userId)
+            .get().await()
+            .documents.first()
+
+            val username = docSnapshot.getString("username").toString()
+            val profileImageUrl = docSnapshot.getString("profileImageUrl").toString()
+            val address = docSnapshot.getString("address").toString()
+            val bio = docSnapshot.getString("bio").toString()
+            val followers = docSnapshot.getLong("followers")!!.toLong()
+            val following = docSnapshot.getLong("following")!!.toLong()
+            val posts = docSnapshot.getLong("posts")!!.toLong()
+
+
+
+        return Profile(
+            username,profileImageUrl, address, bio, followers, following, posts
+        )
+    }
+
+
+
     override suspend fun getComments(postId: String): List<Comment> {
         return firestore.collection(COMMENTS)
             .whereEqualTo("postId", postId).orderBy("createdAt", Query.Direction.DESCENDING)
@@ -157,6 +187,7 @@ class StorageServiceImpl @Inject constructor(
                 document.toObject(Comment::class.java)?.copy(username = username)
             }
     }
+
 
     override suspend fun createLikeDocumentAndIncreasePostLikeCount(postId: String, uid: String) {
         val documentRef = "${uid}_$postId"
