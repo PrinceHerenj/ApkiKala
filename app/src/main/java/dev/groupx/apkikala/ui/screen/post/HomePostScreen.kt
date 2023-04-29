@@ -29,7 +29,6 @@ import dev.groupx.apkikala.ui.common.snackbar.SnackbarManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HomePostScreen(
