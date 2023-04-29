@@ -1,7 +1,13 @@
 package dev.groupx.apkikala.ui.screen.login
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -31,6 +37,7 @@ object LoginNode: NavigationDestination {
 
 @Composable
 fun LoginScreen(
+    openScreen: (String) -> Unit,
     openAndPopUp: (String, String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel()
@@ -62,7 +69,7 @@ fun LoginScreen(
         PasswordField(uiState.password, viewModel::onPasswordChange, Modifier.fieldModifier())
 
         BasicButton(AppText.sign_in, Modifier.basicButton()) { viewModel.onSignInClick(openAndPopUp) }
-        BasicButton(AppText.sign_up, Modifier.basicButton()) { viewModel.onSignUpClick(openAndPopUp) }
+        BasicButton(AppText.sign_up, Modifier.basicButton()) { viewModel.onSignUpClick(openScreen) }
 
         BasicTextButton(AppText.forgot_password, Modifier.textButton()) {
             viewModel.onForgotPasswordClick()

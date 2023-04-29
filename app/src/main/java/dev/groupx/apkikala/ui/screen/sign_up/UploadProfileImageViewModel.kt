@@ -7,7 +7,6 @@ import dev.groupx.apkikala.model.service.AccountService
 import dev.groupx.apkikala.model.service.LogService
 import dev.groupx.apkikala.model.service.StorageService
 import dev.groupx.apkikala.ui.screen.ApkiKalaViewModel
-import dev.groupx.apkikala.ui.screen.create_post.CreatePostNode
 import dev.groupx.apkikala.ui.screen.home.HomeNode
 import javax.inject.Inject
 
@@ -36,11 +35,20 @@ class UploadProfileImageViewModel @Inject constructor(
         }
     }
 
-    fun onCancel(openAndPopUp: (String, String) -> Unit) {
+    fun onCancel(popUp: () -> Unit) {
         launchCatching {
             storageService.removeImage()
-            openAndPopUp(HomeNode.route, CreatePostNode.route)
+            accountService.deleteAccount(accountService.currentUserId)
+            popUp()
         }
     }
+
+    fun onBackClick(popUp: () -> Unit) {
+        launchCatching {
+            accountService.deleteAccount(accountService.currentUserId)
+            popUp()
+        }
+    }
+
 
 }

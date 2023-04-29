@@ -24,17 +24,19 @@ class PersonalProfileViewModel @Inject constructor(
     fun onLoginClick(openScreen: (String) -> Unit) = openScreen(LoginNode.route)
     fun onSignUpClick(openScreen: (String) -> Unit) = openScreen(SignUpNode.route)
 
-    fun onSignOutClick(openAndPopUp: (String, String) -> Unit) {
+
+
+    fun onSignOutClick(clearAndNavigate: (String) -> Unit) {
         launchCatching {
             accountService.signOut()
-            openAndPopUp(LoginNode.route, PersonalProfileNode.route)
+            clearAndNavigate(LoginNode.route)
         }
     }
 
-    fun onDeleteAccClick(openAndPopUp: (String, String) -> Unit, id: String) {
+    fun onDeleteAccClick(clearAndNavigate: (String) -> Unit, id: String) {
         launchCatching {
             accountService.deleteAccount(id)
-            openAndPopUp(LoginNode.route, HomeNode.route)
+            clearAndNavigate(LoginNode.route)
         }
     }
 

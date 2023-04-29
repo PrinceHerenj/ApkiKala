@@ -69,4 +69,6 @@ class CreatePostViewModel @Inject constructor(
         }
     }
 
+    fun onBackClick(popUp: () -> Unit) = popUp()
+
 }

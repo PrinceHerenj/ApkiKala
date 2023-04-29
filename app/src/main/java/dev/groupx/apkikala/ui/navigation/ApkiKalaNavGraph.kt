@@ -36,11 +36,11 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
     }
 
     composable(LoginNode.route) {
-        LoginScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
+        LoginScreen(openScreen = { route -> appState.navigate(route) }, openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
     }
 
     composable(SignUpNode.route) {
-        SignUpScreen(openScreen = { route -> appState.navigate(route) })
+        SignUpScreen(popUp = { appState.popUp() },openScreen = { route -> appState.navigate(route) })
     }
 
     composable(HomeNode.route) {
@@ -51,15 +51,18 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
 
     composable(PersonalProfileNode.route) {
         PersonalProfileScreen(
-            popUp = {appState.popUp()},
+            popUp = { appState.popUp() },
             openScreen = { route -> appState.navigate(route) },
             openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
-            restartApp = { route -> appState.clearAndNavigate(route) }
+            clearAndNavigate = { route -> appState.clearAndNavigate(route) }
         )
     }
 
     composable(CreatePostNode.route) {
-        CreatePostScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
+        CreatePostScreen(
+            popUp = { appState.popUp() },
+            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) }
+        )
     }
 
     composable(SearchNode.route) {
@@ -72,7 +75,7 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
     composable(
         route = "${CommonProfileNode.route}/{uid}",
         arguments = listOf(
-            navArgument("uid") {type = NavType.StringType}
+            navArgument("uid") { type = NavType.StringType }
         )
     ) {
         val uid = it.arguments?.getString("uid") ?: ""
@@ -82,7 +85,7 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
     composable(
         route = "${CommonCommentNode.route}/{postId}",
         arguments = listOf(
-            navArgument("postId") {type = NavType.StringType}
+            navArgument("postId") { type = NavType.StringType }
         )
     ) {
         val postId = it.arguments?.getString("postId") ?: ""
@@ -92,7 +95,7 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
     composable(
         route = "${CommonLikeNode.route}/{postId}",
         arguments = listOf(
-            navArgument("postId") {type = NavType.StringType}
+            navArgument("postId") { type = NavType.StringType }
         )
     ) {
         val postId = it.arguments?.getString("postId") ?: ""
@@ -109,7 +112,14 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
     }
 
     composable(UploadProfileImageNode.route) {
-        UploadProfileImageScreen(openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) }, restartApp = { route -> appState.clearAndNavigate(route) })
+        UploadProfileImageScreen(
+            popUp = { appState.popUp() },
+            openAndPopUp = { route, popUp ->
+            appState.navigateAndPopUp(
+                route,
+                popUp
+            )
+        }, restartApp = { route -> appState.clearAndNavigate(route) })
     }
 
 

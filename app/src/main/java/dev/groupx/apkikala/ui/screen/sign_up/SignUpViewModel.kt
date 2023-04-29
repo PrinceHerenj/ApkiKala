@@ -81,6 +81,9 @@ class SignUpViewModel @Inject constructor(
     }
   }
 
+  fun onBackClick(popUp: () -> Unit) = popUp()
+
+
 }
 
 

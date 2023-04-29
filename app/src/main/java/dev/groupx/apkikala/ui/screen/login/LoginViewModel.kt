@@ -51,7 +51,8 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun onSignUpClick(openAndPopUp: (String, String) -> Unit) = openAndPopUp(SignUpNode.route, LoginNode.route)
+    fun onSignUpClick(openScreen: (String) -> Unit) = openScreen(SignUpNode.route)
+
     fun onForgotPasswordClick() {
         if (!email.isValidEmail()) {
             SnackbarManager.showMessage(AppText.email_error)

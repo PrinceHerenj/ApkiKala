@@ -37,7 +37,7 @@ object PersonalProfileNode : NavigationDestination {
 @Composable
 fun PersonalProfileScreen(
     popUp: () -> Unit,
-    restartApp: (String) -> Unit,
+    clearAndNavigate: (String) -> Unit,
     openScreen: (String) -> Unit,
     openAndPopUp: (String, String) -> Unit,
     viewModel: PersonalProfileViewModel = hiltViewModel(),
@@ -78,15 +78,16 @@ fun PersonalProfileScreen(
                                 onDismissRequest = { expanded = false }) {
                                 if (uiState.isAnonymousAccount) {
                                     DropdownMenuItem(text = { Text("Login") },
-                                        onClick = { viewModel.onLoginClick(openScreen) })
+                                        onClick = { expanded = false; viewModel.onLoginClick(openScreen) })
                                     DropdownMenuItem(text = { Text("SignUp") },
-                                        onClick = { viewModel.onSignUpClick(openScreen) })
+                                        onClick = { expanded = false; viewModel.onSignUpClick(openScreen) })
                                 } else {
                                     DropdownMenuItem(text = { Text("Logout") },
-                                        onClick = { viewModel.onSignOutClick(openAndPopUp) })
+                                        onClick = { expanded = false; viewModel.onSignOutClick(clearAndNavigate) })
                                     DropdownMenuItem(text = { Text("Delete") }, onClick = {
+                                        expanded = false
                                         viewModel.onDeleteAccClick(
-                                            openAndPopUp, uiState.currentUserId
+                                            clearAndNavigate, uiState.currentUserId
                                         )
                                     }
                                     )
