@@ -66,13 +66,14 @@ fun CommonLikeScreen(
             )
         }
     )     {
-        Box(modifier = Modifier.padding(it).padding(top = 24.dp)) {
+        Box(modifier = Modifier
+            .padding(it)
+            .padding(top = 24.dp)) {
             when {
                 uiState.likes.isNotEmpty() -> {
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
                         items(uiState.likes) { like ->
                             LikeItem(like)
-
                         }
                     }
                 }
