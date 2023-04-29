@@ -37,9 +37,10 @@ object PersonalProfileNode : NavigationDestination {
 @Composable
 fun PersonalProfileScreen(
     popUp: () -> Unit,
-    clearAndNavigate: (String) -> Unit,
+    //restartApp: (String) -> Unit,
     openScreen: (String) -> Unit,
     openAndPopUp: (String, String) -> Unit,
+    clearAndNavigate: (String) -> Unit,
     viewModel: PersonalProfileViewModel = hiltViewModel(),
 
 
@@ -78,14 +79,13 @@ fun PersonalProfileScreen(
                                 onDismissRequest = { expanded = false }) {
                                 if (uiState.isAnonymousAccount) {
                                     DropdownMenuItem(text = { Text("Login") },
-                                        onClick = { expanded = false; viewModel.onLoginClick(openScreen) })
+                                        onClick = { viewModel.onLoginClick(openScreen) })
                                     DropdownMenuItem(text = { Text("SignUp") },
-                                        onClick = { expanded = false; viewModel.onSignUpClick(openScreen) })
+                                        onClick = { viewModel.onSignUpClick(openScreen) })
                                 } else {
                                     DropdownMenuItem(text = { Text("Logout") },
-                                        onClick = { expanded = false; viewModel.onSignOutClick(clearAndNavigate) })
+                                        onClick = { viewModel.onSignOutClick(clearAndNavigate) })
                                     DropdownMenuItem(text = { Text("Delete") }, onClick = {
-                                        expanded = false
                                         viewModel.onDeleteAccClick(
                                             clearAndNavigate, uiState.currentUserId
                                         )
@@ -117,6 +117,7 @@ fun PersonalProfileScreen(
             },
 
             ) {
+
             ProfileSection(Modifier.padding(it))
         }
     }
@@ -130,11 +131,10 @@ fun ProfileSection(modifier: Modifier = Modifier) {
             .background(color = MaterialTheme.colorScheme.tertiary)
             .fillMaxWidth()
             .padding(16.dp)
-            .wrapContentHeight(), horizontalAlignment = Alignment.CenterHorizontally
+            .padding(vertical = 5.dp).fillMaxSize()
+            , horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Card(
-            elevation = CardDefaults.cardElevation(4.dp),
-        ) {
+
             Image(
                 painter = painterResource(id = R.drawable.icons8_son_goku),
                 contentDescription = null,
@@ -143,9 +143,9 @@ fun ProfileSection(modifier: Modifier = Modifier) {
             Row(
 
                 modifier = modifier
-
+                    .size(300.dp)
                     .fillMaxWidth()
-                    .padding(horizontal = 150.dp)
+                    .padding(horizontal = 120.dp)
                     .padding(top = 40.dp)
 
 
@@ -155,52 +155,61 @@ fun ProfileSection(modifier: Modifier = Modifier) {
                 Image(
                     painter = painterResource(id = R.drawable.icons8_son_goku),
                     contentDescription = null,
+                    contentScale = ContentScale.Crop,
 
                     modifier = modifier
-                        .aspectRatio(1f, matchHeightConstraintsFirst = true)
+                        .size(100.dp)
+
+
                         .border(
                             width = 1.dp, color = Color.LightGray, shape = CircleShape
                         )
+
                         .padding(2.dp)
                         .clip(CircleShape),
 
                     )
 
+            }}
+
+
+
+            Column(
+                modifier = Modifier.padding(top = 350.dp)
+            )
+            {
+            Card(elevation = CardDefaults.cardElevation(3.dp)){
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceAround,
+                modifier = modifier
+                    .padding(start = 40.dp)
+                    .padding(top = 10.dp)
+            ) {
+
+                stats(numberText = "11", text = "Posts")
+                Spacer(modifier = Modifier.weight(3f))
+                stats(numberText = "11k", text = "Followers")
+                Spacer(modifier = Modifier.weight(2f))
+                stats(numberText = "111", text = "Following")
+                Spacer(modifier = Modifier.weight(1f))
+
+
             }
 
-        }
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceAround,
-            modifier = modifier
-                .padding(start = 40.dp)
-                .padding(top = 10.dp)
-        ) {
-
-            stats(numberText = "11", text = "Posts")
-            Spacer(modifier = Modifier.weight(3f))
-            stats(numberText = "11k", text = "Followers")
-            Spacer(modifier = Modifier.weight(2f))
-            stats(numberText = "111", text = "Following")
-            Spacer(modifier = Modifier.weight(1f))
-
+                ProfileDescription(
+                    displayName = "Rakess",
+                    description = "This is a Sample Text \n\n",
+                    url = "Rakess@gmail.com",
+                    followedBy = listOf("bablu", "parkaass"),
+                    otherFollow = 59
+                )
+            }}
 
         }
-        Row(
-            modifier = modifier.padding(top = 10.dp)
-        ) {
-            ProfileDescription(
-                displayName = "Rakess",
-                description = "This is a Sample Text \n\n",
-                url = "Rakess@gmail.com",
-                followedBy = listOf("bablu", "parkaass"),
-                otherFollow = 59
-            )
-        }
 
 
-    }
-}
+
 
 @Composable
 fun stats(
