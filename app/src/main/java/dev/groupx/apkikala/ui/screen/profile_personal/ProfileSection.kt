@@ -1,10 +1,12 @@
 package dev.groupx.apkikala.ui.screen.profile_personal
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -43,56 +45,60 @@ fun ProfileSection(
         viewModel.getDetails(userId)
     }
 
-//    Column(
-//        modifier = modifier
-//            .background(color = MaterialTheme.colorScheme.tertiary)
-//            .fillMaxWidth()
-//            .padding(vertical = 5.dp)
-//            .fillMaxSize(),
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//
-//    }
-
-    ElevatedCard(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background
-        ), shape = RoundedCornerShape(4.dp), elevation = CardDefaults.cardElevation(
-            4.dp
-        ), modifier = modifier.padding(10.dp),
-    ) {
-        Box(modifier = Modifier.fillMaxWidth().padding(top = 24.dp), contentAlignment = Alignment.Center) {
-            GetProfileImage(profileImageUrl = uiState.profile.profileImageUrl) {
-                ImageCommon(
-                    imageUrl = it,
-                    height = 120.dp,
-                    width = 120.dp,
-                    shape = CircleShape,
-                    contentScale = ContentScale.Crop
-                )
-            }
-        }
-
-        Row(
+    if (uiState.loading) {
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 24.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
+                .fillMaxSize()
+                .background(Color.White.copy(alpha = 0.7f))
+        )
+    } else {
+        ElevatedCard(
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.background
+            ),
+            shape = RoundedCornerShape(4.dp),
+            elevation = CardDefaults.cardElevation(
+                4.dp
+            ),
+            modifier = modifier.padding(10.dp),
         ) {
-            Stats(numberText = uiState.profile.posts.toString(), text = "Posts")
-            Stats(numberText = uiState.profile.followers.toString(), text = "Followers")
-            Stats(numberText = uiState.profile.following.toString(), text = "Following")
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                GetProfileImage(profileImageUrl = uiState.profile.profileImageUrl) {
+                    ImageCommon(
+                        imageUrl = it,
+                        height = 120.dp,
+                        width = 120.dp,
+                        shape = CircleShape,
+                        contentScale = ContentScale.Crop
+                    )
+                }
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 24.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Stats(numberText = uiState.profile.posts.toString(), text = "Posts")
+                Stats(numberText = uiState.profile.followers.toString(), text = "Followers")
+                Stats(numberText = uiState.profile.following.toString(), text = "Following")
+            }
+
+            ProfileDescription(
+                displayName = uiState.profile.username,
+                bio = uiState.profile.bio,
+                address = uiState.profile.address,
+
+                )
         }
-
-        ProfileDescription(
-            displayName = uiState.profile.username,
-            bio = uiState.profile.bio,
-            address = uiState.profile.address,
-
-            )
     }
-
 
 }
 
