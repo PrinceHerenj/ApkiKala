@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".chatActivity"
-    android:background="@drawable/bg">
+    android:background="@drawable/deer_bg">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"

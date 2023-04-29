@@ -4,27 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/shade"
+    android:background="@drawable/bg1"
     tools:context=".loginactivity">
 
-    <ImageView
-        android:id="@+id/app_logo"
-        android:layout_width="200dp"
+    <TextView
+        android:id="@+id/main_text"
+        android:layout_width="350dp"
+        android:layout_marginTop="1dp"
         android:layout_height="200dp"
-        android:src="@drawable/racoondab"
+        android:text="Log In, to Your Collab Portal and connect with fellow artists........."
+        android:textColor="#ffffff"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
-        android:background="@drawable/image_backround"/>
+        android:textStyle="bold"
+        android:textSize="35dp"
+        android:padding="20dp"
+        />
+/>
+
+<!--    <ImageView-->
+<!--        android:id="@+id/app_logo"-->
+<!--        android:layout_width="200dp"-->
+<!--        android:layout_height="200dp"-->
+<!--        android:src="@drawable/racoondab"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_marginTop="70dp"-->
+<!--        android:background="@drawable/image_backround"/>-->
+
+
 
     <EditText
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@id/app_logo"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/bacground"
-        android:textColorHint="#A19D9D"
-        android:textColor="#ffffff"
+        android:layout_below="@id/main_text"
+        android:layout_marginTop="45dp"
+        android:background="#CDF8E8F6"
+        android:textColorHint="#7E7979"
+        android:textColor="#000000"
         android:paddingLeft="20dp"
         android:hint="Email"
         android:layout_marginLeft="30dp"
@@ -35,10 +51,10 @@
         android:layout_height="50dp"
         android:layout_below="@id/email"
         android:layout_marginTop="21dp"
-        android:background="@drawable/bacground"
+        android:background="#CDF8E8F6"
         android:hint="Password"
-        android:textColorHint="#A19D9D"
-        android:textColor="#ffffff"
+        android:textColorHint="#7E7979"
+        android:textColor="#000000"
         android:paddingLeft="20dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
@@ -49,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/password"
         android:layout_marginTop="20dp"
-        android:background="@drawable/bacground_shape"
+        android:background="#670C5B"
         android:textSize="20sp"
         android:layout_centerHorizontal="true"
         android:text="Log In"/>
@@ -58,12 +74,16 @@
         android:id="@+id/to_signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="3dp"
         android:layout_below="@id/button"
         android:textColor="#ffffff"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="Not a User!, Sign Up"
-        android:textSize="15sp"/>
+        android:layout_marginTop="200dp"
+        android:textStyle="bold"
+        android:text="Not a User!?, Sign Up"
+        android:textSize="25dp"/>
 
 
 </RelativeLayout>
