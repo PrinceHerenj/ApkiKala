@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.getField
 import com.google.firebase.storage.FirebaseStorage
 import dev.groupx.apkikala.R
 import dev.groupx.apkikala.model.Comment
@@ -261,7 +262,9 @@ class StorageServiceImpl @Inject constructor(
                 "userId" to uid,
                 "postId" to postId
             )
-        )
+        ).addOnSuccessListener {
+            SnackbarManager.showMessage(R.string.comment_added)
+        }
 
     }
 
@@ -334,6 +337,17 @@ class StorageServiceImpl @Inject constructor(
         )
     }
 
+    override suspend fun removePosts(userId: String) {
+        val query = firestore.collection(POSTS)
+            .whereEqualTo("user", userId)
+            .get().await()
+            .documents
+
+        for (document in query) {
+            removePostStorageCollectionCommentsLikes(document.id)
+        }
+    }
+
     override suspend fun removePostStorageCollectionCommentsLikes(postId: String) {
         // comments
         firestore.collection(COMMENTS).whereEqualTo("postId", postId).get()
@@ -344,13 +358,13 @@ class StorageServiceImpl @Inject constructor(
                 }
                 batch.commit()
                     .addOnSuccessListener {
-                        SnackbarManager.showMessage(R.string.comments_deleted_successfully)
+//                        SnackbarManager.showMessage(R.string.comments_deleted_successfully)
                     }.addOnFailureListener {
-                        SnackbarManager.showMessage(R.string.could_not_delete_comments)
+//                        SnackbarManager.showMessage(R.string.could_not_delete_comments)
                     }
             }
             .addOnFailureListener {
-                SnackbarManager.showMessage(R.string.no_comments_found)
+//                SnackbarManager.showMessage(R.string.no_comments_found)
             }
 
         // likes
@@ -363,9 +377,9 @@ class StorageServiceImpl @Inject constructor(
                 }
                 batch.commit()
                     .addOnSuccessListener {
-                        SnackbarManager.showMessage(R.string.likes_deleted_successfully)
+//                        SnackbarManager.showMessage(R.string.likes_deleted_successfully)
                     }.addOnFailureListener {
-                        SnackbarManager.showMessage(R.string.count_not_delete_likes)
+//                        SnackbarManager.showMessage(R.string.count_not_delete_likes)
                     }
             }
             .addOnFailureListener {
@@ -412,6 +426,26 @@ class StorageServiceImpl @Inject constructor(
         }
     }
 
+    override suspend fun getCurrentUserDetails(userId: String): List<String> {
+        val data = firestore.collection(USERS).document(userId).get().await()
+        return listOf(
+            data.getField("username")!!,
+            data.getString("bio")!!,
+            data.getString("address")!!
+        )
+    }
+
+    override suspend fun setUserDetails(userId: String, username: String, bio: String, address: String) {
+        firestore.collection(USERS).document(userId).update(
+            mapOf(
+                "username" to username,
+                "bio" to bio,
+                "address" to address
+            )
+        ).addOnSuccessListener {
+            SnackbarManager.showMessage(R.string.updated_details_successfully)
+        }
+    }
 
     override suspend fun isLikedByUser(documentRef: String): Boolean {
         val resultDeferred = CompletableDeferred<Boolean>()
@@ -424,7 +458,6 @@ class StorageServiceImpl @Inject constructor(
             }
 
         return resultDeferred.await()
-
     }
 
     override suspend fun isFollowedBy(currentUserId: String, profileUserId: String): Boolean {

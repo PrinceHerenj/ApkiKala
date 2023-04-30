@@ -41,6 +41,7 @@ object CommonCommentNode: NavigationDestination {
 fun CommonCommentScreen(
     postId: String,
     popUp: () -> Unit,
+    openAndPopUp: (String, String) -> Unit,
     viewModel: CommentViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -76,7 +77,7 @@ fun CommonCommentScreen(
             ) {
                 CommentField(value = uiState.comment, onNewValue = viewModel::onCommentChange)
                 BasicButton(text = R.string.add_comment, modifier = Modifier.padding(horizontal = 8.dp)) {
-                    viewModel.addComment(uiState.comment, postId)
+                    viewModel.addComment(uiState.comment, postId, openAndPopUp)
                 }
             }
         }
