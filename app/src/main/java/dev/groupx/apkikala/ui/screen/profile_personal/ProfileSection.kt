@@ -54,7 +54,7 @@ fun ProfileSection(
     } else {
         ElevatedCard(
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.background
+                containerColor = MaterialTheme.colorScheme.primaryContainer
             ),
             shape = RoundedCornerShape(4.dp),
             elevation = CardDefaults.cardElevation(
@@ -111,7 +111,7 @@ fun Stats(
 ) {
     ElevatedCard(
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.tertiary
+            containerColor = MaterialTheme.colorScheme.background
         ),
         shape = RoundedCornerShape(4.dp),
         elevation = CardDefaults.cardElevation(

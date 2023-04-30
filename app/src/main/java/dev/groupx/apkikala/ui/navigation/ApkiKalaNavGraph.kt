@@ -80,7 +80,7 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
         )
     ) {
         val uid = it.arguments?.getString("uid") ?: ""
-        CommonProfileScreen(uid)
+        CommonProfileScreen(popUp = { appState.popUp() },uid)
     }
 
     composable(

@@ -49,6 +49,14 @@ class StorageServiceImpl @Inject constructor(
                 "likes" to 0
             )
         ).await()
+
+        val posts = firestore.collection(USERS).document(userId).get().await().getLong("posts")!!
+
+        firestore.collection(USERS).document(userId).update(
+            mapOf(
+                "posts" to (posts+1)
+            )
+        )
     }
 
     override suspend fun saveImageToFirestoreUser(downloadUrl: Uri, userId: String) {
