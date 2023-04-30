@@ -1,9 +1,9 @@
 package dev.groupx.apkikala.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
-import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 
 
@@ -28,11 +28,13 @@ private val DarkColorPalette = darkColorScheme(
 )
 
 private val LightColorPalette = lightColorScheme(
-    primary = Earth50,
+    primary = Earth50, //
     secondary = Nut3,
-    background = Rose30,
+    background = Rose10, //
     onBackground = Earth100,
-    tertiary  =  Rose10
+    tertiary  =  Rose20,
+    primaryContainer = Rose20,
+//    onPrimaryContainer = Rose10,
 
 
     /* Other default colors to override

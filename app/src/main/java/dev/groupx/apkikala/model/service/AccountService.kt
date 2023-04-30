@@ -15,4 +15,5 @@ interface AccountService {
     suspend fun linkAccount(email: String, password: String, username: String, address: String, bio: String)
     suspend fun deleteAccount(id: String)
     suspend fun signOut()
+    suspend fun deleteAnonymousAccount()
 }

@@ -5,6 +5,7 @@ package dev.groupx.apkikala.ui.common.composables
 import androidx.annotation.StringRes
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddComment
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
@@ -51,13 +52,31 @@ fun CustomField(text: String, value: String, onNewValue: (String) -> Unit, modif
 
 @Composable
 fun EmailField(value: String, onNewValue: (String) -> Unit, modifier: Modifier = Modifier) {
-  OutlinedTextField(
+  TextField(
     singleLine = true,
     modifier = modifier,
     value = value,
     onValueChange = { onNewValue(it) },
     placeholder = { Text(stringResource(AppText.email)) },
-    leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email") }
+    leadingIcon = { Icon(imageVector = Icons.Default.Email, contentDescription = "Email") },
+    colors = TextFieldDefaults.textFieldColors(
+      containerColor = MaterialTheme.colorScheme.tertiary
+    )
+  )
+}
+
+@Composable
+fun CommentField(value: String, onNewValue: (String) -> Unit, modifier: Modifier = Modifier) {
+  TextField(
+    singleLine = true,
+    modifier = modifier,
+    value = value,
+    onValueChange = { onNewValue(it) },
+    placeholder = { Text(stringResource(AppText.add_new_comment)) },
+    leadingIcon = { Icon(imageVector = Icons.Default.AddComment, contentDescription = "Email") },
+    colors = TextFieldDefaults.textFieldColors(
+      containerColor = MaterialTheme.colorScheme.tertiary
+    )
   )
 }
 
@@ -91,12 +110,15 @@ private fun PasswordField(
   val visualTransformation =
     if (isVisible) VisualTransformation.None else PasswordVisualTransformation()
 
-  OutlinedTextField(
+  TextField(
     modifier = modifier,
     value = value,
     onValueChange = { onNewValue(it) },
     placeholder = { Text(text = stringResource(placeholder)) },
     leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "Lock") },
+    colors = TextFieldDefaults.textFieldColors(
+      containerColor = MaterialTheme.colorScheme.tertiary
+    ),
     trailingIcon = {
       IconButton(onClick = { isVisible = !isVisible }) {
         Icon(painter = icon, contentDescription = "Visibility")

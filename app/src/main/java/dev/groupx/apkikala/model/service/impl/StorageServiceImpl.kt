@@ -1,14 +1,21 @@
 package dev.groupx.apkikala.model.service.impl
 
 import android.net.Uri
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.getField
 import com.google.firebase.storage.FirebaseStorage
+import dev.groupx.apkikala.R
+import dev.groupx.apkikala.model.Comment
+import dev.groupx.apkikala.model.Like
 import dev.groupx.apkikala.model.Post
+import dev.groupx.apkikala.model.Profile
 import dev.groupx.apkikala.model.SearchResult
 import dev.groupx.apkikala.model.service.StorageService
+import dev.groupx.apkikala.ui.common.snackbar.SnackbarManager
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -45,6 +52,14 @@ class StorageServiceImpl @Inject constructor(
                 "likes" to 0
             )
         ).await()
+
+        val posts = firestore.collection(USERS).document(userId).get().await().getLong("posts")!!
+
+        firestore.collection(USERS).document(userId).update(
+            mapOf(
+                "posts" to (posts + 1)
+            )
+        )
     }
 
     override suspend fun saveImageToFirestoreUser(downloadUrl: Uri, userId: String) {
@@ -69,10 +84,14 @@ class StorageServiceImpl @Inject constructor(
         firestore.collection(USERS).document(uid)
             .set(
                 hashMapOf(
+                    "userId" to uid,
                     "username" to username,
                     "address" to address,
                     "bio" to bio,
-                    "profileImageUrl" to ""
+                    "profileImageUrl" to "",
+                    "followers" to 0,
+                    "following" to 0,
+                    "posts" to 0
                 )
             )
     }
@@ -112,6 +131,37 @@ class StorageServiceImpl @Inject constructor(
         }
     }
 
+    override suspend fun getFeedPostsFiltered(userId: String): List<Post> {
+        val query: Query = firestore.collection(POSTS)
+            .whereEqualTo("user", userId)
+            .orderBy("createdAt", Query.Direction.DESCENDING)
+
+        val querySnapshot = query.get().await()
+        val currentUserId = auth.currentUser?.uid
+
+
+        return querySnapshot.documents.mapNotNull { document ->
+            var username = ""
+            var profileImageUrl = ""
+            var likedByCurrentUser = false
+            val user = document.getString("user")
+            if (user != null) {
+                username = firestore.collection(USERS).document(user).get().await()
+                    .getString("username").toString()
+                profileImageUrl = firestore.collection(USERS).document(user).get().await()
+                    .getString("profileImageUrl").toString()
+                likedByCurrentUser = isLikedByUser("${currentUserId}_${document.id}")
+            }
+            document.toObject(Post::class.java)?.copy(
+                postId = document.id,
+                username = username,
+                profileImageUrl = profileImageUrl,
+                likedByCurrentUser = likedByCurrentUser
+            )
+        }
+
+    }
+
     override suspend fun getSearchResults(searchString: String): List<SearchResult> {
         val query = firestore.collectionGroup(USERS)
             .whereGreaterThanOrEqualTo("username", searchString)
@@ -125,6 +175,65 @@ class StorageServiceImpl @Inject constructor(
         }
 
     }
+
+    override suspend fun getLikes(postId: String): List<Like> {
+        return firestore.collection(LIKES)
+            .whereEqualTo("postId", postId)
+            .get().await()
+            .documents.mapNotNull { document ->
+                val userId = document.getString("userId").toString()
+                var username = "Deleted User"
+                val userExist = firestore.collection(USERS).document(userId).get().await()
+                if (userExist.exists()) username = userExist.getString("username").toString()
+                document.toObject(Like::class.java)?.copy(username = username)
+            }
+    }
+
+
+    override suspend fun getProfile(userId: String): Profile {
+
+        val docSnapshot = firestore.collection(USERS)
+            .whereEqualTo("userId", userId)
+            .get().await()
+            .documents.first()
+
+        val username = docSnapshot.getString("username").toString()
+        val profileImageUrl = docSnapshot.getString("profileImageUrl").toString()
+        val address = docSnapshot.getString("address").toString()
+        val bio = docSnapshot.getString("bio").toString()
+        val followers = docSnapshot.getLong("followers")!!.toLong()
+        val following = docSnapshot.getLong("following")!!.toLong()
+        val posts = docSnapshot.getLong("posts")!!.toLong()
+
+
+
+        return if (docSnapshot.exists())
+            Profile(
+                docSnapshot.id, username, profileImageUrl, address, bio, followers, following, posts
+            )
+        else
+            Profile(
+                "Anonymous User"
+            )
+    }
+
+
+    override suspend fun getComments(postId: String): List<Comment> {
+        return firestore.collection(COMMENTS)
+            .whereEqualTo("postId", postId).orderBy("createdAt", Query.Direction.DESCENDING)
+            .get().await()
+            .documents.mapNotNull { document ->
+                val userId = document.getString("userId").toString()
+                var username = "Deleted User"
+                val userExist = firestore.collection(USERS).document(userId).get().await()
+                if (userExist.exists()) {
+                    username = userExist.getString("username").toString()
+                    Log.d("Here", userId)
+                }
+                document.toObject(Comment::class.java)?.copy(username = username)
+            }
+    }
+
 
     override suspend fun createLikeDocumentAndIncreasePostLikeCount(postId: String, uid: String) {
         val documentRef = "${uid}_$postId"
@@ -143,17 +252,75 @@ class StorageServiceImpl @Inject constructor(
         )
     }
 
-    override suspend fun isLikedByUser(documentRef: String): Boolean {
-        val resultDeferred = CompletableDeferred<Boolean>()
+    override suspend fun addCommentDocument(comment: String, postId: String, uid: String) {
 
-        firestore.collection(LIKES).document(documentRef).get()
-            .addOnSuccessListener {
-                resultDeferred.complete(it.exists())
-            }.addOnFailureListener { exception ->
-                resultDeferred.completeExceptionally(exception)
-            }
+        val newCommentRef = firestore.collection(POSTS).document().id
+        firestore.collection(COMMENTS).document(newCommentRef).set(
+            hashMapOf(
+                "commentContent" to comment,
+                "createdAt" to FieldValue.serverTimestamp(),
+                "userId" to uid,
+                "postId" to postId
+            )
+        ).addOnSuccessListener {
+            SnackbarManager.showMessage(R.string.comment_added)
+        }
 
-        return resultDeferred.await()
+    }
+
+    override suspend fun addFollower(
+        currentUserId: String,
+        profileUserId: String,
+        newFollowers: Long,
+    ) {
+        val followRef = "${currentUserId}_${profileUserId}"
+        firestore.collection(FOLLOWS).document(followRef).set(
+            hashMapOf(
+                "followerUserId" to currentUserId,
+                "followedUserId" to profileUserId
+            )
+        )
+
+        firestore.collection(USERS).document(profileUserId).update(
+            mapOf(
+                "followers" to newFollowers
+            )
+        )
+
+        val currentUserFollowing = firestore.collection(USERS).document(currentUserId)
+            .get().await().getLong("following")
+
+        firestore.collection(USERS).document(currentUserId).update(
+            mapOf(
+                "following" to (currentUserFollowing?.plus(1))
+            )
+        )
+
+    }
+
+    override suspend fun removeFollower(
+        currentUserId: String,
+        profileUserId: String,
+        newFollowers: Long,
+    ) {
+        val followRef = "${currentUserId}_${profileUserId}"
+        firestore.collection(FOLLOWS).document(followRef)
+            .delete()
+
+        firestore.collection(USERS).document(profileUserId).update(
+            mapOf(
+                "followers" to newFollowers
+            )
+        )
+
+        val currentUserFollowing = firestore.collection(USERS).document(currentUserId)
+            .get().await().getLong("following")
+
+        firestore.collection(USERS).document(currentUserId).update(
+            mapOf(
+                "following" to (currentUserFollowing?.minus(1))
+            )
+        )
 
     }
 
@@ -170,8 +337,142 @@ class StorageServiceImpl @Inject constructor(
         )
     }
 
+    override suspend fun removePosts(userId: String) {
+        val query = firestore.collection(POSTS)
+            .whereEqualTo("user", userId)
+            .get().await()
+            .documents
 
+        for (document in query) {
+            removePostStorageCollectionCommentsLikes(document.id)
+        }
+    }
 
+    override suspend fun removePostStorageCollectionCommentsLikes(postId: String) {
+        // comments
+        firestore.collection(COMMENTS).whereEqualTo("postId", postId).get()
+            .addOnSuccessListener { querySnapshot ->
+                val batch = firestore.batch()
+                for (document in querySnapshot) {
+                    batch.delete(document.reference)
+                }
+                batch.commit()
+                    .addOnSuccessListener {
+//                        SnackbarManager.showMessage(R.string.comments_deleted_successfully)
+                    }.addOnFailureListener {
+//                        SnackbarManager.showMessage(R.string.could_not_delete_comments)
+                    }
+            }
+            .addOnFailureListener {
+//                SnackbarManager.showMessage(R.string.no_comments_found)
+            }
+
+        // likes
+        firestore.collection(LIKES).whereEqualTo("postId", postId).get()
+            .addOnSuccessListener { querySnapshot ->
+                val batch = firestore.batch()
+
+                for (document in querySnapshot) {
+                    batch.delete(document.reference)
+                }
+                batch.commit()
+                    .addOnSuccessListener {
+//                        SnackbarManager.showMessage(R.string.likes_deleted_successfully)
+                    }.addOnFailureListener {
+//                        SnackbarManager.showMessage(R.string.count_not_delete_likes)
+                    }
+            }
+            .addOnFailureListener {
+                SnackbarManager.showMessage(R.string.no_likes_found)
+            }
+
+        // also reduce posts number from user
+
+        val userId = firestore.collection(POSTS).document(postId).get().await().getString("user")!!
+
+        val posts = firestore.collection(USERS).document(userId).get().await().getLong("posts")!!
+
+        firestore.collection(USERS).document(userId).update(
+            mapOf(
+                "posts" to posts - 1
+            )
+        )
+
+        // collection
+        firestore.collection(POSTS).document(postId).delete().await()
+
+        // for storage
+        storage.reference.child(IMG).child("$postId.jpg").delete()
+
+    }
+
+    override fun reportPost(postId: String) {
+        firestore.collection(REPORTED).document(postId).set(
+            mapOf(
+                "postId" to postId,
+                "resolved" to "unresolved"
+            )
+        )
+    }
+
+    override suspend fun adminReportPost(postId: String) {
+        val sourceDocument = firestore.collection(POSTS).document(postId)
+        val sourceSnapshot = sourceDocument.get().await()
+
+        firestore.collection(REPORTED).document(postId).set(sourceSnapshot.data!!)
+
+        sourceDocument.delete().addOnSuccessListener {
+            SnackbarManager.showMessage(R.string.reported)
+        }
+    }
+
+    override suspend fun getCurrentUserDetails(userId: String): List<String> {
+        val data = firestore.collection(USERS).document(userId).get().await()
+        return listOf(
+            data.getField("username")!!,
+            data.getString("bio")!!,
+            data.getString("address")!!
+        )
+    }
+
+    override suspend fun setUserDetails(userId: String, username: String, bio: String, address: String) {
+        firestore.collection(USERS).document(userId).update(
+            mapOf(
+                "username" to username,
+                "bio" to bio,
+                "address" to address
+            )
+        ).addOnSuccessListener {
+            SnackbarManager.showMessage(R.string.updated_details_successfully)
+        }
+    }
+
+    override suspend fun isLikedByUser(documentRef: String): Boolean {
+        val resultDeferred = CompletableDeferred<Boolean>()
+
+        firestore.collection(LIKES).document(documentRef).get()
+            .addOnSuccessListener {
+                resultDeferred.complete(it.exists())
+            }.addOnFailureListener { exception ->
+                resultDeferred.completeExceptionally(exception)
+            }
+
+        return resultDeferred.await()
+    }
+
+    override suspend fun isFollowedBy(currentUserId: String, profileUserId: String): Boolean {
+        val resultDeferred = CompletableDeferred<Boolean>()
+        val followRef = "${currentUserId}_${profileUserId}"
+        firestore.collection(FOLLOWS).document(followRef).get()
+            .addOnSuccessListener {
+                resultDeferred.complete(it.exists())
+            }.addOnFailureListener {
+                resultDeferred.completeExceptionally(it)
+            }
+
+        return resultDeferred.await()
+
+    }
 
 
     companion object {
@@ -179,6 +480,9 @@ class StorageServiceImpl @Inject constructor(
         private const val USERS = "users"
         private const val POSTS = "posts"
         private const val LIKES = "likes"
+        private const val COMMENTS = "comments"
+        private const val FOLLOWS = "follows"
+        private const val REPORTED = "reported"
     }
 
 }

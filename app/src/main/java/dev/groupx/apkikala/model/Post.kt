@@ -15,11 +15,5 @@ data class Post(
     val user: String = "",
     // for likes
     val likes: Int = 0,
-    var likedByCurrentUser: Boolean = false
+    var likedByCurrentUser: Boolean = false,
 )
-
-/* TODO
-    * 1. Using currentUsedId and postId, create a document in likes collection ☑️
-    * 2. Update postId like count ☑️
-    * 3. update likedByCurrentUser
-    * */

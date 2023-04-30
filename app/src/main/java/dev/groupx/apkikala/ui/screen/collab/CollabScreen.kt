@@ -1,12 +1,14 @@
 package dev.groupx.apkikala.ui.screen.collab
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -16,7 +18,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import dev.groupx.apkikala.R
 import dev.groupx.apkikala.ui.navigation.NavigationDestination
 import dev.groupx.apkikala.ui.screen.AccountUiState
 import dev.groupx.apkikala.R.string as AppText
@@ -35,7 +41,20 @@ fun CollabScreen(
     viewModel: CollabViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState(initial = AccountUiState(false))
-    Scaffold(bottomBar = {
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                modifier = Modifier.height(48.dp),
+                title = { Icon(
+                    painter = painterResource(id = R.drawable.icons8_son_goku),
+                    contentDescription = "Back",
+                    tint = Color.Black,
+                    modifier = Modifier
+                        .padding(vertical = 2.dp)
+                ) }
+            )
+        },
+        bottomBar = {
         NavigationBar {
             NavigationBarItem(
                 selected = false,

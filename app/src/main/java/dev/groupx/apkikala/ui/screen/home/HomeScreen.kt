@@ -17,6 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.answerandquestion.loginactivity
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import dev.groupx.apkikala.R
 import dev.groupx.apkikala.ui.navigation.NavigationDestination
 import dev.groupx.apkikala.ui.screen.AccountUiState
 import dev.groupx.apkikala.ui.screen.post.HomePostScreen
@@ -31,16 +36,30 @@ object HomeNode : NavigationDestination {
 @Composable
 fun HomeScreen(
     openScreen: (String) -> Unit,
+    openAndPopUp: (String, String) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 //    context: Context
 ) {
-    val uiState by viewModel.uiState.collectAsState(initial = AccountUiState(false))
     val context = LocalContext.current
+    val accUiState by viewModel.accUiState.collectAsState(initial = AccountUiState(false))
     Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                modifier = Modifier.height(48.dp),
+                title = { Icon(
+                    painter = painterResource(id = R.drawable.icons8_son_goku),
+                    contentDescription = "Back",
+                    tint = Color.Black,
+                    modifier = Modifier
+                        .padding(vertical = 2.dp)
+                ) }
+            )
+        },
         floatingActionButton = {
             ExtendedFloatingActionButton(
+                containerColor = MaterialTheme.colorScheme.secondary,
                 onClick = {
-                    if (!uiState.isAnonymousAccount) viewModel.onAddClick(openScreen)
+                    if (!accUiState.isAnonymousAccount) viewModel.onAddClick(openScreen)
                     else {
                         viewModel.showAnonymousError()
                     }
@@ -55,7 +74,7 @@ fun HomeScreen(
             NavigationBar {
                 NavigationBarItem(
                     selected = true,
-                    onClick = { },
+                    onClick = { viewModel.onHomeClick(openAndPopUp) },
                     icon = { Icon(Icons.Filled.Home, contentDescription = null) }
                 )
                 NavigationBarItem(
@@ -86,7 +105,7 @@ fun HomeScreen(
         }
 
     ) {
-        HomePostScreen(modifier = Modifier.padding(it), openScreen = openScreen)
+        HomePostScreen(modifier = Modifier.padding(it), openScreen = openScreen, openAndPopUp = openAndPopUp)
     }
 }
 

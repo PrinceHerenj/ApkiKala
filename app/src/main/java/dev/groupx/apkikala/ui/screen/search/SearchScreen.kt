@@ -3,6 +3,7 @@ package dev.groupx.apkikala.ui.screen.search
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,6 +13,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -21,8 +23,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import dev.groupx.apkikala.R
 import dev.groupx.apkikala.ui.common.composables.CustomField
 import dev.groupx.apkikala.ui.common.utils.fieldModifier
 import dev.groupx.apkikala.ui.navigation.NavigationDestination
@@ -44,7 +49,20 @@ fun SearchScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    Scaffold(bottomBar = {
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                modifier = Modifier.height(48.dp),
+                title = { Icon(
+                    painter = painterResource(id = R.drawable.icons8_son_goku),
+                    contentDescription = "Back",
+                    tint = Color.Black,
+                    modifier = Modifier
+                        .padding(vertical = 2.dp)
+                ) }
+            )
+        },
+        bottomBar = {
         NavigationBar {
             NavigationBarItem(
                 selected = false,
@@ -72,7 +90,7 @@ fun SearchScreen(
             )
         }
     }) {
-        Column(Modifier.padding(it)) {
+        Column(Modifier.padding(it).padding(top = 24.dp)) {
             CustomField(
                 text = "Search",
                 value = uiState.searchString,
