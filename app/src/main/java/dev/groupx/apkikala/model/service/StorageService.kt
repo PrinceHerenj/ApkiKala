@@ -49,4 +49,5 @@ interface StorageService {
     suspend fun getFeedPostsFiltered(userId: String): List<Post>
     suspend fun removePostStorageCollectionCommentsLikes(postId: String)
     fun reportPost(postId: String)
+    suspend fun adminReportPost(postId: String)
 }

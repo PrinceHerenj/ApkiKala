@@ -41,6 +41,7 @@ import dev.groupx.apkikala.ui.screen.post.PostItem
 @Composable
 fun CommonProfileSection(
     openScreen: (String) -> Unit,
+    openAndPopUp: (String, String) -> Unit,
     modifier: Modifier = Modifier,
     userId: String,
     viewModel: CommonProfileViewModel = hiltViewModel(),
@@ -166,7 +167,7 @@ fun CommonProfileSection(
                             }
                         }
                         items(uiState.posts) { post ->
-                            PostItem(post = post, openScreen = openScreen)
+                            PostItem(post, "${CommonProfileNode.route}/$userId", openScreen, openAndPopUp)
 
                         }
                     }

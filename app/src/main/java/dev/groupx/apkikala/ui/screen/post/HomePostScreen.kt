@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.groupx.apkikala.R
 import dev.groupx.apkikala.ui.common.snackbar.SnackbarManager
+import dev.groupx.apkikala.ui.screen.home.HomeNode
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -33,6 +34,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomePostScreen(
     openScreen: (String) -> Unit,
+    openAndPopUp: (String, String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PostsViewModel = hiltViewModel(),
 ) {
@@ -63,7 +65,7 @@ fun HomePostScreen(
             Box(modifier.pullRefresh(state)) {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(uiState.posts) { post ->
-                        PostItem(post, openScreen)
+                        PostItem(post, HomeNode.route, openScreen, openAndPopUp,)
                     }
                 }
                 PullRefreshIndicator(refreshing, state, Modifier.align(Alignment.TopCenter))

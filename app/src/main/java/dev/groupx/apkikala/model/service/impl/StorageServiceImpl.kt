@@ -335,10 +335,6 @@ class StorageServiceImpl @Inject constructor(
     }
 
     override suspend fun removePostStorageCollectionCommentsLikes(postId: String) {
-
-
-
-
         // comments
         firestore.collection(COMMENTS).whereEqualTo("postId", postId).get()
             .addOnSuccessListener { querySnapshot ->
@@ -398,10 +394,22 @@ class StorageServiceImpl @Inject constructor(
 
     override fun reportPost(postId: String) {
         firestore.collection(REPORTED).document(postId).set(
-            hashMapOf(
-                "postId" to postId
+            mapOf(
+                "postId" to postId,
+                "resolved" to "unresolved"
             )
         )
+    }
+
+    override suspend fun adminReportPost(postId: String) {
+        val sourceDocument = firestore.collection(POSTS).document(postId)
+        val sourceSnapshot = sourceDocument.get().await()
+
+        firestore.collection(REPORTED).document(postId).set(sourceSnapshot.data!!)
+
+        sourceDocument.delete().addOnSuccessListener {
+            SnackbarManager.showMessage(R.string.reported)
+        }
     }
 
 

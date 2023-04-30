@@ -34,7 +34,7 @@ fun HomeScreen(
     openAndPopUp: (String, String) -> Unit,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsState(initial = AccountUiState(false))
+    val accUiState by viewModel.accUiState.collectAsState(initial = AccountUiState(false))
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -52,7 +52,7 @@ fun HomeScreen(
             ExtendedFloatingActionButton(
                 containerColor = MaterialTheme.colorScheme.secondary,
                 onClick = {
-                    if (!uiState.isAnonymousAccount) viewModel.onAddClick(openScreen)
+                    if (!accUiState.isAnonymousAccount) viewModel.onAddClick(openScreen)
                     else {
                         viewModel.showAnonymousError()
                     }
@@ -95,7 +95,7 @@ fun HomeScreen(
         }
 
     ) {
-        HomePostScreen(modifier = Modifier.padding(it), openScreen = openScreen)
+        HomePostScreen(modifier = Modifier.padding(it), openScreen = openScreen, openAndPopUp = openAndPopUp)
     }
 }
 

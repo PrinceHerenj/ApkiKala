@@ -36,6 +36,7 @@ import dev.groupx.apkikala.ui.screen.post.PostItem
 @Composable
 fun ProfileSection(
     openScreen: (String) -> Unit,
+    openAndPopUp: (String, String) -> Unit,
     modifier: Modifier = Modifier,
     userId: String,
     viewModel: PersonalProfileViewModel = hiltViewModel(),
@@ -120,7 +121,7 @@ fun ProfileSection(
                             }
                         }
                         items(uiState.posts) { post ->
-                            PostItem(post = post, openScreen = openScreen)
+                            PostItem(post, PersonalProfileNode.route, openScreen, openAndPopUp)
                         }
                     }
                 }

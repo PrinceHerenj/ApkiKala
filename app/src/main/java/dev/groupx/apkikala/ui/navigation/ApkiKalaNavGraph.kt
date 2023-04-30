@@ -87,6 +87,7 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
         CommonProfileScreen(
             popUp = { appState.popUp() },
             openScreen = { route -> appState.navigate(route) },
+            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
             uid
         )
     }
