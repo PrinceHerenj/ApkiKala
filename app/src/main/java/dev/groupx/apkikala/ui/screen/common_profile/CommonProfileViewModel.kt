@@ -50,17 +50,23 @@ class CommonProfileViewModel @Inject constructor(
                 val profile = withContext(Dispatchers.IO) {
                     storageService.getProfile(userId)
                 }
+                val posts = withContext(Dispatchers.IO) {
+                    storageService.getFeedPostsFiltered(userId)
+                }
                 if (profile.userId == accountService.currentUserId) {
                     uiState.value = uiState.value.copy(
                         loading = false,
                         profile = profile,
-                        isCurrentUserProfile = true
+                        isCurrentUserProfile = true,
+                        posts = posts
                     )
                 }
+
+
                 val following = withContext(Dispatchers.IO) {
                     storageService.isFollowedBy(accountService.currentUserId, userId)
                 }
-                uiState.value = uiState.value.copy(loading = false, profile = profile, following = following)
+                uiState.value = uiState.value.copy(loading = false, profile = profile, following = following, posts = posts)
             } catch (e: Exception) {
                 Log.d("Here", e.toString())
             }

@@ -7,8 +7,6 @@
 - Edit Details 
 
 ## CommonProfile
-- page
-- action
 - feed
 
 ## Personal Profile

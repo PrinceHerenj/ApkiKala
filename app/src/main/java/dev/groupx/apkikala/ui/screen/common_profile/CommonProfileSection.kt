@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
@@ -32,10 +34,12 @@ import dev.groupx.apkikala.ui.common.composables.ProfileDescription
 import dev.groupx.apkikala.ui.common.composables.Stats
 import dev.groupx.apkikala.ui.screen.post.GetProfileImage
 import dev.groupx.apkikala.ui.screen.post.ImageCommon
+import dev.groupx.apkikala.ui.screen.post.PostItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CommonProfileSection(
+    openScreen: (String) -> Unit,
     modifier: Modifier = Modifier,
     userId: String,
     viewModel: CommonProfileViewModel = hiltViewModel(),
@@ -53,94 +57,109 @@ fun CommonProfileSection(
                 .background(Color.White.copy(alpha = 0.7f))
         )
     } else {
-        ElevatedCard(
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.primaryContainer
-            ),
-            shape = RoundedCornerShape(4.dp),
-            elevation = CardDefaults.cardElevation(
-                4.dp
-            ),
-            modifier = modifier.padding(10.dp),
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 24.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                GetProfileImage(profileImageUrl = uiState.profile.profileImageUrl) {
-                    ImageCommon(
-                        imageUrl = it,
-                        height = 120.dp,
-                        width = 120.dp,
-                        shape = CircleShape,
-                        contentScale = ContentScale.Crop
-                    )
-                }
-            }
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 24.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    Stats(numberText = uiState.profile.posts.toString(), text = "Posts")
-                    Stats(numberText = uiState.profile.followers.toString(), text = "Followers")
-                    Stats(numberText = uiState.profile.following.toString(), text = "Following")
-                }
-                if (!uiState.isCurrentUserProfile) {
-                    if (!uiState.following) {
-                        ElevatedCard(colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.primary
-                        ),
-                            shape = RoundedCornerShape(4.dp),
-                            elevation = CardDefaults.cardElevation(4.dp),
-                            onClick = { viewModel.onFollowClick() }) {
-                            Column(
-                                modifier = Modifier
-                                    .padding(10.dp)
-                                    .width(80.dp),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
+        Column(modifier = modifier) {
+            when {
+                uiState.posts.isNotEmpty() -> {
+                    LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                        item {
+                            ElevatedCard(
+                                colors = CardDefaults.cardColors(
+                                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                                ),
+                                shape = RoundedCornerShape(4.dp),
+                                elevation = CardDefaults.cardElevation(
+                                    4.dp
+                                ),
+                                modifier = Modifier.padding(10.dp),
                             ) {
-                                Text(text = stringResource(R.string.follow))
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 24.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    GetProfileImage(profileImageUrl = uiState.profile.profileImageUrl) {
+                                        ImageCommon(
+                                            imageUrl = it,
+                                            height = 120.dp,
+                                            width = 120.dp,
+                                            shape = CircleShape,
+                                            contentScale = ContentScale.Crop
+                                        )
+                                    }
+                                }
+
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(vertical = 24.dp),
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.SpaceEvenly
+                                    ) {
+                                        Stats(numberText = uiState.profile.posts.toString(), text = "Posts")
+                                        Stats(numberText = uiState.profile.followers.toString(), text = "Followers")
+                                        Stats(numberText = uiState.profile.following.toString(), text = "Following")
+                                    }
+                                    if (!uiState.isCurrentUserProfile) {
+                                        if (!uiState.following) {
+                                            ElevatedCard(colors = CardDefaults.cardColors(
+                                                containerColor = MaterialTheme.colorScheme.primary
+                                            ),
+                                                shape = RoundedCornerShape(4.dp),
+                                                elevation = CardDefaults.cardElevation(4.dp),
+                                                onClick = { viewModel.onFollowClick() }) {
+                                                Column(
+                                                    modifier = Modifier
+                                                        .padding(10.dp)
+                                                        .width(80.dp),
+                                                    verticalArrangement = Arrangement.Center,
+                                                    horizontalAlignment = Alignment.CenterHorizontally
+                                                ) {
+                                                    Text(text = stringResource(R.string.follow))
+                                                }
+                                            }
+                                        } else {
+                                            ElevatedCard(colors = CardDefaults.cardColors(
+                                                containerColor = MaterialTheme.colorScheme.primary
+                                            ),
+                                                shape = RoundedCornerShape(4.dp),
+                                                elevation = CardDefaults.cardElevation(4.dp),
+                                                onClick = { viewModel.onUnFollowClick() }) {
+                                                Column(
+                                                    modifier = Modifier
+                                                        .padding(10.dp)
+                                                        .width(80.dp),
+                                                    verticalArrangement = Arrangement.Center,
+                                                    horizontalAlignment = Alignment.CenterHorizontally
+                                                ) {
+                                                    Text(text = stringResource(R.string.unfollow))
+                                                }
+                                            }
+
+                                        }
+                                    }
+
+                                    ProfileDescription(
+                                        displayName = uiState.profile.username,
+                                        bio = uiState.profile.bio,
+                                        address = uiState.profile.address,
+                                    )
+
+
+                                }
                             }
                         }
-                    } else {
-                        ElevatedCard(colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.primary
-                        ),
-                            shape = RoundedCornerShape(4.dp),
-                            elevation = CardDefaults.cardElevation(4.dp),
-                            onClick = { viewModel.onUnFollowClick() }) {
-                            Column(
-                                modifier = Modifier
-                                    .padding(10.dp)
-                                    .width(80.dp),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(text = stringResource(R.string.unfollow))
-                            }
-                        }
+                        items(uiState.posts) {post ->
+                            PostItem(post = post, openScreen = openScreen)
 
+                        }
                     }
                 }
-
-                ProfileDescription(
-                    displayName = uiState.profile.username,
-                    bio = uiState.profile.bio,
-                    address = uiState.profile.address,
-                )
-
-
             }
         }
+
     }
 }

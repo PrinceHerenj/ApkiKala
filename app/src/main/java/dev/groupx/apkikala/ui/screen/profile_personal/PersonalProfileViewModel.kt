@@ -31,20 +31,24 @@ class PersonalProfileViewModel @Inject constructor(
         private set
 
 
-    fun getDetails(userId: String) {
+    fun getDetailsAndProfilePosts(userId: String) {
         launchCatching {
-            Log.d("Here", userId)
             uiState.value = uiState.value.copy(loading = true)
             try {
                 val profile = withContext(Dispatchers.IO) {
                     storageService.getProfile(userId)
                 }
-                uiState.value = uiState.value.copy(loading = false, profile = profile)
+                val posts = withContext(Dispatchers.IO) {
+                    storageService.getFeedPostsFiltered(userId)
+                }
+
+                uiState.value = uiState.value.copy(loading = false, profile = profile, posts = posts)
             } catch (e: Exception) {
                 Log.d("Here", e.toString())
             }
         }
     }
+
 
     fun onLoginClick(openScreen: (String) -> Unit) = openScreen(LoginNode.route)
     fun onSignUpClick(openScreen: (String) -> Unit) = openScreen(SignUpNode.route)

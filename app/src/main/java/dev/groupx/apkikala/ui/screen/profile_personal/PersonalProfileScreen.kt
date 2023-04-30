@@ -97,6 +97,6 @@ fun PersonalProfileScreen(
             }
         },
     ) {
-        ProfileSection(Modifier.padding(it), userId)
+        ProfileSection(openScreen, Modifier.padding(it), userId)
     }
 }

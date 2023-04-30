@@ -128,6 +128,37 @@ class StorageServiceImpl @Inject constructor(
         }
     }
 
+    override suspend fun getFeedPostsFiltered(userId: String): List<Post> {
+        val query: Query = firestore.collection(POSTS)
+            .whereEqualTo("user", userId)
+            .orderBy("createdAt", Query.Direction.DESCENDING)
+
+        val querySnapshot = query.get().await()
+        val currentUserId = auth.currentUser?.uid
+
+
+        return querySnapshot.documents.mapNotNull {document ->
+            var username = ""
+            var profileImageUrl = ""
+            var likedByCurrentUser = false
+            val user = document.getString("user")
+            if (user != null) {
+                username = firestore.collection(USERS).document(user).get().await()
+                    .getString("username").toString()
+                profileImageUrl = firestore.collection(USERS).document(user).get().await()
+                    .getString("profileImageUrl").toString()
+                likedByCurrentUser = isLikedByUser("${currentUserId}_${document.id}")
+            }
+            document.toObject(Post::class.java)?.copy(
+                postId = document.id,
+                username = username,
+                profileImageUrl = profileImageUrl,
+                likedByCurrentUser = likedByCurrentUser
+            )
+        }
+
+    }
+
     override suspend fun getSearchResults(searchString: String): List<SearchResult> {
         val query = firestore.collectionGroup(USERS)
             .whereGreaterThanOrEqualTo("username", searchString)
