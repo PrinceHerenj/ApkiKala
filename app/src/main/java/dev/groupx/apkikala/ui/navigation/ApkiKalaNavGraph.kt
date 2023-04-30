@@ -137,12 +137,7 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
     composable(UploadProfileImageNode.route) {
         UploadProfileImageScreen(
             popUp = { appState.popUp() },
-            openAndPopUp = { route, popUp ->
-                appState.navigateAndPopUp(
-                    route,
-                    popUp
-                )
-            }, restartApp = { route -> appState.clearAndNavigate(route) })
+            restartApp = { route -> appState.clearAndNavigate(route) })
     }
 
 
