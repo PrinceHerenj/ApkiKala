@@ -65,7 +65,7 @@ fun PersonalProfileScreen(
                                     onClick = { viewModel.onSignUpClick(openScreen) })
                             } else {
                                 DropdownMenuItem(text = { Text("Edit Profile") },
-                                    onClick = { /*viewModel.onEditClick(openScreen)*/ })
+                                    onClick = { viewModel.onEditClick(openScreen) })
                                 DropdownMenuItem(text = { Text("Logout") },
                                     onClick = { viewModel.onSignOutClick(clearAndNavigate) })
                                 DropdownMenuItem(text = { Text("Delete") }, onClick = {

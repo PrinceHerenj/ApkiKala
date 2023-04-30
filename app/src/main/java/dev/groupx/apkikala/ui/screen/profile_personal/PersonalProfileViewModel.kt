@@ -8,6 +8,7 @@ import dev.groupx.apkikala.model.service.StorageService
 import dev.groupx.apkikala.ui.screen.AccountUiState
 import dev.groupx.apkikala.ui.screen.ApkiKalaViewModel
 import dev.groupx.apkikala.ui.screen.collab.CollabNode
+import dev.groupx.apkikala.ui.screen.edit_screen.EditNode
 import dev.groupx.apkikala.ui.screen.home.HomeNode
 import dev.groupx.apkikala.ui.screen.login.LoginNode
 import dev.groupx.apkikala.ui.screen.search.SearchNode

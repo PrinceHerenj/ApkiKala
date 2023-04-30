@@ -50,4 +50,6 @@ interface StorageService {
     suspend fun removePostStorageCollectionCommentsLikes(postId: String)
     fun reportPost(postId: String)
     suspend fun adminReportPost(postId: String)
+    suspend fun getCurrentUserDetails(userId: String): List<String>
+    suspend fun setUserDetails(userId: String, username: String, bio: String, address: String)
 }

@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.getField
 import com.google.firebase.storage.FirebaseStorage
 import dev.groupx.apkikala.R
 import dev.groupx.apkikala.model.Comment
@@ -412,6 +413,26 @@ class StorageServiceImpl @Inject constructor(
         }
     }
 
+    override suspend fun getCurrentUserDetails(userId: String): List<String> {
+        val data = firestore.collection(USERS).document(userId).get().await()
+        return listOf(
+            data.getField("username")!!,
+            data.getString("bio")!!,
+            data.getString("address")!!
+        )
+    }
+
+    override suspend fun setUserDetails(userId: String, username: String, bio: String, address: String) {
+        firestore.collection(USERS).document(userId).update(
+            mapOf(
+                "username" to username,
+                "bio" to bio,
+                "address" to address
+            )
+        ).addOnSuccessListener {
+            SnackbarManager.showMessage(R.string.updated_details_successfully)
+        }
+    }
 
     override suspend fun isLikedByUser(documentRef: String): Boolean {
         val resultDeferred = CompletableDeferred<Boolean>()

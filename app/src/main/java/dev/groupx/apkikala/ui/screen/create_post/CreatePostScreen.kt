@@ -110,6 +110,7 @@ fun CreatePostScreen(
                 value = uiState.description,
                 onNewValue = viewModel::onDescriptionChange
             )
+            Spacer(modifier = Modifier.height(16.dp))
 
             if (uiState.isImageUrlAdded) {
                 val canHandleBackButton by remember { mutableStateOf(true) }

@@ -46,4 +46,6 @@
     <string name="count_not_delete_likes">Count not delete Likes</string>
     <string name="no_likes_found">No Likes Found</string>
     <string name="reported">Reported</string>
+    <string name="update_details">Update Details</string>
+    <string name="updated_details_successfully">Updated Details successfully</string>
 </resources>

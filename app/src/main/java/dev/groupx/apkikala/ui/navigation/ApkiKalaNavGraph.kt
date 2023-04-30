@@ -13,6 +13,8 @@ import dev.groupx.apkikala.ui.screen.common_profile.CommonProfileNode
 import dev.groupx.apkikala.ui.screen.common_profile.CommonProfileScreen
 import dev.groupx.apkikala.ui.screen.create_post.CreatePostNode
 import dev.groupx.apkikala.ui.screen.create_post.CreatePostScreen
+import dev.groupx.apkikala.ui.screen.edit_screen.EditMenu
+import dev.groupx.apkikala.ui.screen.edit_screen.EditNode
 import dev.groupx.apkikala.ui.screen.home.HomeNode
 import dev.groupx.apkikala.ui.screen.home.HomeScreen
 import dev.groupx.apkikala.ui.screen.like_screen.CommonLikeNode
@@ -74,6 +76,13 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
         SearchScreen(
             openScreen = { route -> appState.navigate(route) },
             openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
+        )
+    }
+
+    composable(EditNode.route) {
+        EditMenu(
+            popUp = { appState.popUp() },
+            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) }
         )
     }
 
