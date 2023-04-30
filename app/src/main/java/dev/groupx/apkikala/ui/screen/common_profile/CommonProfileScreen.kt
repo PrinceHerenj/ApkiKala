@@ -17,7 +17,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.groupx.apkikala.ui.navigation.NavigationDestination
-import dev.groupx.apkikala.ui.screen.profile_personal.ProfileSection
 import dev.groupx.apkikala.R.string as AppText
 
 object CommonProfileNode : NavigationDestination {
@@ -50,6 +49,6 @@ fun CommonProfileScreen(
             )
         },
     ) {
-        ProfileSection(Modifier.padding(it), userId = uid)
+        CommonProfileSection(Modifier.padding(it), userId = uid)
     }
 }

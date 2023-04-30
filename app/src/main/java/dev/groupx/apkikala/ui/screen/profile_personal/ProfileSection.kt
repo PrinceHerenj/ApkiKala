@@ -3,20 +3,15 @@ package dev.groupx.apkikala.ui.screen.profile_personal
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -25,10 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import dev.groupx.apkikala.ui.common.composables.ProfileDescription
+import dev.groupx.apkikala.ui.common.composables.Stats
 import dev.groupx.apkikala.ui.screen.post.GetProfileImage
 import dev.groupx.apkikala.ui.screen.post.ImageCommon
 
@@ -95,94 +90,9 @@ fun ProfileSection(
                 displayName = uiState.profile.username,
                 bio = uiState.profile.bio,
                 address = uiState.profile.address,
-
-                )
+            )
         }
     }
 
-}
-
-
-@Composable
-fun Stats(
-    numberText: String,
-    text: String,
-    modifier: Modifier = Modifier,
-) {
-    ElevatedCard(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background
-        ),
-        shape = RoundedCornerShape(4.dp),
-        elevation = CardDefaults.cardElevation(
-            4.dp
-        ),
-    ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier
-                .padding(5.dp)
-                .width(80.dp)
-        ) {
-            Text(
-                text = numberText,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                fontSize = 20.sp
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = text, fontWeight = FontWeight.Bold, color = Color.Black, fontSize = 15.sp
-            )
-
-        }
-    }
-
-}
-
-@Composable
-fun ProfileDescription(
-    displayName: String,
-    bio: String,
-    address: String,
-    modifier: Modifier = Modifier,
-) {
-    val letterSpacing = 0.5.sp
-    val lineHeight = 20.sp
-
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-
-    ) {
-        Text(
-            text = displayName,
-            fontWeight = FontWeight.ExtraBold,
-            color = Color.Black,
-            letterSpacing = letterSpacing,
-            lineHeight = lineHeight
-        )
-        Column(Modifier.padding(top = 10.dp)) {
-            Text(
-                text = bio,
-                fontWeight = FontWeight.Medium,
-                color = Color.Black,
-                letterSpacing = letterSpacing,
-                lineHeight = lineHeight
-            )
-            Text(
-                text = address,
-                fontWeight = FontWeight.Medium,
-                color = Color.Black,
-                letterSpacing = letterSpacing,
-                lineHeight = lineHeight
-            )
-
-        }
-        Spacer(modifier = Modifier.height(24.dp))
-    }
 }
 

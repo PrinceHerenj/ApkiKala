@@ -175,7 +175,7 @@ class StorageServiceImpl @Inject constructor(
 
         return if (docSnapshot.exists())
             Profile(
-                username, profileImageUrl, address, bio, followers, following, posts
+                docSnapshot.id, username, profileImageUrl, address, bio, followers, following, posts
             )
         else
             Profile(
@@ -232,6 +232,55 @@ class StorageServiceImpl @Inject constructor(
 
     }
 
+    override suspend fun addFollower(currentUserId: String, profileUserId: String, newFollowers: Long) {
+        val followRef = "${currentUserId}_${profileUserId}"
+        firestore.collection(FOLLOWS).document(followRef).set(
+            hashMapOf(
+                "followerUserId" to currentUserId,
+                "followedUserId" to profileUserId
+            )
+        )
+
+        firestore.collection(USERS).document(profileUserId).update(
+            mapOf(
+                "followers" to newFollowers
+            )
+        )
+
+        val currentUserFollowing = firestore.collection(USERS).document(currentUserId)
+            .get().await().getLong("following")
+
+        firestore.collection(USERS).document(currentUserId).update(
+            mapOf(
+                "following" to (currentUserFollowing?.plus(1))
+            )
+        )
+
+    }
+
+    override suspend fun removeFollower(currentUserId: String, profileUserId: String, newFollowers: Long) {
+        val followRef = "${currentUserId}_${profileUserId}"
+        firestore.collection(FOLLOWS).document(followRef)
+            .delete()
+
+        firestore.collection(USERS).document(profileUserId).update(
+            mapOf(
+                "followers" to newFollowers
+            )
+        )
+
+        val currentUserFollowing = firestore.collection(USERS).document(currentUserId)
+            .get().await().getLong("following")
+
+        firestore.collection(USERS).document(currentUserId).update(
+            mapOf(
+                "following" to (currentUserFollowing?.minus(1))
+            )
+        )
+
+    }
+
+
     override suspend fun isLikedByUser(documentRef: String): Boolean {
         val resultDeferred = CompletableDeferred<Boolean>()
 
@@ -240,6 +289,20 @@ class StorageServiceImpl @Inject constructor(
                 resultDeferred.complete(it.exists())
             }.addOnFailureListener { exception ->
                 resultDeferred.completeExceptionally(exception)
+            }
+
+        return resultDeferred.await()
+
+    }
+
+    override suspend fun isFollowedBy(currentUserId: String, profileUserId: String): Boolean {
+        val resultDeferred = CompletableDeferred<Boolean>()
+        val followRef = "${currentUserId}_${profileUserId}"
+        firestore.collection(FOLLOWS).document(followRef).get()
+            .addOnSuccessListener {
+                resultDeferred.complete(it.exists())
+            }.addOnFailureListener {
+                resultDeferred.completeExceptionally(it)
             }
 
         return resultDeferred.await()
@@ -266,7 +329,7 @@ class StorageServiceImpl @Inject constructor(
         private const val POSTS = "posts"
         private const val LIKES = "likes"
         private const val COMMENTS = "comments"
-
+        private const val FOLLOWS = "follows"
     }
 
 }
