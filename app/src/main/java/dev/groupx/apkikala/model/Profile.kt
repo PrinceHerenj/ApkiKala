@@ -1,6 +1,7 @@
 package dev.groupx.apkikala.model
 
 data class Profile(
+    val userId: String = "",
     val username: String = "",
     val profileImageUrl: String = "",
     val address: String = "",

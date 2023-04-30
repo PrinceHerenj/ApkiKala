@@ -49,6 +49,14 @@ class StorageServiceImpl @Inject constructor(
                 "likes" to 0
             )
         ).await()
+
+        val posts = firestore.collection(USERS).document(userId).get().await().getLong("posts")!!
+
+        firestore.collection(USERS).document(userId).update(
+            mapOf(
+                "posts" to (posts+1)
+            )
+        )
     }
 
     override suspend fun saveImageToFirestoreUser(downloadUrl: Uri, userId: String) {
@@ -155,21 +163,25 @@ class StorageServiceImpl @Inject constructor(
             .get().await()
             .documents.first()
 
-            val username = docSnapshot.getString("username").toString()
-            val profileImageUrl = docSnapshot.getString("profileImageUrl").toString()
-            val address = docSnapshot.getString("address").toString()
-            val bio = docSnapshot.getString("bio").toString()
-            val followers = docSnapshot.getLong("followers")!!.toLong()
-            val following = docSnapshot.getLong("following")!!.toLong()
-            val posts = docSnapshot.getLong("posts")!!.toLong()
+        val username = docSnapshot.getString("username").toString()
+        val profileImageUrl = docSnapshot.getString("profileImageUrl").toString()
+        val address = docSnapshot.getString("address").toString()
+        val bio = docSnapshot.getString("bio").toString()
+        val followers = docSnapshot.getLong("followers")!!.toLong()
+        val following = docSnapshot.getLong("following")!!.toLong()
+        val posts = docSnapshot.getLong("posts")!!.toLong()
 
 
 
-        return Profile(
-            username,profileImageUrl, address, bio, followers, following, posts
-        )
+        return if (docSnapshot.exists())
+            Profile(
+                docSnapshot.id, username, profileImageUrl, address, bio, followers, following, posts
+            )
+        else
+            Profile(
+                "Anonymous User"
+            )
     }
-
 
 
     override suspend fun getComments(postId: String): List<Comment> {
@@ -180,8 +192,8 @@ class StorageServiceImpl @Inject constructor(
                 val userId = document.getString("userId").toString()
                 var username = "Deleted User"
                 val userExist = firestore.collection(USERS).document(userId).get().await()
-                if (userExist.exists())
-                {  username = userExist.getString("username").toString()
+                if (userExist.exists()) {
+                    username = userExist.getString("username").toString()
                     Log.d("Here", userId)
                 }
                 document.toObject(Comment::class.java)?.copy(username = username)
@@ -220,6 +232,55 @@ class StorageServiceImpl @Inject constructor(
 
     }
 
+    override suspend fun addFollower(currentUserId: String, profileUserId: String, newFollowers: Long) {
+        val followRef = "${currentUserId}_${profileUserId}"
+        firestore.collection(FOLLOWS).document(followRef).set(
+            hashMapOf(
+                "followerUserId" to currentUserId,
+                "followedUserId" to profileUserId
+            )
+        )
+
+        firestore.collection(USERS).document(profileUserId).update(
+            mapOf(
+                "followers" to newFollowers
+            )
+        )
+
+        val currentUserFollowing = firestore.collection(USERS).document(currentUserId)
+            .get().await().getLong("following")
+
+        firestore.collection(USERS).document(currentUserId).update(
+            mapOf(
+                "following" to (currentUserFollowing?.plus(1))
+            )
+        )
+
+    }
+
+    override suspend fun removeFollower(currentUserId: String, profileUserId: String, newFollowers: Long) {
+        val followRef = "${currentUserId}_${profileUserId}"
+        firestore.collection(FOLLOWS).document(followRef)
+            .delete()
+
+        firestore.collection(USERS).document(profileUserId).update(
+            mapOf(
+                "followers" to newFollowers
+            )
+        )
+
+        val currentUserFollowing = firestore.collection(USERS).document(currentUserId)
+            .get().await().getLong("following")
+
+        firestore.collection(USERS).document(currentUserId).update(
+            mapOf(
+                "following" to (currentUserFollowing?.minus(1))
+            )
+        )
+
+    }
+
+
     override suspend fun isLikedByUser(documentRef: String): Boolean {
         val resultDeferred = CompletableDeferred<Boolean>()
 
@@ -228,6 +289,20 @@ class StorageServiceImpl @Inject constructor(
                 resultDeferred.complete(it.exists())
             }.addOnFailureListener { exception ->
                 resultDeferred.completeExceptionally(exception)
+            }
+
+        return resultDeferred.await()
+
+    }
+
+    override suspend fun isFollowedBy(currentUserId: String, profileUserId: String): Boolean {
+        val resultDeferred = CompletableDeferred<Boolean>()
+        val followRef = "${currentUserId}_${profileUserId}"
+        firestore.collection(FOLLOWS).document(followRef).get()
+            .addOnSuccessListener {
+                resultDeferred.complete(it.exists())
+            }.addOnFailureListener {
+                resultDeferred.completeExceptionally(it)
             }
 
         return resultDeferred.await()
@@ -254,7 +329,7 @@ class StorageServiceImpl @Inject constructor(
         private const val POSTS = "posts"
         private const val LIKES = "likes"
         private const val COMMENTS = "comments"
-
+        private const val FOLLOWS = "follows"
     }
 
 }

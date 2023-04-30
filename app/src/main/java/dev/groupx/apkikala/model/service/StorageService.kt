@@ -43,4 +43,7 @@ interface StorageService {
     suspend fun addCommentDocument(comment: String, postId: String, uid: String)
     suspend fun getComments(postId: String): List<Comment>
 
+    suspend fun addFollower(currentUserId: String, profileUserId: String, newFollowers: Long)
+    suspend fun removeFollower(currentUserId: String, profileUserId: String, newFollowers: Long)
+    suspend fun isFollowedBy(currentUserId: String, profileUserId: String): Boolean
 }

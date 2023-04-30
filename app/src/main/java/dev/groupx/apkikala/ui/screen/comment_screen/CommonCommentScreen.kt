@@ -69,10 +69,10 @@ fun CommonCommentScreen(
         bottomBar = {
             Row(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .padding(horizontal = 8.dp, vertical = 8.dp)
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 CommentField(value = uiState.comment, onNewValue = viewModel::onCommentChange)
                 BasicButton(text = R.string.add_comment, modifier = Modifier.padding(horizontal = 8.dp)) {
@@ -81,7 +81,9 @@ fun CommonCommentScreen(
             }
         }
     ) {
-        Box(modifier = Modifier.padding(it).padding(top = 24.dp)) {
+        Box(modifier = Modifier
+            .padding(it)
+            .padding(top = 24.dp)) {
             when {
                 uiState.Comments.isNotEmpty() -> {
                     LazyColumn(modifier = Modifier.fillMaxSize()) {

@@ -33,6 +33,7 @@ class PersonalProfileViewModel @Inject constructor(
 
     fun getDetails(userId: String) {
         launchCatching {
+            Log.d("Here", userId)
             uiState.value = uiState.value.copy(loading = true)
             try {
                 val profile = withContext(Dispatchers.IO) {
