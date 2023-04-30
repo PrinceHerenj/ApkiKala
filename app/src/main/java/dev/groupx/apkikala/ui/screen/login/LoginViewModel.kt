@@ -45,7 +45,7 @@ class LoginViewModel @Inject constructor(
         }
 
         launchCatching {
-            accountService.deleteAccount(accountService.currentUserId)
+            accountService.deleteAnonymousAccount()
             accountService.authenticate(email, password)
             openAndPopUp(HomeNode.route, LoginNode.route)
         }

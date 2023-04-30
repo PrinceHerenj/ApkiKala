@@ -60,16 +60,19 @@ class AccountServiceImpl @Inject constructor(
     override suspend fun deleteAccount(id: String) {
         auth.currentUser!!.delete().await()
         storageService.removeUserInfoFromFirestore(id)
-        signOut()
+        createAnonymousAccount()
     }
 
     override suspend fun signOut() {
-        if (auth.currentUser!!.isAnonymous) {
-            auth.currentUser!!.delete()
-        }
         auth.signOut()
 
         createAnonymousAccount()
+    }
+
+    override suspend fun deleteAnonymousAccount() {
+        if (auth.currentUser!!.isAnonymous) {
+            auth.currentUser!!.delete()
+        }
     }
 
     companion object {
