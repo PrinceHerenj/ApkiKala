@@ -77,5 +77,17 @@ class PostsViewModel @Inject constructor(
         openScreen(newRoute)
     }
 
+    fun removePost(postId: String) {
+        launchCatching {
+            storageService.removePostStorageCollectionCommentsLikes(postId)
+        }
+    }
+
+    fun report(postId: String) {
+        launchCatching {
+            storageService.reportPost(postId)
+        }
+    }
+
 
 }

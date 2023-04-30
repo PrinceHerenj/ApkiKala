@@ -20,6 +20,8 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,6 +34,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -81,10 +84,12 @@ fun PostItem(
                 .fillMaxWidth()
         ) {
             PostTopBar(
-                uiState.value.user,
-                uiState.value.profileImageUrl,
-                uiState.value.username,
-                openScreen
+                postId = uiState.value.postId,
+                uid = uiState.value.user,
+                profileImageUrl = uiState.value.profileImageUrl,
+                username = uiState.value.username,
+                openScreen = openScreen,
+                accUiState = accUiState
             )
             PostContent(uiState.value.postImageUrl)
             if (!accUiState.isAnonymousAccount) {
@@ -124,6 +129,8 @@ fun PostTopBar(
     username: String,
     openScreen: (String) -> Unit,
     viewModel: PostsViewModel = hiltViewModel(),
+    accUiState: AccountUiState,
+    postId: String,
 ) {
     Row(
         modifier = Modifier
@@ -154,8 +161,17 @@ fun PostTopBar(
         )
         Spacer(modifier = Modifier.weight(1f))
 
-        IconButton(onClick = { /*TODO*/ }) {
+        var expanded by remember { mutableStateOf(false) }
+        IconButton(onClick = { expanded = !expanded }) {
             Icon(Icons.Filled.MoreVert, contentDescription = null)
+            DropdownMenu(expanded = expanded,
+                onDismissRequest = { expanded = false }) {
+                if (uid == accUiState.currentUserId) {
+                    DropdownMenuItem(text = { Text(text = "Remove Post")}, onClick = { viewModel.removePost(postId) })
+                } else {
+                    DropdownMenuItem(text = { Text(text = "Report Post") }, onClick = { viewModel.report(postId) })
+                }
+            }
         }
     }
 }
