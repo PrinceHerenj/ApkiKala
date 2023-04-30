@@ -155,21 +155,25 @@ class StorageServiceImpl @Inject constructor(
             .get().await()
             .documents.first()
 
-            val username = docSnapshot.getString("username").toString()
-            val profileImageUrl = docSnapshot.getString("profileImageUrl").toString()
-            val address = docSnapshot.getString("address").toString()
-            val bio = docSnapshot.getString("bio").toString()
-            val followers = docSnapshot.getLong("followers")!!.toLong()
-            val following = docSnapshot.getLong("following")!!.toLong()
-            val posts = docSnapshot.getLong("posts")!!.toLong()
+        val username = docSnapshot.getString("username").toString()
+        val profileImageUrl = docSnapshot.getString("profileImageUrl").toString()
+        val address = docSnapshot.getString("address").toString()
+        val bio = docSnapshot.getString("bio").toString()
+        val followers = docSnapshot.getLong("followers")!!.toLong()
+        val following = docSnapshot.getLong("following")!!.toLong()
+        val posts = docSnapshot.getLong("posts")!!.toLong()
 
 
 
-        return Profile(
-            username,profileImageUrl, address, bio, followers, following, posts
-        )
+        return if (docSnapshot.exists())
+            Profile(
+                username, profileImageUrl, address, bio, followers, following, posts
+            )
+        else
+            Profile(
+                "Anonymous User"
+            )
     }
-
 
 
     override suspend fun getComments(postId: String): List<Comment> {
@@ -180,8 +184,8 @@ class StorageServiceImpl @Inject constructor(
                 val userId = document.getString("userId").toString()
                 var username = "Deleted User"
                 val userExist = firestore.collection(USERS).document(userId).get().await()
-                if (userExist.exists())
-                {  username = userExist.getString("username").toString()
+                if (userExist.exists()) {
+                    username = userExist.getString("username").toString()
                     Log.d("Here", userId)
                 }
                 document.toObject(Comment::class.java)?.copy(username = username)
