@@ -7,11 +7,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -83,6 +83,7 @@ fun PostLoadingScreen(
     modifier: Modifier = Modifier
 ) {
     Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+
         Column {
             DefaultPostItem()
             DefaultPostItem()
@@ -92,6 +93,7 @@ fun PostLoadingScreen(
                 .fillMaxSize()
                 .background(Color.White.copy(alpha = 0.7f))
         )
+        LinearProgressIndicator()
 
     }
 
@@ -100,7 +102,8 @@ fun PostLoadingScreen(
 @Composable
 fun LoadingScreen() {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        CircularProgressIndicator()
+
+        LinearProgressIndicator()
     }
 
 }

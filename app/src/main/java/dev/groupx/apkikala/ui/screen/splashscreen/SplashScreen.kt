@@ -79,7 +79,7 @@ fun SplashScreen(
                     .clip(RoundedCornerShape(50))
                 )
             }
-            CircularProgressIndicator(color = MaterialTheme.colorScheme.onBackground)
+            CircularProgressIndicator()
         }
     }
 

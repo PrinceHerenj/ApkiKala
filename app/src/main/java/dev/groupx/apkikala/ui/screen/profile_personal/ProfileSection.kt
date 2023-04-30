@@ -29,6 +29,7 @@ import dev.groupx.apkikala.ui.common.composables.ProfileDescription
 import dev.groupx.apkikala.ui.common.composables.Stats
 import dev.groupx.apkikala.ui.screen.post.GetProfileImage
 import dev.groupx.apkikala.ui.screen.post.ImageCommon
+import dev.groupx.apkikala.ui.screen.post.LoadingScreen
 import dev.groupx.apkikala.ui.screen.post.PostItem
 
 
@@ -46,11 +47,15 @@ fun ProfileSection(
     }
 
     if (uiState.loading) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White.copy(alpha = 0.7f))
-        )
+        Box(modifier) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White.copy(alpha = 0.7f))
+            )
+            LoadingScreen()
+        }
+
     } else {
         Column(
             modifier = modifier
@@ -63,7 +68,7 @@ fun ProfileSection(
                                 colors = CardDefaults.cardColors(
                                     containerColor = MaterialTheme.colorScheme.primaryContainer
                                 ),
-                                shape = RoundedCornerShape(4.dp),
+                                shape = RoundedCornerShape(8.dp),
                                 elevation = CardDefaults.cardElevation(
                                     4.dp
                                 ),
@@ -78,8 +83,8 @@ fun ProfileSection(
                                     GetProfileImage(profileImageUrl = uiState.profile.profileImageUrl) {
                                         ImageCommon(
                                             imageUrl = it,
-                                            height = 120.dp,
-                                            width = 120.dp,
+                                            height = 150.dp,
+                                            width = 150.dp,
                                             shape = CircleShape,
                                             contentScale = ContentScale.Crop
                                         )
@@ -93,9 +98,18 @@ fun ProfileSection(
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.SpaceEvenly
                                 ) {
-                                    Stats(numberText = uiState.profile.posts.toString(), text = "Posts")
-                                    Stats(numberText = uiState.profile.followers.toString(), text = "Followers")
-                                    Stats(numberText = uiState.profile.following.toString(), text = "Following")
+                                    Stats(
+                                        numberText = uiState.profile.posts.toString(),
+                                        text = "Posts"
+                                    )
+                                    Stats(
+                                        numberText = uiState.profile.followers.toString(),
+                                        text = "Followers"
+                                    )
+                                    Stats(
+                                        numberText = uiState.profile.following.toString(),
+                                        text = "Following"
+                                    )
                                 }
 
                                 ProfileDescription(
@@ -105,7 +119,7 @@ fun ProfileSection(
                                 )
                             }
                         }
-                        items(uiState.posts) {post ->
+                        items(uiState.posts) { post ->
                             PostItem(post = post, openScreen = openScreen)
                         }
                     }
