@@ -46,4 +46,8 @@ interface StorageService {
     suspend fun addFollower(currentUserId: String, profileUserId: String, newFollowers: Long)
     suspend fun removeFollower(currentUserId: String, profileUserId: String, newFollowers: Long)
     suspend fun isFollowedBy(currentUserId: String, profileUserId: String): Boolean
+    suspend fun getFeedPostsFiltered(userId: String): List<Post>
+    suspend fun removePostStorageCollectionCommentsLikes(postId: String)
+    fun reportPost(postId: String)
+    suspend fun adminReportPost(postId: String)
 }

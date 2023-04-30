@@ -19,7 +19,7 @@ class HomeViewModel @Inject constructor(
     accountService: AccountService,
     logService: LogService,
 ) : ApkiKalaViewModel(logService) {
-    var uiState = accountService.currentUser.map { AccountUiState(it.isAnonymous, it.id) }
+    var accUiState = accountService.currentUser.map { AccountUiState(it.isAnonymous, it.id) }
         private set
 
     fun onHomeClick(openAndPopUp: (String, String) -> Unit) = openAndPopUp(HomeNode.route, HomeNode.route)

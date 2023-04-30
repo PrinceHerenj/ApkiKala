@@ -30,8 +30,8 @@ fun PersonalProfileScreen(
     clearAndNavigate: (String) -> Unit,
     viewModel: PersonalProfileViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.accUiState.collectAsState(initial = AccountUiState(false))
-    val userId = uiState.currentUserId
+    val accUiState by viewModel.accUiState.collectAsState(initial = AccountUiState(false))
+    val userId = accUiState.currentUserId
     Scaffold(
         modifier = Modifier.background(color = MaterialTheme.colorScheme.secondary),
         topBar = {
@@ -58,7 +58,7 @@ fun PersonalProfileScreen(
                         )
                         DropdownMenu(expanded = expanded,
                             onDismissRequest = { expanded = false }) {
-                            if (uiState.isAnonymousAccount) {
+                            if (accUiState.isAnonymousAccount) {
                                 DropdownMenuItem(text = { Text("Login") },
                                     onClick = { viewModel.onLoginClick(openScreen) })
                                 DropdownMenuItem(text = { Text("SignUp") },
@@ -70,7 +70,7 @@ fun PersonalProfileScreen(
                                     onClick = { viewModel.onSignOutClick(clearAndNavigate) })
                                 DropdownMenuItem(text = { Text("Delete") }, onClick = {
                                     viewModel.onDeleteAccClick(
-                                        clearAndNavigate, uiState.currentUserId
+                                        clearAndNavigate, accUiState.currentUserId
                                     )
                                 })
                             }
@@ -97,6 +97,6 @@ fun PersonalProfileScreen(
             }
         },
     ) {
-        ProfileSection(Modifier.padding(it), userId)
+        ProfileSection(openScreen, openAndPopUp, Modifier.padding(it), userId)
     }
 }

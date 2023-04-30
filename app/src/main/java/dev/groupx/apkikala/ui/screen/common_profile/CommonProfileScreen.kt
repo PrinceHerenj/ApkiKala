@@ -28,6 +28,8 @@ object CommonProfileNode : NavigationDestination {
 @Composable
 fun CommonProfileScreen(
     popUp: () -> Unit,
+    openScreen: (String) -> Unit,
+    openAndPopUp: (String, String) -> Unit,
     uid: String,
     viewModel: CommonProfileViewModel = hiltViewModel(),
 ) {
@@ -49,6 +51,6 @@ fun CommonProfileScreen(
             )
         },
     ) {
-        CommonProfileSection(Modifier.padding(it), userId = uid)
+        CommonProfileSection(openScreen, openAndPopUp, Modifier.padding(it), userId = uid)
     }
 }

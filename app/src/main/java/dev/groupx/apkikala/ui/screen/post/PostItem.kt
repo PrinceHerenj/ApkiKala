@@ -20,6 +20,8 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,6 +34,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,7 +58,9 @@ import java.util.Locale
 @Composable
 fun PostItem(
     post: Post,
+    node: String,
     openScreen: (String) -> Unit,
+    openAndPopUp: (String, String) -> Unit,
     viewModel: PostsViewModel = hiltViewModel(),
 ) {
     val accUiState by viewModel.accUiState.collectAsState(initial = AccountUiState(false))
@@ -63,9 +68,6 @@ fun PostItem(
     val uiState = remember {
         mutableStateOf(post)
     }
-
-
-
     ElevatedCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primary
@@ -81,10 +83,14 @@ fun PostItem(
                 .fillMaxWidth()
         ) {
             PostTopBar(
-                uiState.value.user,
-                uiState.value.profileImageUrl,
-                uiState.value.username,
-                openScreen
+                postId = uiState.value.postId,
+                uid = uiState.value.user,
+                profileImageUrl = uiState.value.profileImageUrl,
+                username = uiState.value.username,
+                openScreen = openScreen,
+                openAndPopUp = openAndPopUp,
+                accUiState = accUiState,
+                node = node
             )
             PostContent(uiState.value.postImageUrl)
             if (!accUiState.isAnonymousAccount) {
@@ -123,6 +129,10 @@ fun PostTopBar(
     profileImageUrl: String,
     username: String,
     openScreen: (String) -> Unit,
+    openAndPopUp: (String, String) -> Unit,
+    accUiState: AccountUiState,
+    postId: String,
+    node: String,
     viewModel: PostsViewModel = hiltViewModel(),
 ) {
     Row(
@@ -154,8 +164,21 @@ fun PostTopBar(
         )
         Spacer(modifier = Modifier.weight(1f))
 
-        IconButton(onClick = { /*TODO*/ }) {
+        var expanded by remember { mutableStateOf(false) }
+        IconButton(onClick = { expanded = !expanded }) {
             Icon(Icons.Filled.MoreVert, contentDescription = null)
+            DropdownMenu(expanded = expanded,
+                onDismissRequest = { expanded = false }) {
+                if (uid == accUiState.currentUserId) {
+                    DropdownMenuItem(
+                        text = { Text(text = "Remove Post") },
+                        onClick = { viewModel.removePost(postId, openAndPopUp, node) })
+                } else {
+                    DropdownMenuItem(
+                        text = { Text(text = "Report Post") },
+                        onClick = { viewModel.report(postId) })
+                }
+            }
         }
     }
 }
@@ -201,11 +224,21 @@ fun PostBottomBar(
         val currentLikes = uiState.value.likes
 
         if (!likedByCurrentUser) {
-            IconButton(onClick = { uiState.value = uiState.value.copy(likedByCurrentUser = true, likes = (currentLikes+1)) ; actionOnLike() }) {
+            IconButton(onClick = {
+                uiState.value = uiState.value.copy(
+                    likedByCurrentUser = true,
+                    likes = (currentLikes + 1)
+                ); actionOnLike()
+            }) {
                 Icon(Icons.Filled.FavoriteBorder, contentDescription = null)
             }
         } else {
-            IconButton(onClick = { uiState.value = uiState.value.copy(likedByCurrentUser = false, likes = (currentLikes-1)); actionOnDislike() }) {
+            IconButton(onClick = {
+                uiState.value = uiState.value.copy(
+                    likedByCurrentUser = false,
+                    likes = (currentLikes - 1)
+                ); actionOnDislike()
+            }) {
                 Icon(Icons.Filled.Favorite, contentDescription = null)
             }
         }

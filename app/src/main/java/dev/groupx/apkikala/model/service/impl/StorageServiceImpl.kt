@@ -7,12 +7,14 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
+import dev.groupx.apkikala.R
 import dev.groupx.apkikala.model.Comment
 import dev.groupx.apkikala.model.Like
 import dev.groupx.apkikala.model.Post
 import dev.groupx.apkikala.model.Profile
 import dev.groupx.apkikala.model.SearchResult
 import dev.groupx.apkikala.model.service.StorageService
+import dev.groupx.apkikala.ui.common.snackbar.SnackbarManager
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -54,7 +56,7 @@ class StorageServiceImpl @Inject constructor(
 
         firestore.collection(USERS).document(userId).update(
             mapOf(
-                "posts" to (posts+1)
+                "posts" to (posts + 1)
             )
         )
     }
@@ -126,6 +128,37 @@ class StorageServiceImpl @Inject constructor(
                 likedByCurrentUser = likedByCurrentUser
             )
         }
+    }
+
+    override suspend fun getFeedPostsFiltered(userId: String): List<Post> {
+        val query: Query = firestore.collection(POSTS)
+            .whereEqualTo("user", userId)
+            .orderBy("createdAt", Query.Direction.DESCENDING)
+
+        val querySnapshot = query.get().await()
+        val currentUserId = auth.currentUser?.uid
+
+
+        return querySnapshot.documents.mapNotNull { document ->
+            var username = ""
+            var profileImageUrl = ""
+            var likedByCurrentUser = false
+            val user = document.getString("user")
+            if (user != null) {
+                username = firestore.collection(USERS).document(user).get().await()
+                    .getString("username").toString()
+                profileImageUrl = firestore.collection(USERS).document(user).get().await()
+                    .getString("profileImageUrl").toString()
+                likedByCurrentUser = isLikedByUser("${currentUserId}_${document.id}")
+            }
+            document.toObject(Post::class.java)?.copy(
+                postId = document.id,
+                username = username,
+                profileImageUrl = profileImageUrl,
+                likedByCurrentUser = likedByCurrentUser
+            )
+        }
+
     }
 
     override suspend fun getSearchResults(searchString: String): List<SearchResult> {
@@ -232,7 +265,11 @@ class StorageServiceImpl @Inject constructor(
 
     }
 
-    override suspend fun addFollower(currentUserId: String, profileUserId: String, newFollowers: Long) {
+    override suspend fun addFollower(
+        currentUserId: String,
+        profileUserId: String,
+        newFollowers: Long,
+    ) {
         val followRef = "${currentUserId}_${profileUserId}"
         firestore.collection(FOLLOWS).document(followRef).set(
             hashMapOf(
@@ -258,7 +295,11 @@ class StorageServiceImpl @Inject constructor(
 
     }
 
-    override suspend fun removeFollower(currentUserId: String, profileUserId: String, newFollowers: Long) {
+    override suspend fun removeFollower(
+        currentUserId: String,
+        profileUserId: String,
+        newFollowers: Long,
+    ) {
         val followRef = "${currentUserId}_${profileUserId}"
         firestore.collection(FOLLOWS).document(followRef)
             .delete()
@@ -278,6 +319,97 @@ class StorageServiceImpl @Inject constructor(
             )
         )
 
+    }
+
+    override suspend fun removeLikeDocumentAndDecreasePostLikeCount(postId: String, uid: String) {
+        val documentRef = "${uid}_$postId"
+        firestore.collection(LIKES).document(documentRef)
+            .delete()
+        val currentLikes = firestore.collection(POSTS).document(postId).get().await()
+            .getLong("likes")
+        val updatedLikes = currentLikes?.minus(1)
+
+        firestore.collection(POSTS).document(postId).update(
+            "likes", updatedLikes
+        )
+    }
+
+    override suspend fun removePostStorageCollectionCommentsLikes(postId: String) {
+        // comments
+        firestore.collection(COMMENTS).whereEqualTo("postId", postId).get()
+            .addOnSuccessListener { querySnapshot ->
+                val batch = firestore.batch()
+                for (document in querySnapshot) {
+                    batch.delete(document.reference)
+                }
+                batch.commit()
+                    .addOnSuccessListener {
+                        SnackbarManager.showMessage(R.string.comments_deleted_successfully)
+                    }.addOnFailureListener {
+                        SnackbarManager.showMessage(R.string.could_not_delete_comments)
+                    }
+            }
+            .addOnFailureListener {
+                SnackbarManager.showMessage(R.string.no_comments_found)
+            }
+
+        // likes
+        firestore.collection(LIKES).whereEqualTo("postId", postId).get()
+            .addOnSuccessListener { querySnapshot ->
+                val batch = firestore.batch()
+
+                for (document in querySnapshot) {
+                    batch.delete(document.reference)
+                }
+                batch.commit()
+                    .addOnSuccessListener {
+                        SnackbarManager.showMessage(R.string.likes_deleted_successfully)
+                    }.addOnFailureListener {
+                        SnackbarManager.showMessage(R.string.count_not_delete_likes)
+                    }
+            }
+            .addOnFailureListener {
+                SnackbarManager.showMessage(R.string.no_likes_found)
+            }
+
+        // also reduce posts number from user
+
+        val userId = firestore.collection(POSTS).document(postId).get().await().getString("user")!!
+
+        val posts = firestore.collection(USERS).document(userId).get().await().getLong("posts")!!
+
+        firestore.collection(USERS).document(userId).update(
+            mapOf(
+                "posts" to posts - 1
+            )
+        )
+
+        // collection
+        firestore.collection(POSTS).document(postId).delete().await()
+
+        // for storage
+        storage.reference.child(IMG).child("$postId.jpg").delete()
+
+    }
+
+    override fun reportPost(postId: String) {
+        firestore.collection(REPORTED).document(postId).set(
+            mapOf(
+                "postId" to postId,
+                "resolved" to "unresolved"
+            )
+        )
+    }
+
+    override suspend fun adminReportPost(postId: String) {
+        val sourceDocument = firestore.collection(POSTS).document(postId)
+        val sourceSnapshot = sourceDocument.get().await()
+
+        firestore.collection(REPORTED).document(postId).set(sourceSnapshot.data!!)
+
+        sourceDocument.delete().addOnSuccessListener {
+            SnackbarManager.showMessage(R.string.reported)
+        }
     }
 
 
@@ -309,19 +441,6 @@ class StorageServiceImpl @Inject constructor(
 
     }
 
-    override suspend fun removeLikeDocumentAndDecreasePostLikeCount(postId: String, uid: String) {
-        val documentRef = "${uid}_$postId"
-        firestore.collection(LIKES).document(documentRef)
-            .delete()
-        val currentLikes = firestore.collection(POSTS).document(postId).get().await()
-            .getLong("likes")
-        val updatedLikes = currentLikes?.minus(1)
-
-        firestore.collection(POSTS).document(postId).update(
-            "likes", updatedLikes
-        )
-    }
-
 
     companion object {
         private const val IMG = "imagesGlobal"
@@ -330,6 +449,7 @@ class StorageServiceImpl @Inject constructor(
         private const val LIKES = "likes"
         private const val COMMENTS = "comments"
         private const val FOLLOWS = "follows"
+        private const val REPORTED = "reported"
     }
 
 }

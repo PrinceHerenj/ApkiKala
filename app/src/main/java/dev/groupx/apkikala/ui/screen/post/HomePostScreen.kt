@@ -7,11 +7,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.groupx.apkikala.R
 import dev.groupx.apkikala.ui.common.snackbar.SnackbarManager
+import dev.groupx.apkikala.ui.screen.home.HomeNode
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -33,6 +34,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomePostScreen(
     openScreen: (String) -> Unit,
+    openAndPopUp: (String, String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: PostsViewModel = hiltViewModel(),
 ) {
@@ -63,7 +65,7 @@ fun HomePostScreen(
             Box(modifier.pullRefresh(state)) {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(uiState.posts) { post ->
-                        PostItem(post, openScreen)
+                        PostItem(post, HomeNode.route, openScreen, openAndPopUp,)
                     }
                 }
                 PullRefreshIndicator(refreshing, state, Modifier.align(Alignment.TopCenter))
@@ -83,6 +85,7 @@ fun PostLoadingScreen(
     modifier: Modifier = Modifier
 ) {
     Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+
         Column {
             DefaultPostItem()
             DefaultPostItem()
@@ -92,6 +95,7 @@ fun PostLoadingScreen(
                 .fillMaxSize()
                 .background(Color.White.copy(alpha = 0.7f))
         )
+        LinearProgressIndicator()
 
     }
 
@@ -100,7 +104,8 @@ fun PostLoadingScreen(
 @Composable
 fun LoadingScreen() {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        CircularProgressIndicator()
+
+        LinearProgressIndicator()
     }
 
 }

@@ -39,4 +39,11 @@
     <string name="add_comment">Add</string>
     <string name="follow">Follow</string>
     <string name="unfollow">Unfollow</string>
+    <string name="comments_deleted_successfully">Comments Deleted Successfully</string>
+    <string name="could_not_delete_comments">Could not delete comments</string>
+    <string name="no_comments_found">No Comments Found</string>
+    <string name="likes_deleted_successfully">Likes deleted successfully</string>
+    <string name="count_not_delete_likes">Count not delete Likes</string>
+    <string name="no_likes_found">No Likes Found</string>
+    <string name="reported">Reported</string>
 </resources>

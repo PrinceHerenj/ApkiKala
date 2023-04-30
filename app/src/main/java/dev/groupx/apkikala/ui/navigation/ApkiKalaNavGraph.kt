@@ -36,11 +36,15 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
     }
 
     composable(LoginNode.route) {
-        LoginScreen(openScreen = { route -> appState.navigate(route) }, openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
+        LoginScreen(
+            openScreen = { route -> appState.navigate(route) },
+            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) })
     }
 
     composable(SignUpNode.route) {
-        SignUpScreen(popUp = { appState.popUp() },openScreen = { route -> appState.navigate(route) })
+        SignUpScreen(
+            popUp = { appState.popUp() },
+            openScreen = { route -> appState.navigate(route) })
     }
 
     composable(HomeNode.route) {
@@ -80,7 +84,12 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
         )
     ) {
         val uid = it.arguments?.getString("uid") ?: ""
-        CommonProfileScreen(popUp = { appState.popUp() },uid)
+        CommonProfileScreen(
+            popUp = { appState.popUp() },
+            openScreen = { route -> appState.navigate(route) },
+            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
+            uid
+        )
     }
 
     composable(
@@ -90,7 +99,7 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
         )
     ) {
         val postId = it.arguments?.getString("postId") ?: ""
-        CommonCommentScreen(postId,  popUp = { appState.popUp() })
+        CommonCommentScreen(postId, popUp = { appState.popUp() })
     }
 
     composable(
@@ -100,7 +109,7 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
         )
     ) {
         val postId = it.arguments?.getString("postId") ?: ""
-        CommonLikeScreen(postId, popUp = { appState.popUp() }, )
+        CommonLikeScreen(postId, popUp = { appState.popUp() })
     }
 
 
@@ -116,11 +125,11 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
         UploadProfileImageScreen(
             popUp = { appState.popUp() },
             openAndPopUp = { route, popUp ->
-            appState.navigateAndPopUp(
-                route,
-                popUp
-            )
-        }, restartApp = { route -> appState.clearAndNavigate(route) })
+                appState.navigateAndPopUp(
+                    route,
+                    popUp
+                )
+            }, restartApp = { route -> appState.clearAndNavigate(route) })
     }
 
 
