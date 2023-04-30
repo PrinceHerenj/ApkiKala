@@ -48,6 +48,7 @@ object UploadProfileImageNode : NavigationDestination {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UploadProfileImageScreen(
+    destRoute: String,
     popUp: () -> Unit,
     restartApp: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -62,8 +63,8 @@ fun UploadProfileImageScreen(
                 navigationIcon = {
                     IconButton(onClick = {
                         if (uiState.isImageUrlAdded) {
-                            viewModel.onCancel(popUp)
-                        } else viewModel.onBackClick(popUp)
+                            viewModel.onCancel(popUp, destRoute)
+                        } else viewModel.onBackClick(popUp, destRoute)
                     }) {
                         Icon(
                             Icons.Filled.ArrowBack,
@@ -106,7 +107,7 @@ fun UploadProfileImageScreen(
                 ) { galleryLauncher.launch("image/*") }
 
                 BackHandler(enabled = canHandleBackButton) {
-                    viewModel.onBackClick(popUp)
+                    viewModel.onBackClick(popUp, destRoute)
                 }
 
             } else {
@@ -123,16 +124,16 @@ fun UploadProfileImageScreen(
                 val canHandleBackButton by remember { mutableStateOf(true) }
 
                 BasicButton(
-                    text = R.string.create_account,
+                    text = R.string.update_profile_image,
                     modifier = Modifier
                         .width(250.dp)
                         .padding(vertical = 8.dp)
                 ) {
-                    viewModel.onAddProfileImageClick(restartApp)
+                    viewModel.onAddProfileImageClick(restartApp, destRoute)
                 }
 
                 BackHandler(enabled = canHandleBackButton) {
-                    viewModel.onCancel(popUp)
+                    viewModel.onCancel(popUp, destRoute)
                 }
             }
 

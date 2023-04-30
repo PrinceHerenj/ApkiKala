@@ -14,6 +14,7 @@ import dev.groupx.apkikala.ui.screen.home.HomeNode
 import dev.groupx.apkikala.ui.screen.login.LoginNode
 import dev.groupx.apkikala.ui.screen.search.SearchNode
 import dev.groupx.apkikala.ui.screen.sign_up.SignUpNode
+import dev.groupx.apkikala.ui.screen.sign_up.UploadProfileImageNode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -89,6 +90,8 @@ class PersonalProfileViewModel @Inject constructor(
     fun onCollabClick(openScreen: (String) -> Unit) = openScreen(CollabNode.route)
     fun onBackClick(popUp: () -> Unit) = popUp()
     fun onEditClick(openScreen: (String) -> Unit) = openScreen(EditNode.route)
+
+    fun onEditProfileImage(openScreen: (String) -> Unit) = openScreen("${UploadProfileImageNode.route}/${PersonalProfileNode.route}")
 
 
 }

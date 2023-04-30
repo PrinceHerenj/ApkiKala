@@ -134,8 +134,15 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
         )
     }
 
-    composable(UploadProfileImageNode.route) {
+    composable(
+        route = "${UploadProfileImageNode.route}/{destRoute}",
+        arguments = listOf(
+            navArgument("destRoute") { type = NavType.StringType }
+        )
+    ) {
+        val destRoute = it.arguments?.getString("destRoute") ?: ""
         UploadProfileImageScreen(
+            destRoute,
             popUp = { appState.popUp() },
             restartApp = { route -> appState.clearAndNavigate(route) })
     }

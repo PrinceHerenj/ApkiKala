@@ -9,6 +9,7 @@ import dev.groupx.apkikala.ui.common.utils.isValidEmail
 import dev.groupx.apkikala.ui.common.utils.isValidPassword
 import dev.groupx.apkikala.ui.common.utils.passwordMatches
 import dev.groupx.apkikala.ui.screen.ApkiKalaViewModel
+import dev.groupx.apkikala.ui.screen.home.HomeNode
 import javax.inject.Inject
 import dev.groupx.apkikala.R.string as AppText
 
@@ -77,7 +78,7 @@ class SignUpViewModel @Inject constructor(
 
     launchCatching {
       accountService.linkAccount(email, password, username, address, bio)
-      openScreen(UploadProfileImageNode.route)
+      openScreen("${UploadProfileImageNode.route}/${HomeNode.route}")
     }
   }
 
