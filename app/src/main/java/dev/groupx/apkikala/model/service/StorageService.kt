@@ -52,4 +52,5 @@ interface StorageService {
     suspend fun adminReportPost(postId: String)
     suspend fun getCurrentUserDetails(userId: String): List<String>
     suspend fun setUserDetails(userId: String, username: String, bio: String, address: String)
+    suspend fun removePosts(userId: String)
 }

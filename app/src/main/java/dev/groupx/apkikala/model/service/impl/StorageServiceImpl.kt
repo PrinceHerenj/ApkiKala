@@ -262,7 +262,9 @@ class StorageServiceImpl @Inject constructor(
                 "userId" to uid,
                 "postId" to postId
             )
-        )
+        ).addOnSuccessListener {
+            SnackbarManager.showMessage(R.string.comment_added)
+        }
 
     }
 
@@ -335,6 +337,17 @@ class StorageServiceImpl @Inject constructor(
         )
     }
 
+    override suspend fun removePosts(userId: String) {
+        val query = firestore.collection(POSTS)
+            .whereEqualTo("user", userId)
+            .get().await()
+            .documents
+
+        for (document in query) {
+            removePostStorageCollectionCommentsLikes(document.id)
+        }
+    }
+
     override suspend fun removePostStorageCollectionCommentsLikes(postId: String) {
         // comments
         firestore.collection(COMMENTS).whereEqualTo("postId", postId).get()
@@ -345,13 +358,13 @@ class StorageServiceImpl @Inject constructor(
                 }
                 batch.commit()
                     .addOnSuccessListener {
-                        SnackbarManager.showMessage(R.string.comments_deleted_successfully)
+//                        SnackbarManager.showMessage(R.string.comments_deleted_successfully)
                     }.addOnFailureListener {
-                        SnackbarManager.showMessage(R.string.could_not_delete_comments)
+//                        SnackbarManager.showMessage(R.string.could_not_delete_comments)
                     }
             }
             .addOnFailureListener {
-                SnackbarManager.showMessage(R.string.no_comments_found)
+//                SnackbarManager.showMessage(R.string.no_comments_found)
             }
 
         // likes
@@ -364,9 +377,9 @@ class StorageServiceImpl @Inject constructor(
                 }
                 batch.commit()
                     .addOnSuccessListener {
-                        SnackbarManager.showMessage(R.string.likes_deleted_successfully)
+//                        SnackbarManager.showMessage(R.string.likes_deleted_successfully)
                     }.addOnFailureListener {
-                        SnackbarManager.showMessage(R.string.count_not_delete_likes)
+//                        SnackbarManager.showMessage(R.string.count_not_delete_likes)
                     }
             }
             .addOnFailureListener {
@@ -445,7 +458,6 @@ class StorageServiceImpl @Inject constructor(
             }
 
         return resultDeferred.await()
-
     }
 
     override suspend fun isFollowedBy(currentUserId: String, profileUserId: String): Boolean {

@@ -2,10 +2,13 @@ package dev.groupx.apkikala.ui.screen.comment_screen
 
 import android.util.Log
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.groupx.apkikala.R
 import dev.groupx.apkikala.model.service.AccountService
 import dev.groupx.apkikala.model.service.LogService
 import dev.groupx.apkikala.model.service.StorageService
+import dev.groupx.apkikala.ui.common.snackbar.SnackbarManager
 import dev.groupx.apkikala.ui.screen.ApkiKalaViewModel
+import dev.groupx.apkikala.ui.screen.home.HomeNode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
@@ -45,10 +48,16 @@ class CommentViewModel @Inject constructor(
         popUp()
     }
 
-    fun addComment(comment: String, postId: String) {
+    fun addComment(comment: String, postId: String, openAndPopUp: (String, String)-> Unit) {
+        if (comment.isBlank()) {
+            SnackbarManager.showMessage(R.string.no_comment_add)
+            return
+        }
         val userId = accountService.currentUserId
         launchCatching {
             storageService.addCommentDocument(comment, postId, userId)
         }
+        openAndPopUp(HomeNode.route, "${CommonCommentNode.route}/${postId}")
     }
+
 }

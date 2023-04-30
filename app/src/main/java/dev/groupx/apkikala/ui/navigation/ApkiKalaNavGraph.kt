@@ -108,7 +108,11 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
         )
     ) {
         val postId = it.arguments?.getString("postId") ?: ""
-        CommonCommentScreen(postId, popUp = { appState.popUp() })
+        CommonCommentScreen(
+            postId,
+            popUp = { appState.popUp() },
+            openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
+        )
     }
 
     composable(

@@ -4,5 +4,4 @@
 
 ## EditProfile
 - Edit Profile Screen
-- Edit Details 
 
