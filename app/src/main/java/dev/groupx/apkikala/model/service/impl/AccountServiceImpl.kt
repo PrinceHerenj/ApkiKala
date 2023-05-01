@@ -1,11 +1,11 @@
 package dev.groupx.apkikala.model.service.impl
 
-import dev.groupx.apkikala.model.service.trace
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import dev.groupx.apkikala.model.User
 import dev.groupx.apkikala.model.service.AccountService
 import dev.groupx.apkikala.model.service.StorageService
+import dev.groupx.apkikala.model.service.trace
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -60,17 +60,19 @@ class AccountServiceImpl @Inject constructor(
     override suspend fun deleteAccount(id: String) {
         auth.currentUser!!.delete().await()
         storageService.removeUserInfoFromFirestore(id)
-
         createAnonymousAccount()
     }
 
     override suspend fun signOut() {
-        if (auth.currentUser!!.isAnonymous) {
-            auth.currentUser!!.delete()
-        }
         auth.signOut()
 
         createAnonymousAccount()
+    }
+
+    override suspend fun deleteAnonymousAccount() {
+        if (auth.currentUser!!.isAnonymous) {
+            auth.currentUser!!.delete()
+        }
     }
 
     companion object {

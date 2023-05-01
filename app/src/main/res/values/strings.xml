@@ -32,5 +32,23 @@
     <string name="username_already_exists">Username already exists</string>
     <string name="add_profile_image">Continue To Add Profile Image</string>
     <string name="upload_image">Upload Image</string>
-    <string name="Anonym_AddPost">You must be logged in to add or like a post</string>
+    <string name="Anonym_Error">Log In to Perform Action</string>
+    <string name="view_comments">View Comments</string>
+    <string name="back_again_to_exit">Press Back again to Exit</string>
+    <string name="add_new_comment">Add New Comment</string>
+    <string name="add_comment">Add</string>
+    <string name="follow">Follow</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="comments_deleted_successfully">Comments Deleted Successfully</string>
+    <string name="could_not_delete_comments">Could not delete comments</string>
+    <string name="no_comments_found">No Comments Found</string>
+    <string name="likes_deleted_successfully">Likes deleted successfully</string>
+    <string name="count_not_delete_likes">Count not delete Likes</string>
+    <string name="no_likes_found">No Likes Found</string>
+    <string name="reported">Reported</string>
+    <string name="update_details">Update Details</string>
+    <string name="updated_details_successfully">Updated Details successfully</string>
+    <string name="comment_added">Comment Added</string>
+    <string name="no_comment_add">Please Enter a Comment to add</string>
+    <string name="update_profile_image">Update Profile Image</string>
 </resources>

@@ -1,14 +1,13 @@
 package dev.groupx.apkikala.ui.screen.sign_up
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.groupx.apkikala.model.service.AccountService
 import dev.groupx.apkikala.model.service.LogService
 import dev.groupx.apkikala.model.service.StorageService
 import dev.groupx.apkikala.ui.screen.ApkiKalaViewModel
-import dev.groupx.apkikala.ui.screen.create_post.CreatePostNode
-import dev.groupx.apkikala.ui.screen.home.HomeNode
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,18 +28,30 @@ class UploadProfileImageViewModel @Inject constructor(
         }
     }
 
-    fun onAddProfileImageClick(restartApp: (String) -> Unit) {
+    fun onAddProfileImageClick(restartApp: (String) -> Unit, destRoute: String) {
         launchCatching {
             storageService.saveImageToFirestoreUser(setUrl, accountService.currentUserId)
-            restartApp(HomeNode.route)
+            restartApp(destRoute)
         }
     }
 
-    fun onCancel(openAndPopUp: (String, String) -> Unit) {
+    fun onCancel(popUp: () -> Unit, destRoute: String) {
         launchCatching {
             storageService.removeImage()
-            openAndPopUp(HomeNode.route, CreatePostNode.route)
+            if (destRoute == "${UploadProfileImageNode}/HomeScreen")
+                accountService.deleteAccount(accountService.currentUserId)
+            popUp()
         }
     }
+
+    fun onBackClick(popUp: () -> Unit, destRoute: String) {
+        launchCatching {
+            Log.d("In UploadProfile", destRoute)
+            if (destRoute == "${UploadProfileImageNode}/HomeScreen")
+                accountService.deleteAccount(accountService.currentUserId)
+            popUp()
+        }
+    }
+
 
 }

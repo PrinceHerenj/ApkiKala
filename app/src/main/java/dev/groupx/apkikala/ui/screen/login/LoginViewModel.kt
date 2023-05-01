@@ -45,13 +45,14 @@ class LoginViewModel @Inject constructor(
         }
 
         launchCatching {
-            accountService.deleteAccount(accountService.currentUserId)
+            accountService.deleteAnonymousAccount()
             accountService.authenticate(email, password)
             openAndPopUp(HomeNode.route, LoginNode.route)
         }
     }
 
-    fun onSignUpClick(openAndPopUp: (String, String) -> Unit) = openAndPopUp(SignUpNode.route, LoginNode.route)
+    fun onSignUpClick(openScreen: (String) -> Unit) = openScreen(SignUpNode.route)
+
     fun onForgotPasswordClick() {
         if (!email.isValidEmail()) {
             SnackbarManager.showMessage(AppText.email_error)
