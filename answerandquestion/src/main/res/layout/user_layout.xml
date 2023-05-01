@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:background="@drawable/chat_bg"
+    android:padding="1dp"
+    android:elevation="15dp"
+    android:layout_margin="10dp">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="20dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/main_logo"
+            />
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rupam"
+            android:paddingLeft="1dp"
+            android:textSize="20sp"
+            android:layout_centerVertical="true"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/image"/>
+    
+<!--        <View-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="1dp"-->
+<!--            android:background="@color/shade"-->
+<!--            android:layout_below="@id/image"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:layout_marginBottom="0dp"/>-->
+
+
+
+
+</RelativeLayout>

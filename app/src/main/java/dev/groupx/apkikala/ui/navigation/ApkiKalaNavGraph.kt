@@ -62,6 +62,7 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
             openScreen = { route -> appState.navigate(route) },
             openAndPopUp = { route, popUp -> appState.navigateAndPopUp(route, popUp) },
             clearAndNavigate = { route -> appState.clearAndNavigate(route) }
+
         )
     }
 
