@@ -1,5 +1,6 @@
 package dev.groupx.apkikala.ui.screen.profile_personal
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -9,11 +10,13 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.Composable.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.groupx.apkikala.ui.navigation.NavigationDestination
 import dev.groupx.apkikala.ui.screen.AccountUiState
 import dev.groupx.apkikala.R.string as AppText
+import com.example.answerandquestion.loginactivity
 
 object PersonalProfileNode : NavigationDestination {
     override val route = "ProfileScreen"
@@ -30,6 +33,7 @@ fun PersonalProfileScreen(
     clearAndNavigate: (String) -> Unit,
     viewModel: PersonalProfileViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val accUiState by viewModel.accUiState.collectAsState(initial = AccountUiState(false))
     val userId = accUiState.currentUserId
     Scaffold(
@@ -91,7 +95,8 @@ fun PersonalProfileScreen(
                     viewModel.onSearchClick(openScreen)
                 }, icon = { Icon(Icons.Filled.Search, contentDescription = null) })
                 NavigationBarItem(selected = false, onClick = {
-                    viewModel.onCollabClick(openScreen)
+                    val intent = Intent(context, loginactivity::class.java)
+                    context.startActivity(intent)
                 }, icon = { Icon(Icons.Filled.PlayArrow, contentDescription = null) })
                 NavigationBarItem(selected = true,
                     onClick = { },
