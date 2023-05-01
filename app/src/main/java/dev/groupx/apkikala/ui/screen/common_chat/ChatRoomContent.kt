@@ -59,6 +59,7 @@ fun ChatRoomContent(
     val scrollState = rememberLazyListState()
 
     LaunchedEffect(sender, receiver) {
+//        viewModel.getChats(sender, receiver)
         scrollState.scrollToItem(uiState.chats.size - 1)
     }
 

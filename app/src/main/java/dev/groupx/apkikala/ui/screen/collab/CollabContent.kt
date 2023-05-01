@@ -17,6 +17,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -42,9 +43,9 @@ fun CollabContent(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-//    LaunchedEffect(currentUserId) {
-//        viewModel.getCurrentUserChatRooms(currentUserId)
-//    }
+    LaunchedEffect(currentUserId) {
+        viewModel.getCurrentUserChatRooms(currentUserId)
+    }
 
     if (uiState.loading) {
         Box(modifier) {

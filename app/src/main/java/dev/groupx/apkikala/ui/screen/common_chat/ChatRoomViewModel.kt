@@ -23,5 +23,10 @@ class ChatRoomViewModel @Inject constructor(
         private set
 
     fun onBackClick(popUp: () -> Unit) { popUp() }
+    fun getChats(sender: String, receiver: String) {
+        launchCatching {
+//            chatService.getChats()
+        }
+    }
 
 }
