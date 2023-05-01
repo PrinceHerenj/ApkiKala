@@ -73,7 +73,7 @@ fun CommonProfileSection(
                                 ),
                                 shape = RoundedCornerShape(8.dp),
                                 elevation = CardDefaults.cardElevation(
-                                    4.dp
+                                    8.dp
                                 ),
                                 modifier = Modifier.padding(10.dp),
                             ) {
@@ -118,30 +118,55 @@ fun CommonProfileSection(
                                         )
                                     }
                                     if (!uiState.isCurrentUserProfile) {
-                                        if (!uiState.following) {
-                                            ElevatedCard(colors = CardDefaults.cardColors(
-                                                containerColor = MaterialTheme.colorScheme.primary
-                                            ),
-                                                shape = RoundedCornerShape(4.dp),
-                                                elevation = CardDefaults.cardElevation(4.dp),
-                                                onClick = { viewModel.onFollowClick() }) {
-                                                Column(
-                                                    modifier = Modifier
-                                                        .padding(10.dp)
-                                                        .width(80.dp),
-                                                    verticalArrangement = Arrangement.Center,
-                                                    horizontalAlignment = Alignment.CenterHorizontally
-                                                ) {
-                                                    Text(text = stringResource(R.string.follow))
+                                        Row(
+                                            Modifier
+                                                .fillMaxWidth()
+                                                .padding(horizontal = 20.dp),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.SpaceEvenly
+                                        ) {
+                                            if (!uiState.following) {
+                                                ElevatedCard(colors = CardDefaults.cardColors(
+                                                    containerColor = MaterialTheme.colorScheme.primary
+                                                ),
+                                                    shape = RoundedCornerShape(4.dp),
+                                                    elevation = CardDefaults.cardElevation(4.dp),
+                                                    onClick = { viewModel.onFollowClick() }) {
+                                                    Column(
+                                                        modifier = Modifier
+                                                            .padding(10.dp)
+                                                            .width(80.dp),
+                                                        verticalArrangement = Arrangement.Center,
+                                                        horizontalAlignment = Alignment.CenterHorizontally
+                                                    ) {
+                                                        Text(text = stringResource(R.string.follow))
+                                                    }
+                                                }
+                                            } else {
+                                                ElevatedCard(colors = CardDefaults.cardColors(
+                                                    containerColor = MaterialTheme.colorScheme.primary
+                                                ),
+                                                    shape = RoundedCornerShape(4.dp),
+                                                    elevation = CardDefaults.cardElevation(4.dp),
+                                                    onClick = { viewModel.onUnFollowClick() }) {
+                                                    Column(
+                                                        modifier = Modifier
+                                                            .padding(10.dp)
+                                                            .width(80.dp),
+                                                        verticalArrangement = Arrangement.Center,
+                                                        horizontalAlignment = Alignment.CenterHorizontally
+                                                    ) {
+                                                        Text(text = stringResource(R.string.unfollow))
+                                                    }
                                                 }
                                             }
-                                        } else {
+
                                             ElevatedCard(colors = CardDefaults.cardColors(
                                                 containerColor = MaterialTheme.colorScheme.primary
                                             ),
                                                 shape = RoundedCornerShape(4.dp),
                                                 elevation = CardDefaults.cardElevation(4.dp),
-                                                onClick = { viewModel.onUnFollowClick() }) {
+                                                onClick = { viewModel.onCollabClick(openScreen, uiState.profile.userId) }) {
                                                 Column(
                                                     modifier = Modifier
                                                         .padding(10.dp)
@@ -149,7 +174,7 @@ fun CommonProfileSection(
                                                     verticalArrangement = Arrangement.Center,
                                                     horizontalAlignment = Alignment.CenterHorizontally
                                                 ) {
-                                                    Text(text = stringResource(R.string.unfollow))
+                                                    Text(text = stringResource(R.string.collab))
                                                 }
                                             }
 
@@ -167,7 +192,12 @@ fun CommonProfileSection(
                             }
                         }
                         items(uiState.posts) { post ->
-                            PostItem(post, "${CommonProfileNode.route}/$userId", openScreen, openAndPopUp)
+                            PostItem(
+                                post,
+                                "${CommonProfileNode.route}/$userId",
+                                openScreen,
+                                openAndPopUp
+                            )
 
                         }
                     }

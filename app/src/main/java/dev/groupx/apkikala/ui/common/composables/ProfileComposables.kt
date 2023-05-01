@@ -79,11 +79,13 @@ fun ProfileDescription(
         Text(
             text = displayName,
             fontWeight = FontWeight.ExtraBold,
+            fontSize = 20.sp,
             color = Color.Black,
             letterSpacing = letterSpacing,
             lineHeight = lineHeight
         )
-        Column(Modifier.padding(top = 10.dp)) {
+        Column(Modifier.padding(top = 10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 text = bio,
                 fontWeight = FontWeight.Medium,

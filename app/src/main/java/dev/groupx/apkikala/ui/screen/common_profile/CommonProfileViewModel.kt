@@ -4,9 +4,11 @@ import android.util.Log
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dev.groupx.apkikala.model.Profile
 import dev.groupx.apkikala.model.service.AccountService
+import dev.groupx.apkikala.model.service.ChatService
 import dev.groupx.apkikala.model.service.LogService
 import dev.groupx.apkikala.model.service.StorageService
 import dev.groupx.apkikala.ui.screen.ApkiKalaViewModel
+import dev.groupx.apkikala.ui.screen.common_chat.ChatRoomNode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
@@ -16,6 +18,7 @@ import javax.inject.Inject
 class CommonProfileViewModel @Inject constructor(
     private val storageService: StorageService,
     private val accountService: AccountService,
+    private val chatService: ChatService,
     logService: LogService,
 ) : ApkiKalaViewModel(logService) {
 
@@ -66,7 +69,12 @@ class CommonProfileViewModel @Inject constructor(
                 val following = withContext(Dispatchers.IO) {
                     storageService.isFollowedBy(accountService.currentUserId, userId)
                 }
-                uiState.value = uiState.value.copy(loading = false, profile = profile, following = following, posts = posts)
+                uiState.value = uiState.value.copy(
+                    loading = false,
+                    profile = profile,
+                    following = following,
+                    posts = posts
+                )
             } catch (e: Exception) {
                 Log.d("Here", e.toString())
             }
@@ -98,6 +106,16 @@ class CommonProfileViewModel @Inject constructor(
                 ),
                 following = false
             )
+        }
+    }
+
+    fun onCollabClick(openScreen: (String) -> Unit, collabWithUserId: String) {
+        launchCatching {
+            val currentUser = accountService.currentUserId
+            if (!chatService.checkChatRooms(currentUser, collabWithUserId)) {
+                chatService.createChatRooms(currentUser, collabWithUserId)
+            }
+            openScreen("${ChatRoomNode.route}/${currentUser}/${collabWithUserId}")
         }
     }
 }

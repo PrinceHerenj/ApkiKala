@@ -51,4 +51,5 @@
     <string name="comment_added">Comment Added</string>
     <string name="no_comment_add">Please Enter a Comment to add</string>
     <string name="update_profile_image">Update Profile Image</string>
+    <string name="collab">Collab</string>
 </resources>

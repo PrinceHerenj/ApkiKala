@@ -9,6 +9,8 @@ import dev.groupx.apkikala.ui.screen.collab.CollabNode
 import dev.groupx.apkikala.ui.screen.collab.CollabScreen
 import dev.groupx.apkikala.ui.screen.comment_screen.CommonCommentNode
 import dev.groupx.apkikala.ui.screen.comment_screen.CommonCommentScreen
+import dev.groupx.apkikala.ui.screen.common_chat.ChatRoomContent
+import dev.groupx.apkikala.ui.screen.common_chat.ChatRoomNode
 import dev.groupx.apkikala.ui.screen.common_profile.CommonProfileNode
 import dev.groupx.apkikala.ui.screen.common_profile.CommonProfileScreen
 import dev.groupx.apkikala.ui.screen.create_post.CreatePostNode
@@ -123,6 +125,18 @@ fun NavGraphBuilder.apkiKalaGraph(appState: ApkiKalaAppState) {
     ) {
         val postId = it.arguments?.getString("postId") ?: ""
         CommonLikeScreen(postId, popUp = { appState.popUp() })
+    }
+
+    composable(
+        route = "${ChatRoomNode.route}/{currentUserId}/{receiverUserId}",
+        arguments = listOf(
+            navArgument("currentUserId") {type=NavType.StringType},
+            navArgument("receiverUserId") {type=NavType.StringType}
+        )
+    ) {
+        val currentUserId = it.arguments?.getString("currentUserId") ?: ""
+        val receiverUserId = it.arguments?.getString("receiverUserId") ?: ""
+        ChatRoomContent(currentUserId, receiverUserId, popUp = {appState.popUp()})
     }
 
 

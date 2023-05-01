@@ -40,7 +40,7 @@ fun CollabScreen(
     openAndPopUp: (String, String) -> Unit,
     viewModel: CollabViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState(initial = AccountUiState(false))
+    val accUiState by viewModel.accUiState.collectAsState(initial = AccountUiState(false))
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -82,6 +82,8 @@ fun CollabScreen(
             )
         }
     }) {
-        Box(Modifier.padding(it)) {}
+        Box(Modifier.padding(it)) {
+            CollabContent(openScreen, accUiState.currentUserId)
+        }
     }
 }
