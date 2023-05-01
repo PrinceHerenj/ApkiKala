@@ -71,7 +71,7 @@ fun ProfileSection(
                                 ),
                                 shape = RoundedCornerShape(8.dp),
                                 elevation = CardDefaults.cardElevation(
-                                    4.dp
+                                    8.dp
                                 ),
                                 modifier = Modifier.padding(10.dp),
                             ) {
