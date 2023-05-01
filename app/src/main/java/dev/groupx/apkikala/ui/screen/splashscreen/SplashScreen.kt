@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -39,13 +40,13 @@ object SplashNode : NavigationDestination {
     override val titleRes = R.string.app_name
 }
 
-private const val SPLASH_TIMEOUT = 500L
+private const val SPLASH_TIMEOUT = 1000L
 
 @Composable
 fun SplashScreen(
     openAndPopUp: (String, String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: SplashViewModel = hiltViewModel()
+    viewModel: SplashViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState(initial = AccountUiState(false))
     Column(
@@ -71,12 +72,18 @@ fun SplashScreen(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(300.dp),
+                    .height(400.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Image(painter = painterResource(id = R.drawable.icons8_son_goku), contentDescription = null, modifier = Modifier
-                    .size(128.dp)
-                    .clip(RoundedCornerShape(50))
+                Image(
+                    painter = painterResource(id = R.drawable.spalsh_screen),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds,
+                    modifier = Modifier
+                        .size(300.dp)
+                        .clip(
+                            RoundedCornerShape(50)
+                        )
                 )
             }
             CircularProgressIndicator()

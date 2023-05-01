@@ -1,5 +1,6 @@
 package dev.groupx.apkikala.ui.screen.search
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -53,12 +53,12 @@ fun SearchScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 modifier = Modifier.height(48.dp),
-                title = { Icon(
-                    painter = painterResource(id = R.drawable.icons8_son_goku),
-                    contentDescription = "Back",
-                    tint = Color.Black,
+                title = { Image(
+                    painter = painterResource(id = R.drawable.apki_kala_logo_hs_final_centered),
+                    contentDescription = null,
                     modifier = Modifier
-                        .padding(vertical = 2.dp)
+                        .padding(vertical = 1.dp)
+                        .size(48.dp)
                 ) }
             )
         },

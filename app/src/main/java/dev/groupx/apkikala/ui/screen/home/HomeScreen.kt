@@ -2,6 +2,7 @@ package dev.groupx.apkikala.ui.screen.home
 
 import android.content.Context
 import android.content.Intent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -46,13 +47,16 @@ fun HomeScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 modifier = Modifier.height(48.dp),
-                title = { Icon(
-                    painter = painterResource(id = R.drawable.icons8_son_goku),
-                    contentDescription = "Back",
-                    tint = Color.Black,
-                    modifier = Modifier
-                        .padding(vertical = 2.dp)
-                ) }
+                title = {
+                    Image(
+                        painter = painterResource(id = R.drawable.apki_kala_logo_hs_final_centered),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(vertical = 1.dp)
+                            .size(48.dp)
+                    )
+
+                }
             )
         },
         floatingActionButton = {
@@ -105,7 +109,11 @@ fun HomeScreen(
         }
 
     ) {
-        HomePostScreen(modifier = Modifier.padding(it), openScreen = openScreen, openAndPopUp = openAndPopUp)
+        HomePostScreen(
+            modifier = Modifier.padding(it),
+            openScreen = openScreen,
+            openAndPopUp = openAndPopUp
+        )
     }
 }
 
